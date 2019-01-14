@@ -10,20 +10,8 @@ public class FrontController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uri = req.getRequestURI();
-        Command command;
-        switch (uri) {
-            case "/login":
-                command = new LoginCommand();
-                break;
-
-            case "/logout":
-                command = new LogoutCommand();
-                break;
-
-            default:
-                command = new NoCommand();
-                break;
-        }
+        CommandFactory commandFactory = CommandFactory.getInstance();
+        Command command = commandFactory.getCommand(uri);
         command.execute(req, resp);
     }
 
