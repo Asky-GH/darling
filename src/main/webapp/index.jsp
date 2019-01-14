@@ -4,22 +4,30 @@
 
 <html>
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Index page</title>
+        <jsp:include page="layout/header.jsp"/>
+        <title>Main page</title>
     </head>
     
     <body>
-        <c:choose>
-            <c:when test="${user != null}">
-                <p>Welcome ${user.email}!</p>
-                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                <form id="logout-form" method="post" style="display: none;" action="/logout"></form>
-            </c:when>
-            <c:otherwise>
-                <p>Welcome guest!</p>
-                <a href="/login">Login</a>
-            </c:otherwise>
-        </c:choose>
+        <jsp:include page="layout/navbar.jsp"/>
+
+        <section class="section">
+            <div class="container">
+                <div class="columns">
+                    <div class="column is-4 is-offset-4 has-text-centered">
+                        <c:choose>
+                            <c:when test="${user != null}">
+                                <p>Welcome ${user.email}!</p>
+                            </c:when>
+                            <c:otherwise>
+                                <p>Welcome guest!</p>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <jsp:include page="layout/footer.jsp"/>
     </body>
 </html>
