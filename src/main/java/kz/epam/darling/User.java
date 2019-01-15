@@ -1,7 +1,6 @@
 package kz.epam.darling;
 
-public class User {
-    private int id;
+public class User extends Entity {
     private String email;
     private String gender;
     private String role;
@@ -12,12 +11,11 @@ public class User {
     private String city;
 
 
-    public int getId() {
-        return id;
+    public User() {
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public User(int id) {
+        super(id);
     }
 
     public String getEmail() {
