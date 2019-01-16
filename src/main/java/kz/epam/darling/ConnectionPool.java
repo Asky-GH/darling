@@ -21,12 +21,14 @@ public class ConnectionPool {
         }
     }
 
-    public static ConnectionPool getInstance() throws SQLException {
+    public static ConnectionPool getInstance() throws SQLException, ClassNotFoundException {
         if (instance == null) {
             ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTIES_FILE);
             String url = resourceBundle.getString("db.url");
             String user = resourceBundle.getString("db.user");
             String password = resourceBundle.getString("db.password");
+            String driver = resourceBundle.getString("db.driver");
+            Class.forName(driver);
             instance = new ConnectionPool(url, user, password, POOL_SIZE);
         }
         return instance;

@@ -7,5 +7,5 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public interface Command {
-    void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, SQLException;
+    void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, SQLException, InterruptedException, ClassNotFoundException;
 }

@@ -2,6 +2,7 @@ package kz.epam.darling;
 
 public class User extends Entity {
     private String email;
+    private String password;
     private String gender;
     private String role;
     private String firstName;
@@ -24,6 +25,14 @@ public class User extends Entity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getGender() {

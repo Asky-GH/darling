@@ -15,7 +15,7 @@ public class FrontController extends HttpServlet {
         Command command = commandFactory.getCommand(uri);
         try {
             command.execute(req, resp);
-        } catch (SQLException e) {
+        } catch (SQLException | InterruptedException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
