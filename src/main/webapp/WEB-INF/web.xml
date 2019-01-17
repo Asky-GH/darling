@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>DarlingServlet</servlet-name>
-        <servlet-class>kz.epam.darling.FrontController</servlet-class>
+        <servlet-class>kz.epam.darling.controller.FrontController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DarlingServlet</servlet-name>

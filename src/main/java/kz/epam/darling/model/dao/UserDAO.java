@@ -1,4 +1,6 @@
-package kz.epam.darling;
+package kz.epam.darling.model.dao;
+
+import kz.epam.darling.model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,20 +8,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class UserDAO extends DAO<Integer, User> {
+// TODO remove hardcoded values
+public class UserDAO implements DAO<Integer, User> {
     private static final String INSERT_QUERY = "INSERT INTO users(email, password, gender_id, role_id) " +
                                                 "VALUES (?, ?, 1, 1)";
     private static final String FIND_BY_EMAIL_QUERY = "SELECT u.id, u.email, u.password, g.gender, r.role " +
                                                         "FROM users u, genders g, roles r WHERE email = ? " +
                                                         "AND u.gender_id = g.id AND u.role_id = r.id";
+    private Connection connection;
 
 
-    public UserDAO() throws SQLException, ClassNotFoundException {
+    public UserDAO(Connection connection) {
+        this.connection = connection;
     }
 
     @Override
-    public boolean create(User user) throws InterruptedException, SQLException {
-        Connection connection = connectionPool.takeConnection();
+    public boolean create(User user) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY)) {
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getPassword());
@@ -28,7 +32,7 @@ public class UserDAO extends DAO<Integer, User> {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            connectionPool.releaseConnection(connection);
+            ConnectionPool.getInstance().releaseConnection(connection);
         }
         return false;
     }
@@ -44,8 +48,8 @@ public class UserDAO extends DAO<Integer, User> {
     }
 
     @Override
-    public User update(User user) {
-        return null;
+    public boolean update(User user) {
+        return false;
     }
 
     @Override
@@ -53,9 +57,8 @@ public class UserDAO extends DAO<Integer, User> {
         return false;
     }
 
-    public User findByEmail(String email) throws SQLException, InterruptedException {
+    public User findByEmail(String email) {
         User user = null;
-        Connection connection = connectionPool.takeConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_EMAIL_QUERY)) {
             preparedStatement.setString(1, email);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -71,7 +74,7 @@ public class UserDAO extends DAO<Integer, User> {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            connectionPool.releaseConnection(connection);
+            ConnectionPool.getInstance().releaseConnection(connection);
         }
         return user;
     }

@@ -3,12 +3,12 @@
 
 <html>
     <head>
-        <jsp:include page="layout/header.jsp"/>
+        <jsp:include page="../layout/header.jsp"/>
         <title>Registration page</title>
     </head>
     
     <body>
-        <jsp:include page="layout/navbar.jsp"/>
+        <jsp:include page="../layout/navbar.jsp"/>
 
         <section class="section">
             <div class="container">
@@ -45,6 +45,6 @@
             </div>
         </section>
 
-        <jsp:include page="layout/footer.jsp"/>
+        <jsp:include page="../layout/footer.jsp"/>
     </body>
 </html>

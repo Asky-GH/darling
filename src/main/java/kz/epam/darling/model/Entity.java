@@ -1,4 +1,4 @@
-package kz.epam.darling;
+package kz.epam.darling.model;
 
 public abstract class Entity {
     private int id;

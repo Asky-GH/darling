@@ -1,11 +1,13 @@
-package kz.epam.darling;
+package kz.epam.darling.controller;
+
+import kz.epam.darling.controller.command.Command;
+import kz.epam.darling.controller.command.CommandFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class FrontController extends HttpServlet {
     @Override
@@ -13,11 +15,7 @@ public class FrontController extends HttpServlet {
         String uri = req.getRequestURI();
         CommandFactory commandFactory = CommandFactory.getInstance();
         Command command = commandFactory.getCommand(uri);
-        try {
-            command.execute(req, resp);
-        } catch (SQLException | InterruptedException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        command.execute(req, resp);
     }
 
     @Override

@@ -1,3 +1,6 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <footer class="footer">
     <div class="content has-text-centered">
         <p><b>Darling</b> by <a target="_blank" href="https://github.com/Asky-GH">Askhat Abishev</a>.</p>
@@ -6,6 +9,6 @@
     </div>
 
     <script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
-    <script defer src="/js/navbar.js"></script>
+    <script defer src="../../js/navbar.js"></script>
     <!--<script defer src="/js/registration.js"></script>-->
 </footer>

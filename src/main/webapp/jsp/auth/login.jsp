@@ -1,13 +1,14 @@
-<!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
     <head>
-        <jsp:include page="layout/header.jsp"/>
+        <jsp:include page="../layout/header.jsp"/>
         <title>Login page</title>
     </head>
     
     <body>
-        <jsp:include page="layout/navbar.jsp"/>
+        <jsp:include page="../layout/navbar.jsp"/>
 
         <section class="section">
             <div class="container">
@@ -17,7 +18,7 @@
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
                                     <input tabindex="1" class="input" type="text" name="email" placeholder="email" autofocus>
-                                    <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
+                                    <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
                                 </div>
                             </div>
                             <div class="field">
@@ -38,6 +39,6 @@
             </div>
         </section>
 
-        <jsp:include page="layout/footer.jsp"/>
+        <jsp:include page="../layout/footer.jsp"/>
     </body>
 </html>

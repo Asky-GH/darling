@@ -1,5 +1,6 @@
-package kz.epam.darling;
+package kz.epam.darling.model;
 
+// TODO improve model. Think about builder pattern
 public class User extends Entity {
     private String email;
     private String password;
