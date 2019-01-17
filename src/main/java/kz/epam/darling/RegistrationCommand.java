@@ -1,5 +1,7 @@
 package kz.epam.darling;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,14 +18,15 @@ public class RegistrationCommand implements Command {
             if (!email.isEmpty() && !password.isEmpty() && !confirmPassword.isEmpty()) {
                 UserDAO userDAO = new UserDAO();
                 //TODO email validation
-                if (userDAO.findByEmail(email)) {
+                User user = userDAO.findByEmail(email);
+                if (user != null) {
                     request.setAttribute("errorMessage", "Email already exists!");
                 }
                 if (password.equals(confirmPassword)) {
-                    User user = new User();
+                    user = new User();
                     user.setEmail(email);
-                    //TODO password encryption and validation
-                    user.setPassword(password);
+                    //TODO password validation
+                    user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
                     userDAO.create(user);
                     request.getSession().setAttribute("user", user);
                     response.sendRedirect("/");

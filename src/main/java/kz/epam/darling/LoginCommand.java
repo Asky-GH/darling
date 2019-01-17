@@ -1,5 +1,7 @@
 package kz.epam.darling;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,15 +10,16 @@ import java.sql.SQLException;
 
 public class LoginCommand implements Command {
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, SQLException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, SQLException, InterruptedException, ClassNotFoundException {
         boolean error = false;
         if (request.getMethod().equals("POST")) {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
-            if (email != null && password != null) {
+            if (!email.isEmpty() && !password.isEmpty()) {
                 UserDAO userDAO = new UserDAO();
-                User user = userDAO.authenticateUser(email, password);
-                if (user != null) {
+                User user = userDAO.findByEmail(email);
+                if (user != null && BCrypt.checkpw(password, user.getPassword())) {
+                    user.setPassword(null);
                     request.getSession().setAttribute("user", user);
                     response.sendRedirect("/");
                     return;
