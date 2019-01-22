@@ -14,7 +14,8 @@
             <div class="container">
                 <div class="columns">
                     <div class="column is-4 is-offset-4 has-text-centered">
-                        <form method="post" action="/login">
+                        <form method="post" action="${pageContext.request.contextPath}/login">
+                            <input type="hidden" name="action" value="post-login">
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
                                     <input tabindex="1" class="input" type="text" name="email" placeholder="email" autofocus>
