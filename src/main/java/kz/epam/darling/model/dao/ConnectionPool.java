@@ -1,5 +1,8 @@
 package kz.epam.darling.model.dao;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -7,10 +10,10 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-// TODO think about dispose logic
 public class ConnectionPool {
     private static final String PROPERTIES_FILE = "database";
     private static final int POOL_SIZE = 8;
+    private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class.getName());
     private static ConnectionPool instance = new ConnectionPool();
     private BlockingQueue<Connection> connections = new ArrayBlockingQueue<>(POOL_SIZE);
 
@@ -27,7 +30,7 @@ public class ConnectionPool {
                 connections.offer(DriverManager.getConnection(url, user, password));
             }
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
     }
 
@@ -40,7 +43,7 @@ public class ConnectionPool {
         try {
             connection = connections.take();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
         return connection;
     }
@@ -49,13 +52,13 @@ public class ConnectionPool {
         try {
             if (!connection.isClosed()) {
                 if (!connections.offer(connection)) {
-                    System.out.println("Connection not added. Possible leakage of connections");
+                    LOGGER.warn("Connection not added. Possible leakage of connections");
                 }
             } else {
-                System.out.println("Trying to release closed connection. Possible leakage of connections");
+                LOGGER.warn("Trying to release closed connection. Possible leakage of connections");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
     }
 }

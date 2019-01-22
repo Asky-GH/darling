@@ -1,6 +1,8 @@
 package kz.epam.darling.model.dao;
 
 import kz.epam.darling.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,8 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-// TODO remove hardcoded values
 public class UserDAO implements DAO<Integer, User> {
+    private static final Logger LOGGER = LogManager.getLogger(UserDAO.class.getName());
     private static final String INSERT_QUERY = "INSERT INTO users(email, password, gender_id, role_id) " +
                                                 "VALUES (?, ?, 1, 1)";
     private static final String FIND_BY_EMAIL_QUERY = "SELECT u.id, u.email, u.password, g.gender, r.role " +
@@ -30,11 +32,11 @@ public class UserDAO implements DAO<Integer, User> {
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
+            return false;
         } finally {
             ConnectionPool.getInstance().releaseConnection(connection);
         }
-        return false;
     }
 
     @Override
@@ -72,7 +74,7 @@ public class UserDAO implements DAO<Integer, User> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         } finally {
             ConnectionPool.getInstance().releaseConnection(connection);
         }
