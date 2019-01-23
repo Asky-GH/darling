@@ -21,4 +21,13 @@
         <servlet-name>default</servlet-name>
         <url-pattern>/js/*</url-pattern>
     </servlet-mapping>
+
+    <filter>
+        <filter-name>ProfileFilter</filter-name>
+        <filter-class>kz.epam.darling.controller.ProfileFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ProfileFilter</filter-name>
+        <url-pattern>/profile</url-pattern>
+    </filter-mapping>
 </web-app>
