@@ -1,6 +1,7 @@
 package kz.epam.darling.controller;
 
 import kz.epam.darling.controller.command.CommandFactory;
+import kz.epam.darling.model.dao.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,9 +20,14 @@ public class FrontController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             CommandFactory.getInstance().getCommand(req.getServletPath()).execute(req, resp);
-        } catch (InterruptedException | SQLException | ClassNotFoundException e) {
-            LOGGER.error(e);
-            throw new ServletException(e);
+        } catch (InterruptedException | SQLException | ClassNotFoundException applicationException) {
+            try {
+                ConnectionPool.getInstance().dispose();
+            } catch (SQLException | ClassNotFoundException connectionPoolDisposeException) {
+                LOGGER.info(connectionPoolDisposeException);
+            }
+            LOGGER.error(applicationException);
+            throw new ServletException(applicationException);
         }
     }
 

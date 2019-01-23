@@ -50,4 +50,21 @@ public class ConnectionPool {
             LOGGER.warn("Trying to release closed connection. Possible leakage of connections");
         }
     }
+
+    public void dispose() throws SQLException {
+        if (instance != null) {
+            instance.clearConnectionQueue();
+            instance = null;
+        }
+    }
+
+    private void clearConnectionQueue() throws SQLException {
+        Connection connection;
+        while ((connection = connections.poll()) != null) {
+            if (!connection.getAutoCommit()) {
+                connection.commit();
+            }
+            connection.close();
+        }
+    }
 }
