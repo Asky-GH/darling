@@ -3,6 +3,7 @@ package kz.epam.darling.controller.command.auth;
 import kz.epam.darling.controller.command.Command;
 import kz.epam.darling.model.User;
 import kz.epam.darling.model.dao.ConnectionPool;
+import kz.epam.darling.model.dao.InfoDAO;
 import kz.epam.darling.model.dao.UserDAO;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -26,6 +27,7 @@ public class LoginCommand implements Command {
             User user = userDAO.findByEmail(email);
             if (user != null && BCrypt.checkpw(password, user.getPassword())) {
                 user.setPassword(null);
+                user.setInfo(new InfoDAO(ConnectionPool.getInstance().takeConnection()).findByUserId(user.getId()));
                 request.getSession().setAttribute("user", user);
                 response.sendRedirect(request.getContextPath() + "/");
                 return;

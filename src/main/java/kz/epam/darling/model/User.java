@@ -4,13 +4,8 @@ package kz.epam.darling.model;
 public class User extends Entity {
     private String email;
     private String password;
-    private String gender;
-    private String role;
-    private String firstName;
-    private String lastName;
-    private int birthyear;
-    private String country;
-    private String city;
+    private int roleId;
+    private Info info;
 
 
     public User() {
@@ -36,59 +31,19 @@ public class User extends Entity {
         this.password = password;
     }
 
-    public String getGender() {
-        return gender;
+    public int getRoleId() {
+        return roleId;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 
-    public String getRole() {
-        return role;
+    public Info getInfo() {
+        return info;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public int getBirthyear() {
-        return birthyear;
-    }
-
-    public void setBirthyear(int birthyear) {
-        this.birthyear = birthyear;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
+    public void setInfo(Info info) {
+        this.info = info;
     }
 }
