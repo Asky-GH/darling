@@ -1,10 +1,9 @@
 package kz.epam.darling.model;
 
-// TODO improve model. Think about builder pattern
 public class User extends Entity {
     private String email;
     private String password;
-    private int roleId;
+    private Role role;
     private Info info;
 
 
@@ -31,12 +30,12 @@ public class User extends Entity {
         this.password = password;
     }
 
-    public int getRoleId() {
-        return roleId;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Info getInfo() {
