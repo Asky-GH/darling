@@ -6,21 +6,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandFactory {
-    private static final String GET_LOGIN_ACTION = "get-login";
-    private static final String POST_LOGIN_ACTION = "post-login";
-    private static final String LOGOUT_ACTION = "logout";
-    private static final String GET_REGISTRATION_ACTION = "get-registration";
-    private static final String POST_REGISTRATION_ACTION = "post-registration";
+    private static final String LOGIN_ACTION = "/login";
+    private static final String LOGOUT_ACTION = "/logout";
+    private static final String REGISTRATION_ACTION = "/registration";
+    private static final String PROFILE_ACTION = "/profile";
     private static CommandFactory instance = new CommandFactory();
     private Map<String, Command> commands = new HashMap<>();
 
 
     private CommandFactory() {
-        commands.put(GET_LOGIN_ACTION, new GetLoginCommand());
-        commands.put(POST_LOGIN_ACTION, new PostLoginCommand());
+        commands.put(LOGIN_ACTION, new LoginCommand());
         commands.put(LOGOUT_ACTION, new LogoutCommand());
-        commands.put(GET_REGISTRATION_ACTION, new GetRegistrationCommand());
-        commands.put(POST_REGISTRATION_ACTION, new PostRegistrationCommand());
+        commands.put(REGISTRATION_ACTION, new RegistrationCommand());
+        commands.put(PROFILE_ACTION, new ProfileCommand());
     }
 
     public static CommandFactory getInstance() {

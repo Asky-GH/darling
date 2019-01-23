@@ -1,8 +1,8 @@
 package kz.epam.darling.controller.command.auth;
 
-import kz.epam.darling.model.dao.ConnectionPool;
 import kz.epam.darling.controller.command.Command;
 import kz.epam.darling.model.User;
+import kz.epam.darling.model.dao.ConnectionPool;
 import kz.epam.darling.model.dao.UserDAO;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -11,9 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class PostLoginCommand implements Command {
+public class LoginCommand implements Command {
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        request.getRequestDispatcher("jsp/auth/login.jsp").forward(request, response);
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         if (!email.isEmpty() && !password.isEmpty()) {

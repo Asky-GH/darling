@@ -1,8 +1,8 @@
 package kz.epam.darling.controller.command.auth;
 
-import kz.epam.darling.model.dao.ConnectionPool;
 import kz.epam.darling.controller.command.Command;
 import kz.epam.darling.model.User;
+import kz.epam.darling.model.dao.ConnectionPool;
 import kz.epam.darling.model.dao.UserDAO;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -11,9 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class PostRegistrationCommand implements Command {
+public class RegistrationCommand implements Command {
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        request.getRequestDispatcher("jsp/auth/registration.jsp").forward(request, response);
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
@@ -27,10 +32,12 @@ public class PostRegistrationCommand implements Command {
                     user = new User();
                     user.setEmail(email);
                     user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-                    if (userDAO.create(user)) {
+                    userDAO.create(user);
+                    user = userDAO.findByEmail(email);
+                    if (user != null) {
                         user.setPassword(null);
                         request.getSession().setAttribute("user", user);
-                        response.sendRedirect(request.getContextPath() + "/");
+                        response.sendRedirect(request.getContextPath() + "/profile");
                         return;
                     } else {
                         // TODO email already exists or database connection error
