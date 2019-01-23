@@ -1,30 +1,24 @@
 package kz.epam.darling.model.dao;
 
-import kz.epam.darling.model.Country;
-import kz.epam.darling.model.Gender;
 import kz.epam.darling.model.Info;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class InfoDAO implements DAO<Integer, Info> {
-    private static final Logger LOGGER = LogManager.getLogger(InfoDAO.class.getName());
     private static final String INSERT_QUERY = "INSERT INTO info(first_name, last_name, birthday, gender_id, " +
                                                 "country_id, user_id) VALUES(?, ?, ?, ?, ?, ?)";
     private static final String FIND_BY_USER_ID_QUERY = "SELECT * FROM info WHERE user_id = ?";
-    private Connection connection;
-    private GenderDAO genderDAO = new GenderDAO(ConnectionPool.getInstance().takeConnection());
-    private CountryDAO countryDAO = new CountryDAO(ConnectionPool.getInstance().takeConnection());
+    private GenderDAO genderDAO = new GenderDAO();
+    private CountryDAO countryDAO = new CountryDAO();
 
 
-    public InfoDAO(Connection connection) {
-        this.connection = connection;
-    }
-
-    public Info findByUserId(int id) {
+    public Info findByUserId(int id) throws SQLException, ClassNotFoundException, InterruptedException {
         Info info = null;
+        Connection connection = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_USER_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -33,16 +27,12 @@ public class InfoDAO implements DAO<Integer, Info> {
                     info.setId(resultSet.getInt("id"));
                     info.setFirstName(resultSet.getString("first_name"));
                     info.setLastName(resultSet.getString("last_name"));
-                    int genderId = resultSet.getInt("gender_id");
-                    info.setGender(genderDAO.findById(genderId));
+                    info.setGender(genderDAO.findById(resultSet.getInt("gender_id")));
                     info.setBirthday(resultSet.getDate("birthday"));
-                    int countryId = resultSet.getInt("country_id");
-                    info.setCountry(countryDAO.findById(countryId));
+                    info.setCountry(countryDAO.findById(resultSet.getInt("country_id")));
                     info.setUserId(id);
                 }
             }
-        } catch (SQLException e) {
-            LOGGER.error(e);
         } finally {
             ConnectionPool.getInstance().releaseConnection(connection);
         }
@@ -50,21 +40,16 @@ public class InfoDAO implements DAO<Integer, Info> {
     }
 
     @Override
-    public boolean create(Info info) {
+    public void create(Info info) throws SQLException, InterruptedException, ClassNotFoundException {
+        Connection connection = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY)) {
             preparedStatement.setString(1, info.getFirstName());
             preparedStatement.setString(2, info.getLastName());
             preparedStatement.setDate(3, info.getBirthday());
-            Gender gender = genderDAO.findByName(info.getGender().getName());
-            preparedStatement.setInt(4, gender.getId());
-            Country country = countryDAO.findByName(info.getCountry().getName());
-            preparedStatement.setInt(5, country.getId());
+            preparedStatement.setInt(4, info.getGender().getId());
+            preparedStatement.setInt(5, info.getCountry().getId());
             preparedStatement.setInt(6, info.getUserId());
             preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            LOGGER.error(e);
-            return false;
         } finally {
             ConnectionPool.getInstance().releaseConnection(connection);
         }

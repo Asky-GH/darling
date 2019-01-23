@@ -2,12 +2,13 @@ package kz.epam.darling.model.dao;
 
 import kz.epam.darling.model.Entity;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface DAO<K, T extends Entity> {
-    boolean create(T entity);
+    void create(T entity) throws SQLException, InterruptedException, ClassNotFoundException;
     List<T> findAll();
-    T findById(K id);
+    T findById(K id) throws SQLException, ClassNotFoundException, InterruptedException;
     boolean update(T entity);
     boolean delete(K id);
 }

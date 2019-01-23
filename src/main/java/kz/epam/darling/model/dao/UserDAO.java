@@ -1,25 +1,22 @@
 package kz.epam.darling.model.dao;
 
 import kz.epam.darling.model.User;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserDAO implements DAO<Integer, User> {
-    private static final Logger LOGGER = LogManager.getLogger(UserDAO.class.getName());
     private static final String INSERT_QUERY = "INSERT INTO users(email, password) VALUES(?, ?)";
     private static final String FIND_BY_EMAIL_QUERY = "SELECT * FROM users WHERE email = ?";
-    private Connection connection;
+    private RoleDAO roleDAO = new RoleDAO();
 
 
-    public UserDAO(Connection connection) {
-        this.connection = connection;
-    }
-
-    public User findByEmail(String email) {
+    public User findByEmail(String email) throws SQLException, ClassNotFoundException, InterruptedException {
         User user = null;
+        Connection connection = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_EMAIL_QUERY)) {
             preparedStatement.setString(1, email);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -28,11 +25,9 @@ public class UserDAO implements DAO<Integer, User> {
                     user.setId(resultSet.getInt("id"));
                     user.setEmail(resultSet.getString("email"));
                     user.setPassword(resultSet.getString("password"));
-                    user.setRoleId(resultSet.getInt("role_id"));
+                    user.setRole(roleDAO.findById(resultSet.getInt("role_id")));
                 }
             }
-        } catch (SQLException e) {
-            LOGGER.error(e);
         } finally {
             ConnectionPool.getInstance().releaseConnection(connection);
         }
@@ -40,15 +35,12 @@ public class UserDAO implements DAO<Integer, User> {
     }
 
     @Override
-    public boolean create(User user) {
+    public void create(User user) throws SQLException, ClassNotFoundException, InterruptedException {
+        Connection connection = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY)) {
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            LOGGER.error(e);
-            return false;
         } finally {
             ConnectionPool.getInstance().releaseConnection(connection);
         }

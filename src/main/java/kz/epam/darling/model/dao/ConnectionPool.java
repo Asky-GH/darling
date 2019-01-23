@@ -14,51 +14,40 @@ public class ConnectionPool {
     private static final String PROPERTIES_FILE = "database";
     private static final int POOL_SIZE = 8;
     private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class.getName());
-    private static ConnectionPool instance = new ConnectionPool();
+    private static ConnectionPool instance;
     private BlockingQueue<Connection> connections = new ArrayBlockingQueue<>(POOL_SIZE);
 
 
-    private ConnectionPool() {
+    private ConnectionPool() throws SQLException, ClassNotFoundException {
         ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTIES_FILE);
         String url = resourceBundle.getString("db.url");
         String user = resourceBundle.getString("db.user");
         String password = resourceBundle.getString("db.password");
         String driver = resourceBundle.getString("db.driver");
-        try {
-            Class.forName(driver);
-            for (int i = 0; i < POOL_SIZE; i++) {
-                connections.offer(DriverManager.getConnection(url, user, password));
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            LOGGER.error(e);
+        Class.forName(driver);
+        for (int i = 0; i < POOL_SIZE; i++) {
+            connections.offer(DriverManager.getConnection(url, user, password));
         }
     }
 
-    public static ConnectionPool getInstance() {
+    public static ConnectionPool getInstance() throws SQLException, ClassNotFoundException {
+        if (instance == null) {
+            instance = new ConnectionPool();
+        }
         return instance;
     }
 
-    public Connection takeConnection() {
-        Connection connection = null;
-        try {
-            connection = connections.take();
-        } catch (InterruptedException e) {
-            LOGGER.error(e);
-        }
-        return connection;
+    public Connection takeConnection() throws InterruptedException {
+        return connections.take();
     }
 
-    public void releaseConnection(Connection connection) {
-        try {
-            if (!connection.isClosed()) {
-                if (!connections.offer(connection)) {
-                    LOGGER.warn("Connection not added. Possible leakage of connections");
-                }
-            } else {
-                LOGGER.warn("Trying to release closed connection. Possible leakage of connections");
+    public void releaseConnection(Connection connection) throws SQLException {
+        if (!connection.isClosed()) {
+            if (!connections.offer(connection)) {
+                LOGGER.warn("Connection not added. Possible leakage of connections");
             }
-        } catch (SQLException e) {
-            LOGGER.error(e);
+        } else {
+            LOGGER.warn("Trying to release closed connection. Possible leakage of connections");
         }
     }
 }
