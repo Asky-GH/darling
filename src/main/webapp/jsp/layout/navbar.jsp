@@ -14,7 +14,7 @@
     </div>
     <div class="navbar-menu">
         <div class="navbar-end">
-            <a class="navbar-item" href="${pageContext.request.contextPath}/">Main</a>
+            <a class="navbar-item" href="${pageContext.request.contextPath}/main">Main</a>
             <c:choose>
                 <c:when test="${user != null}">
                     <div class="navbar-item has-dropdown is-hoverable">

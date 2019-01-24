@@ -11,6 +11,8 @@ public class CommandFactory {
     private static final String REGISTRATION_ACTION = "/registration";
     private static final String PROFILE_ACTION = "/profile";
     private static final String MAIN_ACTION = "/main";
+    private static final String MATCH_ACTION = "/match";
+    private static final String CHAT_ACTION = "/chat";
     private static CommandFactory instance = new CommandFactory();
     private Map<String, Command> commands = new HashMap<>();
 
@@ -21,6 +23,8 @@ public class CommandFactory {
         commands.put(REGISTRATION_ACTION, new RegistrationCommand());
         commands.put(PROFILE_ACTION, new ProfileCommand());
         commands.put(MAIN_ACTION, new MainCommand());
+        commands.put(MATCH_ACTION, new MatchCommand());
+        commands.put(CHAT_ACTION, new ChatCommand());
     }
 
     public static CommandFactory getInstance() {

@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO implements DAO<Integer, User> {
-    private static final String INSERT_QUERY = "INSERT INTO users(email, password) VALUES(?, ?)";
+    private static final String INSERT_QUERY = "INSERT INTO users(email, password) VALUES (?, ?)";
     private static final String FIND_BY_EMAIL_QUERY = "SELECT * FROM users WHERE email = ?";
     private static final String FIND_ALL_QUERY = "SELECT * FROM users";
+    private static final String FIND_BY_ID_QUERY = "SELECT * FROM users WHERE id = ?";
     private RoleDAO roleDAO = new RoleDAO();
     private InfoDAO infoDAO = new InfoDAO();
 
@@ -63,6 +64,7 @@ public class UserDAO implements DAO<Integer, User> {
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 User user = retrieveUser(resultSet);
+                user.setPassword(null);
                 users.add(user);
             }
         } finally {
@@ -72,8 +74,22 @@ public class UserDAO implements DAO<Integer, User> {
     }
 
     @Override
-    public User findById(Integer id) {
-        return null;
+    public User findById(Integer id) throws SQLException, ClassNotFoundException, InterruptedException {
+        User user = null;
+        Connection connection = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY)) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    user = retrieveUser(resultSet);
+                    user.setPassword(null);
+                }
+            }
+
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(connection);
+        }
+        return user;
     }
 
     @Override

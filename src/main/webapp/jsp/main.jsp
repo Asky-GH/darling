@@ -13,11 +13,11 @@
         <ul>
             <c:forEach var="user" items="${users}">
                 <li>
-                    <a href="${pageContext.request.contextPath}/users?id=${user.id}">${user.info.firstName}</a>
+                    <a href="${pageContext.request.contextPath}/match?id=${user.id}">${user.info.firstName}</a>
                 </li>
             </c:forEach>
         </ul>
 
         <jsp:include page="layout/footer.jsp"/>
-</body>
+    </body>
 </html>

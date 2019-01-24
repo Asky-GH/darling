@@ -10,7 +10,7 @@ import java.util.List;
 
 public class InfoDAO implements DAO<Integer, Info> {
     private static final String INSERT_QUERY = "INSERT INTO info(first_name, last_name, birthday, gender_id, " +
-                                                "country_id, user_id) VALUES(?, ?, ?, ?, ?, ?)";
+                                                "country_id, user_id) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String FIND_BY_USER_ID_QUERY = "SELECT * FROM info WHERE user_id = ?";
     private GenderDAO genderDAO = new GenderDAO();
     private CountryDAO countryDAO = new CountryDAO();
