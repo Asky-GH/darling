@@ -4,7 +4,7 @@
 <nav class="navbar has-shadow is-spaced" roleId="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item" href="${pageContext.request.contextPath}/">
-            <img src="img/logo.png" alt="Logo" style="margin-right:5px;"><b>Darling</b>
+            <img src="static/img/logo.png" alt="Logo" style="margin-right:5px;"><b>Darling</b>
         </a>
         <a roleId="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
             <span aria-hidden="true"></span>

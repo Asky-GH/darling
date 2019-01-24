@@ -15,11 +15,11 @@
 
     <servlet-mapping>
         <servlet-name>default</servlet-name>
-        <url-pattern>/img/*</url-pattern>
+        <url-pattern>/static/img/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>default</servlet-name>
-        <url-pattern>/js/*</url-pattern>
+        <url-pattern>/static/js/*</url-pattern>
     </servlet-mapping>
 
     <filter>
