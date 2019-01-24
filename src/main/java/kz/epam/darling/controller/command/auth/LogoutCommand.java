@@ -18,7 +18,7 @@ public class LogoutCommand implements Command {
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        doGet(request, response);
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+
     }
 }

@@ -10,6 +10,7 @@ public class CommandFactory {
     private static final String LOGOUT_ACTION = "/logout";
     private static final String REGISTRATION_ACTION = "/registration";
     private static final String PROFILE_ACTION = "/profile";
+    private static final String MAIN_ACTION = "/main";
     private static CommandFactory instance = new CommandFactory();
     private Map<String, Command> commands = new HashMap<>();
 
@@ -19,6 +20,7 @@ public class CommandFactory {
         commands.put(LOGOUT_ACTION, new LogoutCommand());
         commands.put(REGISTRATION_ACTION, new RegistrationCommand());
         commands.put(PROFILE_ACTION, new ProfileCommand());
+        commands.put(MAIN_ACTION, new MainCommand());
     }
 
     public static CommandFactory getInstance() {

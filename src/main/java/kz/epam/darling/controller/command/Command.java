@@ -18,7 +18,9 @@ public interface Command {
         }
     }
 
-    void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+    void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException,
+                                                                                InterruptedException, SQLException,
+                                                                                ClassNotFoundException;
     void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException,
                                                                                     InterruptedException, SQLException,
                                                                                     ClassNotFoundException;

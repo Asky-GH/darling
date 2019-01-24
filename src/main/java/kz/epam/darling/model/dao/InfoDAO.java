@@ -40,7 +40,7 @@ public class InfoDAO implements DAO<Integer, Info> {
     }
 
     @Override
-    public void create(Info info) throws SQLException, InterruptedException, ClassNotFoundException {
+    public void create(Info info) throws SQLException, ClassNotFoundException, InterruptedException {
         Connection connection = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY)) {
             preparedStatement.setString(1, info.getFirstName());

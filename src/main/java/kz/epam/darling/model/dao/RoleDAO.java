@@ -12,7 +12,7 @@ public class RoleDAO implements DAO<Integer, Role> {
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM roles WHERE id = ?";
 
     @Override
-    public void create(Role entity) throws SQLException, InterruptedException, ClassNotFoundException {
+    public void create(Role entity) throws SQLException, ClassNotFoundException, InterruptedException {
 
     }
 

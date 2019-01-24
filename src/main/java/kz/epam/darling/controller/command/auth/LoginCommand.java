@@ -2,7 +2,6 @@ package kz.epam.darling.controller.command.auth;
 
 import kz.epam.darling.controller.command.Command;
 import kz.epam.darling.model.User;
-import kz.epam.darling.model.dao.InfoDAO;
 import kz.epam.darling.model.dao.UserDAO;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -14,7 +13,6 @@ import java.sql.SQLException;
 
 public class LoginCommand implements Command {
     private UserDAO userDAO = new UserDAO();
-    private InfoDAO infoDAO = new InfoDAO();
 
 
     @Override
@@ -32,9 +30,8 @@ public class LoginCommand implements Command {
             User user = userDAO.findByEmail(email);
             if (user != null && BCrypt.checkpw(password, user.getPassword())) {
                 user.setPassword(null);
-                user.setInfo(infoDAO.findByUserId(user.getId()));
                 request.getSession().setAttribute("user", user);
-                response.sendRedirect(request.getContextPath() + "/");
+                response.sendRedirect(request.getContextPath() + "/main");
                 return;
             }
         }

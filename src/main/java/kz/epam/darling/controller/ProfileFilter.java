@@ -14,7 +14,7 @@ public class ProfileFilter implements Filter {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             HttpServletResponse response = (HttpServletResponse) servletResponse;
-            response.sendRedirect(request.getContextPath() + "/");
+            response.sendRedirect(request.getContextPath() + "/main");
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }
