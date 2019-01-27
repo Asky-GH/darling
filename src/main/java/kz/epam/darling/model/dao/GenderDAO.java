@@ -1,7 +1,6 @@
 package kz.epam.darling.model.dao;
 
 import kz.epam.darling.model.Gender;
-import kz.epam.darling.util.ApplicationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,14 +14,13 @@ public class GenderDAO {
 
 
     static Gender findById(Integer id) {
-        Gender gender;
+        Gender gender = null;
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM genders WHERE id = ?")) {
             ps.setInt(1, id);
             gender = retrieveGender(ps);
         } catch (SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         } finally {
             ConnectionPool.getInstance().releaseConnection(con);
         }
@@ -30,14 +28,13 @@ public class GenderDAO {
     }
 
     public static Gender findByName(String name) {
-        Gender gender;
+        Gender gender = null;
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM genders WHERE name = ?")) {
             ps.setString(1, name);
             gender = retrieveGender(ps);
         } catch (SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         } finally {
             ConnectionPool.getInstance().releaseConnection(con);
         }
@@ -54,7 +51,6 @@ public class GenderDAO {
             }
         } catch (SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         }
         return gender;
     }

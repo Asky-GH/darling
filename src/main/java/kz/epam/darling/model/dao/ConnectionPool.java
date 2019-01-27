@@ -1,6 +1,5 @@
 package kz.epam.darling.model.dao;
 
-import kz.epam.darling.util.ApplicationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,7 +31,6 @@ public class ConnectionPool {
             }
         } catch (ClassNotFoundException | SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         }
     }
 
@@ -42,17 +40,18 @@ public class ConnectionPool {
         }
     }
 
-    public static ConnectionPool getInstance() {
+    static ConnectionPool getInstance() {
         return instance;
     }
 
     Connection takeConnection() {
+        Connection connection = null;
         try {
-            return connections.take();
+            connection = connections.take();
         } catch (InterruptedException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         }
+        return connection;
     }
 
     void releaseConnection(Connection connection) {
@@ -66,7 +65,6 @@ public class ConnectionPool {
             }
         } catch (SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         }
     }
 
@@ -87,7 +85,6 @@ public class ConnectionPool {
                 connection.close();
             } catch (SQLException e) {
                 LOGGER.error(e);
-                throw new ApplicationException();
             }
         }
     }

@@ -1,7 +1,6 @@
 package kz.epam.darling.model.dao;
 
 import kz.epam.darling.model.Role;
-import kz.epam.darling.util.ApplicationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,7 +27,6 @@ class RoleDAO {
             }
         } catch (SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         } finally {
             ConnectionPool.getInstance().releaseConnection(con);
         }

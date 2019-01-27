@@ -1,7 +1,6 @@
 package kz.epam.darling.model.dao;
 
 import kz.epam.darling.model.Info;
-import kz.epam.darling.util.ApplicationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,7 +32,6 @@ public class InfoDAO {
             }
         } catch (SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         } finally {
             ConnectionPool.getInstance().releaseConnection(con);
         }
@@ -53,7 +51,6 @@ public class InfoDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         } finally {
             ConnectionPool.getInstance().releaseConnection(con);
         }

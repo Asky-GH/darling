@@ -1,7 +1,6 @@
 package kz.epam.darling.model.dao;
 
 import kz.epam.darling.model.User;
-import kz.epam.darling.util.ApplicationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +29,6 @@ public class UserDAO {
 
         } catch (SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         } finally {
             ConnectionPool.getInstance().releaseConnection(con);
         }
@@ -49,7 +47,6 @@ public class UserDAO {
             }
         } catch (SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         } finally {
             ConnectionPool.getInstance().releaseConnection(con);
         }
@@ -68,7 +65,6 @@ public class UserDAO {
             }
         } catch (SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         } finally {
             ConnectionPool.getInstance().releaseConnection(con);
         }
@@ -83,7 +79,6 @@ public class UserDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         } finally {
             ConnectionPool.getInstance().releaseConnection(con);
         }
@@ -96,10 +91,9 @@ public class UserDAO {
             user.setPassword(rs.getString("password"));
             user.setRole(RoleDAO.findById(rs.getInt("role_id")));
             user.setInfo(InfoDAO.findByUserId(user.getId()));
-            return user;
         } catch (SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         }
+        return user;
     }
 }

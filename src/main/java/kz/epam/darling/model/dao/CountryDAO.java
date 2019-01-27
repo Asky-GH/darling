@@ -1,7 +1,6 @@
 package kz.epam.darling.model.dao;
 
 import kz.epam.darling.model.Country;
-import kz.epam.darling.util.ApplicationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,14 +14,13 @@ public class CountryDAO {
 
 
     static Country findById(Integer id) {
-        Country country;
+        Country country = null;
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM countries WHERE id = ?")) {
             ps.setInt(1, id);
             country = retrieveCountry(ps);
         } catch (SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         } finally {
             ConnectionPool.getInstance().releaseConnection(con);
         }
@@ -30,14 +28,13 @@ public class CountryDAO {
     }
 
     public static Country findByName(String name) {
-        Country country;
+        Country country = null;
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM countries WHERE name = ?")) {
             ps.setString(1, name);
             country = retrieveCountry(ps);
         } catch (SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         } finally {
             ConnectionPool.getInstance().releaseConnection(con);
         }
@@ -54,7 +51,6 @@ public class CountryDAO {
             }
         } catch (SQLException e) {
             LOGGER.error(e);
-            throw new ApplicationException();
         }
         return country;
     }
