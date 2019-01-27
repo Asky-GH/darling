@@ -3,7 +3,8 @@ package kz.epam.darling.controller.command.auth;
 import kz.epam.darling.controller.command.Command;
 import kz.epam.darling.model.User;
 import kz.epam.darling.model.dao.UserDAO;
-import kz.epam.darling.util.Validator;
+import kz.epam.darling.util.EmailValidator;
+import kz.epam.darling.util.PasswordValidator;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.servlet.ServletException;
@@ -29,10 +30,10 @@ public class RegistrationCommand implements Command {
         if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             errorMessages.offer("All fields are required!");
         }
-        if (!Validator.emailIsValid(email)) {
+        if (!EmailValidator.isValid(email)) {
             errorMessages.offer("Invalid email!");
         }
-        if (!Validator.passwordIsValid(password)) {
+        if (!PasswordValidator.isValid(password)) {
             errorMessages.offer("Password must be at list 6 characters long! It must contain at least 1 lowercase, " +
                                 "1 uppercase latin letter, 1 special character, 1 digit! It must not contain whitespace!");
         }
