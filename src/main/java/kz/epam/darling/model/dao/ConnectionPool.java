@@ -1,5 +1,6 @@
 package kz.epam.darling.model.dao;
 
+import kz.epam.darling.util.ApplicationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,60 +12,83 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class ConnectionPool {
-    private static final String PROPERTIES_FILE = "database";
-    private static final int POOL_SIZE = 8;
     private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class.getName());
     private static ConnectionPool instance;
-    private BlockingQueue<Connection> connections = new ArrayBlockingQueue<>(POOL_SIZE);
+    private BlockingQueue<Connection> connections;
 
 
-    private ConnectionPool() throws SQLException, ClassNotFoundException {
-        ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTIES_FILE);
-        String url = resourceBundle.getString("db.url");
-        String user = resourceBundle.getString("db.user");
-        String password = resourceBundle.getString("db.password");
-        String driver = resourceBundle.getString("db.driver");
-        Class.forName(driver);
-        for (int i = 0; i < POOL_SIZE; i++) {
-            connections.offer(DriverManager.getConnection(url, user, password));
+    private ConnectionPool() {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
+        String databaseURL = resourceBundle.getString("db.url");
+        String databaseUser = resourceBundle.getString("db.user");
+        String databasePassword = resourceBundle.getString("db.password");
+        String databaseDriver = resourceBundle.getString("db.driver");
+        int databaseConnectionPoolSize = Integer.parseInt(resourceBundle.getString("db.connectionPoolSize"));
+        connections = new ArrayBlockingQueue<>(databaseConnectionPoolSize);
+        try {
+            Class.forName(databaseDriver);
+            for (int i = 0; i < databaseConnectionPoolSize; i++) {
+                connections.offer(DriverManager.getConnection(databaseURL, databaseUser, databasePassword));
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            LOGGER.error(e);
+            throw new ApplicationException();
         }
     }
 
-    public static ConnectionPool getInstance() throws SQLException, ClassNotFoundException {
+    public static void init() {
         if (instance == null) {
             instance = new ConnectionPool();
         }
+    }
+
+    public static ConnectionPool getInstance() {
         return instance;
     }
 
-    public Connection takeConnection() throws InterruptedException {
-        return connections.take();
-    }
-
-    public void releaseConnection(Connection connection) throws SQLException {
-        if (!connection.isClosed()) {
-            if (!connections.offer(connection)) {
-                LOGGER.warn("Connection not added. Possible leakage of connections");
-            }
-        } else {
-            LOGGER.warn("Trying to release closed connection. Possible leakage of connections");
+    Connection takeConnection() {
+        try {
+            return connections.take();
+        } catch (InterruptedException e) {
+            LOGGER.error(e);
+            throw new ApplicationException();
         }
     }
 
-    public void dispose() throws SQLException {
+    void releaseConnection(Connection connection) {
+        try {
+            if (!connection.isClosed()) {
+                if (!connections.offer(connection)) {
+                    LOGGER.warn("Connection not added. Possible leakage of connections");
+                }
+            } else {
+                LOGGER.warn("Trying to release closed connection. Possible leakage of connections");
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new ApplicationException();
+        }
+    }
+
+    public static void dispose() {
         if (instance != null) {
             instance.clearConnectionQueue();
             instance = null;
         }
     }
 
-    private void clearConnectionQueue() throws SQLException {
+    private void clearConnectionQueue() {
         Connection connection;
         while ((connection = connections.poll()) != null) {
-            if (!connection.getAutoCommit()) {
-                connection.commit();
+            try {
+                if (!connection.getAutoCommit()) {
+                    connection.commit();
+                }
+                connection.close();
+            } catch (SQLException e) {
+                LOGGER.error(e);
+                throw new ApplicationException();
             }
-            connection.close();
         }
     }
 }
