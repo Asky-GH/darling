@@ -1,71 +1,61 @@
 package kz.epam.darling.model.dao;
 
 import kz.epam.darling.model.Gender;
+import kz.epam.darling.util.ApplicationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
-public class GenderDAO implements DAO<Integer, Gender> {
-    private static final String FIND_BY_NAME_QUERY = "SELECT * FROM genders WHERE name = ?";
-    private static final String FIND_BY_ID_QUERY = "SELECT * FROM genders WHERE id = ?";
+public class GenderDAO {
+    private static final Logger LOGGER = LogManager.getLogger(GenderDAO.class.getName());
 
 
-    public Gender findByName(String name) throws SQLException, ClassNotFoundException, InterruptedException {
+    static Gender findById(Integer id) {
         Gender gender;
-        Connection connection = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_NAME_QUERY)) {
-            preparedStatement.setString(1, name);
-            gender = retrieveGender(preparedStatement);
+        Connection con = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM genders WHERE id = ?")) {
+            ps.setInt(1, id);
+            gender = retrieveGender(ps);
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new ApplicationException();
         } finally {
-            ConnectionPool.getInstance().releaseConnection(connection);
+            ConnectionPool.getInstance().releaseConnection(con);
         }
         return gender;
     }
 
-    private Gender retrieveGender(PreparedStatement preparedStatement) throws SQLException {
+    public static Gender findByName(String name) {
+        Gender gender;
+        Connection con = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM genders WHERE name = ?")) {
+            ps.setString(1, name);
+            gender = retrieveGender(ps);
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new ApplicationException();
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
+        }
+        return gender;
+    }
+
+    private static Gender retrieveGender(PreparedStatement ps) {
         Gender gender = null;
-        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (resultSet.next()) {
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
                 gender = new Gender();
-                gender.setId(resultSet.getInt("id"));
-                gender.setName(resultSet.getString("name"));
+                gender.setId(rs.getInt("id"));
+                gender.setName(rs.getString("name"));
             }
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new ApplicationException();
         }
         return gender;
-    }
-
-    @Override
-    public void create(Gender entity) {
-    }
-
-    @Override
-    public List<Gender> findAll() {
-        return null;
-    }
-
-    @Override
-    public Gender findById(Integer id) throws SQLException, ClassNotFoundException, InterruptedException {
-        Gender gender;
-        Connection connection = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY)) {
-            preparedStatement.setInt(1, id);
-            gender = retrieveGender(preparedStatement);
-        } finally {
-            ConnectionPool.getInstance().releaseConnection(connection);
-        }
-        return gender;
-    }
-
-    @Override
-    public boolean update(Gender entity) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Integer id) {
-        return false;
     }
 }

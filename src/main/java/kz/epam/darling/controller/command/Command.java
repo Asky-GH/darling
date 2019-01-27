@@ -4,12 +4,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 public interface Command {
-    default void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException,
-                                                                                            InterruptedException,
-                                                                                            SQLException, ClassNotFoundException {
+    default void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String method = request.getMethod();
         if (method.equals("GET")) {
             doGet(request, response);
@@ -18,10 +15,6 @@ public interface Command {
         }
     }
 
-    void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException,
-                                                                                InterruptedException, SQLException,
-                                                                                ClassNotFoundException;
-    void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException,
-                                                                                    InterruptedException, SQLException,
-                                                                                    ClassNotFoundException;
+    void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+    void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 }

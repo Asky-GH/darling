@@ -11,23 +11,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
-import java.sql.SQLException;
 
 public class ProfileCommand implements Command {
-    private GenderDAO genderDAO = new GenderDAO();
-    private CountryDAO countryDAO = new CountryDAO();
-    private InfoDAO infoDAO = new InfoDAO();
-
-
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.getRequestDispatcher("jsp/profile.jsp").forward(request, response);
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException,
-                                                                                        InterruptedException,
-                                                                                        SQLException, ClassNotFoundException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String gender = request.getParameter("gender");
@@ -41,11 +33,11 @@ public class ProfileCommand implements Command {
             Info info = new Info();
             info.setFirstName(firstName);
             info.setLastName(lastName);
-            info.setGender(genderDAO.findByName(gender));
+            info.setGender(GenderDAO.findByName(gender));
             info.setBirthday(Date.valueOf(birthday));
-            info.setCountry(countryDAO.findByName(countryName));
+            info.setCountry(CountryDAO.findByName(countryName));
             info.setUserId(user.getId());
-            infoDAO.create(info);
+            InfoDAO.create(info);
             user.setInfo(info);
             response.sendRedirect(request.getContextPath() + "/profile");
         }

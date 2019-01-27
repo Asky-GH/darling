@@ -5,7 +5,8 @@ import java.sql.Timestamp;
 public class Message extends Entity {
     private String text;
     private Timestamp created_at;
-    private int user_id;
+    private int sender_id;
+    private int receiver_id;
 
 
     public Message() {
@@ -31,11 +32,19 @@ public class Message extends Entity {
         this.created_at = created_at;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getSender_id() {
+        return sender_id;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setSender_id(int sender_id) {
+        this.sender_id = sender_id;
+    }
+
+    public int getReceiver_id() {
+        return receiver_id;
+    }
+
+    public void setReceiver_id(int receiver_id) {
+        this.receiver_id = receiver_id;
     }
 }

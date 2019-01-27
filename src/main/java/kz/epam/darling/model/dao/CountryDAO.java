@@ -1,71 +1,61 @@
 package kz.epam.darling.model.dao;
 
 import kz.epam.darling.model.Country;
+import kz.epam.darling.util.ApplicationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
-public class CountryDAO implements DAO<Integer, Country> {
-    private static final String FIND_BY_NAME_QUERY = "SELECT * FROM countries WHERE name = ?";
-    private static final String FIND_BY_ID_QUERY = "SELECT * FROM countries WHERE id = ?";
+public class CountryDAO {
+    private static final Logger LOGGER = LogManager.getLogger(CountryDAO.class.getName());
 
 
-    public Country findByName(String name) throws SQLException, ClassNotFoundException, InterruptedException {
+    static Country findById(Integer id) {
         Country country;
-        Connection connection = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_NAME_QUERY)) {
-            preparedStatement.setString(1, name);
-            country = retrieveCountry(preparedStatement);
+        Connection con = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM countries WHERE id = ?")) {
+            ps.setInt(1, id);
+            country = retrieveCountry(ps);
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new ApplicationException();
         } finally {
-            ConnectionPool.getInstance().releaseConnection(connection);
+            ConnectionPool.getInstance().releaseConnection(con);
         }
         return country;
     }
 
-    private Country retrieveCountry(PreparedStatement preparedStatement) throws SQLException {
+    public static Country findByName(String name) {
+        Country country;
+        Connection con = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM countries WHERE name = ?")) {
+            ps.setString(1, name);
+            country = retrieveCountry(ps);
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new ApplicationException();
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
+        }
+        return country;
+    }
+
+    private static Country retrieveCountry(PreparedStatement ps) {
         Country country = null;
-        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (resultSet.next()) {
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
                 country = new Country();
-                country.setId(resultSet.getInt("id"));
-                country.setName(resultSet.getString("name"));
+                country.setId(rs.getInt("id"));
+                country.setName(rs.getString("name"));
             }
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new ApplicationException();
         }
         return country;
-    }
-
-    @Override
-    public void create(Country entity) {
-    }
-
-    @Override
-    public List<Country> findAll() {
-        return null;
-    }
-
-    @Override
-    public Country findById(Integer id) throws SQLException, ClassNotFoundException, InterruptedException {
-        Country country;
-        Connection connection = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY)) {
-            preparedStatement.setInt(1, id);
-            country = retrieveCountry(preparedStatement);
-        } finally {
-            ConnectionPool.getInstance().releaseConnection(connection);
-        }
-        return country;
-    }
-
-    @Override
-    public boolean update(Country entity) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Integer id) {
-        return false;
     }
 }

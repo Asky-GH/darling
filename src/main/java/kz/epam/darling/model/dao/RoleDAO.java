@@ -1,52 +1,37 @@
 package kz.epam.darling.model.dao;
 
 import kz.epam.darling.model.Role;
+import kz.epam.darling.util.ApplicationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
-public class RoleDAO implements DAO<Integer, Role> {
-    private static final String FIND_BY_ID_QUERY = "SELECT * FROM roles WHERE id = ?";
+class RoleDAO {
+    private static final Logger LOGGER = LogManager.getLogger(RoleDAO.class.getName());
 
-    @Override
-    public void create(Role entity) throws SQLException, ClassNotFoundException, InterruptedException {
 
-    }
-
-    @Override
-    public List<Role> findAll() {
-        return null;
-    }
-
-    @Override
-    public Role findById(Integer id) throws SQLException, ClassNotFoundException, InterruptedException {
+    static Role findById(Integer id) {
         Role role = null;
-        Connection connection = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY)) {
-            preparedStatement.setInt(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
+        Connection con = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM roles WHERE id = ?")) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
                     role = new Role();
-                    role.setId(resultSet.getInt("id"));
-                    role.setName(resultSet.getString("name"));
+                    role.setId(rs.getInt("id"));
+                    role.setName(rs.getString("name"));
                 }
             }
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new ApplicationException();
         } finally {
-            ConnectionPool.getInstance().releaseConnection(connection);
+            ConnectionPool.getInstance().releaseConnection(con);
         }
         return role;
-    }
-
-    @Override
-    public boolean update(Role entity) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Integer id) {
-        return false;
     }
 }

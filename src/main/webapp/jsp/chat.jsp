@@ -13,23 +13,23 @@
         <table>
             <tr>
                 <td>First name</td>
-                <td>${match.info.firstName}</td>
+                <td>${receiver.info.firstName}</td>
             </tr>
             <tr>
                 <td>Last name</td>
-                <td>${match.info.lastName}</td>
+                <td>${receiver.info.lastName}</td>
             </tr>
             <tr>
                 <td>Gender</td>
-                <td>${match.info.gender.name}</td>
+                <td>${receiver.info.gender.name}</td>
             </tr>
             <tr>
                 <td>Birthday</td>
-                <td>${match.info.birthday}</td>
+                <td>${receiver.info.birthday}</td>
             </tr>
             <tr>
                 <td>Country</td>
-                <td>${match.info.country.name}</td>
+                <td>${receiver.info.country.name}</td>
             </tr>
         </table>
 
@@ -37,7 +37,7 @@
             <c:forEach var="message" items="${messages}">
                 <tr>
                     <c:choose>
-                        <c:when test="${message.user_id == match.id}">
+                        <c:when test="${message.sender_id == receiver.id}">
                             <td>
                                 ${message.text} - ${message.created_at}
                             </td>
@@ -54,7 +54,7 @@
             </c:forEach>
         </table>
 
-        <form method="post" action="${pageContext.request.contextPath}/chat?id=${match.id}">
+        <form method="post" action="${pageContext.request.contextPath}/chat?id=${receiver.id}">
             <textarea rows="4" cols="50" placeholder="Type your message here..." name="text"></textarea>
             <input type="submit" value="Send">
         </form>

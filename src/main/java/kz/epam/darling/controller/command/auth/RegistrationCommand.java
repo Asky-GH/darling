@@ -10,23 +10,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class RegistrationCommand implements Command {
-    private UserDAO userDAO = new UserDAO();
-
-
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.getRequestDispatcher("jsp/auth/registration.jsp").forward(request, response);
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException,
-                                                                                        InterruptedException,
-                                                                                        SQLException, ClassNotFoundException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
@@ -45,7 +39,7 @@ public class RegistrationCommand implements Command {
         if (!password.equals(confirmPassword)) {
             errorMessages.offer("Passwords do not match!");
         }
-        User user = userDAO.findByEmail(email);
+        User user = UserDAO.findByEmail(email);
         if (user != null) {
             errorMessages.offer("Email already exists!");
         }
@@ -57,8 +51,8 @@ public class RegistrationCommand implements Command {
             user = new User();
             user.setEmail(email);
             user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-            userDAO.create(user);
-            user = userDAO.findByEmail(email);
+            UserDAO.create(user);
+            user = UserDAO.findByEmail(email);
             user.setPassword(null);
             request.getSession().setAttribute("user", user);
             response.sendRedirect(request.getContextPath() + "/profile");
