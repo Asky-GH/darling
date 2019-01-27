@@ -1,4 +1,4 @@
-package kz.epam.darling.controller;
+package kz.epam.darling.controller.filter;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -7,6 +7,11 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class ProfileFilter implements Filter {
+    @Override
+    public void init(FilterConfig filterConfig) {
+
+    }
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
@@ -22,11 +27,6 @@ public class ProfileFilter implements Filter {
 
     @Override
     public void destroy() {
-
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) {
 
     }
 }
