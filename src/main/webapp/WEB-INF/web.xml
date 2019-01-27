@@ -5,11 +5,11 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
     <servlet>
-        <servlet-name>FrontController</servlet-name>
-        <servlet-class>kz.epam.darling.controller.FrontController</servlet-class>
+        <servlet-name>DarlingServlet</servlet-name>
+        <servlet-class>kz.epam.darling.controller.DarlingServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>FrontController</servlet-name>
+        <servlet-name>DarlingServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
@@ -28,7 +28,7 @@
 
     <filter>
         <filter-name>ProfileFilter</filter-name>
-        <filter-class>kz.epam.darling.controller.ProfileFilter</filter-class>
+        <filter-class>kz.epam.darling.controller.filter.ProfileFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>ProfileFilter</filter-name>
@@ -36,7 +36,7 @@
     </filter-mapping>
     <filter>
         <filter-name>CharsetFilter</filter-name>
-        <filter-class>kz.epam.darling.controller.CharsetFilter</filter-class>
+        <filter-class>kz.epam.darling.controller.filter.CharsetFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>CharsetFilter</filter-name>
