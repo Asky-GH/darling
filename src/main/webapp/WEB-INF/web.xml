@@ -27,11 +27,11 @@
     </servlet-mapping>
 
     <filter>
-        <filter-name>ProfileFilter</filter-name>
-        <filter-class>kz.epam.darling.controller.filter.ProfileFilter</filter-class>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>kz.epam.darling.controller.filter.AuthFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>ProfileFilter</filter-name>
+        <filter-name>AuthFilter</filter-name>
         <url-pattern>/profile</url-pattern>
     </filter-mapping>
     <filter>
