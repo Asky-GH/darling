@@ -3,6 +3,8 @@ package kz.epam.darling.controller.command.auth;
 import kz.epam.darling.controller.command.Command;
 import kz.epam.darling.model.User;
 import kz.epam.darling.model.dao.UserDAO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.servlet.ServletException;
@@ -11,25 +13,36 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class LoginCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(LoginCommand.class.getName());
+
+
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.getRequestDispatcher("jsp/auth/login.jsp").forward(request, response);
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.getRequestDispatcher("jsp/auth/login.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            LOGGER.error(e);
+        }
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        if (!email.isEmpty() && !password.isEmpty()) {
-            User user = UserDAO.findByEmail(email);
-            if (user != null && BCrypt.checkpw(password, user.getPassword())) {
-                user.setPassword(null);
-                request.getSession().setAttribute("user", user);
-                response.sendRedirect(request.getContextPath() + "/main");
-                return;
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            if (!email.isEmpty() && !password.isEmpty()) {
+                User user = UserDAO.findByEmail(email);
+                if (user != null && BCrypt.checkpw(password, user.getPassword())) {
+                    user.setPassword(null);
+                    request.getSession().setAttribute("user", user);
+                    response.sendRedirect(request.getContextPath() + "/main");
+                    return;
+                }
             }
+            request.setAttribute("errorMessage", "Invalid email or password!");
+            request.getRequestDispatcher("jsp/auth/login.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            LOGGER.error(e);
         }
-        request.setAttribute("errorMessage", "Invalid email or password!");
-        request.getRequestDispatcher("jsp/auth/login.jsp").forward(request, response);
     }
 }

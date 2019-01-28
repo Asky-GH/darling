@@ -1,19 +1,28 @@
 package kz.epam.darling.controller.filter;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.servlet.*;
 import java.io.IOException;
 
 public class CharsetFilter implements Filter {
+    private static final Logger LOGGER = LogManager.getLogger(CharsetFilter.class.getName());
+
+
     @Override
     public void init(FilterConfig filterConfig) {
 
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
-                         FilterChain filterChain) throws IOException, ServletException {
-        servletRequest.setCharacterEncoding("utf-8");
-        filterChain.doFilter(servletRequest, servletResponse);
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) {
+        try {
+            servletRequest.setCharacterEncoding("utf-8");
+            filterChain.doFilter(servletRequest, servletResponse);
+        } catch (IOException | ServletException e) {
+            LOGGER.error(e);
+        }
     }
 
     @Override

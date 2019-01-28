@@ -4,6 +4,8 @@ import kz.epam.darling.model.Message;
 import kz.epam.darling.model.User;
 import kz.epam.darling.model.dao.MessageDAO;
 import kz.epam.darling.model.dao.UserDAO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,19 +14,26 @@ import java.io.IOException;
 import java.util.List;
 
 public class ChatCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(ChatCommand.class.getName());
+
+
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
         User sender = (User) request.getSession(false).getAttribute("user");
         int receiver_id = Integer.parseInt(request.getParameter("id"));
         User receiver = UserDAO.findById(receiver_id);
         List<Message> messages = MessageDAO.findByParticipants(sender.getId(), receiver_id);
         request.setAttribute("messages", messages);
         request.setAttribute("receiver", receiver);
-        request.getRequestDispatcher("jsp/chat.jsp").forward(request, response);
+        try {
+            request.getRequestDispatcher("jsp/chat.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            LOGGER.error(e);
+        }
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
         User sender = (User) request.getSession(false).getAttribute("user");
         int receiver_id = Integer.parseInt(request.getParameter("id"));
         String text = request.getParameter("text");
