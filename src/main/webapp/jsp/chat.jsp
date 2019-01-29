@@ -13,23 +13,27 @@
         <table>
             <tr>
                 <td>First name</td>
-                <td>${receiver.info.firstName}</td>
+                <td>${receiver.profile.firstName}</td>
             </tr>
             <tr>
                 <td>Last name</td>
-                <td>${receiver.info.lastName}</td>
-            </tr>
-            <tr>
-                <td>Gender</td>
-                <td>${receiver.info.gender.name}</td>
+                <td>${receiver.profile.lastName}</td>
             </tr>
             <tr>
                 <td>Birthday</td>
-                <td>${receiver.info.birthday}</td>
+                <td>${receiver.profile.birthday}</td>
+            </tr>
+            <tr>
+                <td>Gender</td>
+                <td>${receiver.profile.gender.type}</td>
             </tr>
             <tr>
                 <td>Country</td>
-                <td>${receiver.info.country.name}</td>
+                <td>${receiver.profile.country.name}</td>
+            </tr>
+            <tr>
+                <td>City</td>
+                <td>${receiver.profile.city.name}</td>
             </tr>
         </table>
 

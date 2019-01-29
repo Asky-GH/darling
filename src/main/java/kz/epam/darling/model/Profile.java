@@ -2,19 +2,20 @@ package kz.epam.darling.model;
 
 import java.sql.Date;
 
-public class Info extends Entity {
+public class Profile extends Entity {
     private String firstName;
     private String lastName;
     private Gender gender;
     private Date birthday;
     private Country country;
+    private City city;
     private int userId;
 
 
-    public Info() {
+    public Profile() {
     }
 
-    public Info(int id) {
+    public Profile(int id) {
         super(id);
     }
 
@@ -56,6 +57,14 @@ public class Info extends Entity {
 
     public void setCountry(Country country) {
         this.country = country;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public int getUserId() {

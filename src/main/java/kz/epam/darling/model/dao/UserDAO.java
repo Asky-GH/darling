@@ -84,13 +84,26 @@ public class UserDAO {
         }
     }
 
+    public static void update(User user) {
+        Connection con = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement ps = con.prepareStatement("UPDATE users SET email = ? WHERE id = ?")) {
+            ps.setString(1, user.getEmail());
+            ps.setInt(2, user.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error(e);
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
+        }
+    }
+
     private static User retrieveUser(ResultSet rs) {
         User user = new User();
         try {
             user.setId(rs.getInt("id"));user.setEmail(rs.getString("email"));
             user.setPassword(rs.getString("password"));
             user.setRole(RoleDAO.findById(rs.getInt("role_id")));
-            user.setInfo(InfoDAO.findByUserId(user.getId()));
+            user.setProfile(ProfileDAO.findByUserId(user.getId()));
         } catch (SQLException e) {
             LOGGER.error(e);
         }

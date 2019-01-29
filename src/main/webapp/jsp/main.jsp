@@ -19,7 +19,7 @@
                     </c:when>
                     <c:otherwise>
                         <li>
-                            <a href="${pageContext.request.contextPath}/match?id=${match.id}">${match.info.firstName}</a>
+                            <a href="${pageContext.request.contextPath}/match?id=${match.id}">${match.profile.firstName}</a>
                         </li>
                     </c:otherwise>
                 </c:choose>

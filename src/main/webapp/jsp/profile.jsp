@@ -10,51 +10,65 @@
     <body>
         <jsp:include page="layout/navbar.jsp"/>
 
-        <c:choose>
-            <c:when test="${user.info == null}">
-                <p>Please fill in the information about yourself, so that more people can see your profile.</p>
-                <form method="post" action="${pageContext.request.contextPath}/profile">
-                    <input type="text" name="firstName" placeholder="First name" autofocus>
-                    <input type="text" name="lastName" placeholder="Last name">
-                    <input type="radio" name="gender" value="female">Female
-                    <input type="radio" name="gender" value="male">Male
-                    <input type="date" name="birthday">Birthday
-                    <input name="countryName" list="countries" placeholder="Country">
-                    <datalist id="countries">
-                        <option value="Kazakhstan">
-                        <option value="Russia">
-                        <option value="United States">
-                        <option value="Spain">
-                    </datalist>
-                    <p class="help is-danger">${errorMessage}</p>
-                    <input type="submit" value="Submit">
-                </form>
-            </c:when>
-            <c:otherwise>
-                <table>
-                    <tr>
-                        <td>First name</td>
-                        <td>${user.info.firstName}</td>
-                    </tr>
-                    <tr>
-                        <td>Last name</td>
-                        <td>${user.info.lastName}</td>
-                    </tr>
-                    <tr>
-                        <td>Gender</td>
-                        <td>${user.info.gender.name}</td>
-                    </tr>
-                    <tr>
-                        <td>Birthday</td>
-                        <td>${user.info.birthday}</td>
-                    </tr>
-                    <tr>
-                        <td>Country</td>
-                        <td>${user.info.country.name}</td>
-                    </tr>
-                </table>
-            </c:otherwise>
-        </c:choose>
+        <table class="table">
+            <tr>
+                <td>First name</td>
+                <td>${user.profile.firstName}</td>
+            </tr>
+            <tr>
+                <td>Last name</td>
+                <td>${user.profile.lastName}</td>
+            </tr>
+            <tr>
+                <td>Birthday</td>
+                <td>${user.profile.birthday}</td>
+            </tr>
+            <tr>
+                <td>Gender</td>
+                <td>${user.profile.gender.type}</td>
+            </tr>
+        </table>
+        <section class="section">
+            <div class="container">
+                <div class="columns">
+                    <div class="column is-4 is-offset-4 has-text-centered">
+                        <form method="post" action="${pageContext.request.contextPath}/profile">
+                            <div class="field">
+                                <div class="control">
+                                    <div id="emailControl" class="control has-icons-left has-icons-right">
+                                        <input id="email" name="email" type="text" value="${user.email}" class="input">
+                                        <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-grouped">
+                                <div class="control has-icons-left">
+                                    <div class="select">
+                                        <select name="country_id">
+                                            <option value="${user.profile.country.id}">${user.profile.country.name}</option>
+                                            <option value="2">USA</option>
+                                        </select>
+                                    </div>
+                                    <div class="icon is-small is-left">
+                                        <i class="fas fa-globe"></i>
+                                    </div>
+                                </div>
+                                <div class="select is-rounded">
+                                    <select name="city_id">
+                                        <option value="${user.profile.city.id}">${user.profile.city.name}</option>
+                                        <option value="2">New York</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="help is-danger">${errorMessage}</p>
+                                <input class="button is-fullwidth is-info" type="submit" value="Save"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <jsp:include page="layout/footer.jsp"/>
     </body>

@@ -13,7 +13,7 @@ public class CountryDAO {
     private static final Logger LOGGER = LogManager.getLogger(CountryDAO.class.getName());
 
 
-    static Country findById(Integer id) {
+    public static Country findById(Integer id) {
         Country country = null;
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM countries WHERE id = ?")) {

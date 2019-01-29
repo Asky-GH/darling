@@ -13,7 +13,7 @@ public class GenderDAO {
     private static final Logger LOGGER = LogManager.getLogger(GenderDAO.class.getName());
 
 
-    static Gender findById(Integer id) {
+    public static Gender findById(Integer id) {
         Gender gender = null;
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM genders WHERE id = ?")) {
@@ -27,11 +27,11 @@ public class GenderDAO {
         return gender;
     }
 
-    public static Gender findByName(String name) {
+    public static Gender findByType(String type) {
         Gender gender = null;
         Connection con = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM genders WHERE name = ?")) {
-            ps.setString(1, name);
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM genders WHERE type = ?")) {
+            ps.setString(1, type);
             gender = retrieveGender(ps);
         } catch (SQLException e) {
             LOGGER.error(e);
@@ -47,7 +47,7 @@ public class GenderDAO {
             if (rs.next()) {
                 gender = new Gender();
                 gender.setId(rs.getInt("id"));
-                gender.setName(rs.getString("name"));
+                gender.setType(rs.getString("type"));
             }
         } catch (SQLException e) {
             LOGGER.error(e);

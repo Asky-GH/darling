@@ -1,7 +1,7 @@
 package kz.epam.darling.model;
 
 public class Role extends Entity {
-    private String name;
+    private String type;
 
 
     public Role() {
@@ -11,11 +11,11 @@ public class Role extends Entity {
         super(id);
     }
 
-    public String getName() {
-        return name;
+    public String getType() {
+        return type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setType(String type) {
+        this.type = type;
     }
 }

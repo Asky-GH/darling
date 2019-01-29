@@ -1,10 +1,9 @@
 package kz.epam.darling.controller.command;
 
-import kz.epam.darling.model.Info;
+import kz.epam.darling.model.Profile;
 import kz.epam.darling.model.User;
-import kz.epam.darling.model.dao.CountryDAO;
-import kz.epam.darling.model.dao.GenderDAO;
-import kz.epam.darling.model.dao.InfoDAO;
+import kz.epam.darling.model.dao.*;
+import kz.epam.darling.util.EmailValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,26 +28,21 @@ public class ProfileCommand implements Command {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String gender = request.getParameter("gender");
-        String birthday = request.getParameter("birthday");
-        String countryName = request.getParameter("countryName");
+        String email = request.getParameter("email");
+        int country_id = Integer.parseInt(request.getParameter("country_id"));
+        int city_id = Integer.parseInt(request.getParameter("city_id"));
         try {
-            if (firstName.isEmpty() || lastName.isEmpty() || gender == null || birthday.isEmpty() || countryName.isEmpty()) {
-                request.setAttribute("errorMessage", "All fields are required!");
+            if (!EmailValidator.isValid(email)) {
+                request.setAttribute("errorMessage", "Invalid email!");
                 request.getRequestDispatcher("jsp/profile.jsp").forward(request, response);
             } else {
                 User user = (User) request.getSession(false).getAttribute("user");
-                Info info = new Info();
-                info.setFirstName(firstName);
-                info.setLastName(lastName);
-                info.setGender(GenderDAO.findByName(gender));
-                info.setBirthday(Date.valueOf(birthday));
-                info.setCountry(CountryDAO.findByName(countryName));
-                info.setUserId(user.getId());
-                InfoDAO.create(info);
-                user.setInfo(info);
+                user.setEmail(email);
+                UserDAO.update(user);
+                Profile profile = user.getProfile();
+                profile.setCountry(CountryDAO.findById(country_id));
+                profile.setCity(CityDAO.findById(city_id));
+                ProfileDAO.update(profile);
                 response.sendRedirect(request.getContextPath() + "/profile");
             }
         } catch (ServletException | IOException e) {

@@ -13,23 +13,27 @@
         <table>
             <tr>
                 <td>First name</td>
-                <td>${match.info.firstName}</td>
+                <td>${match.profile.firstName}</td>
             </tr>
             <tr>
                 <td>Last name</td>
-                <td>${match.info.lastName}</td>
-            </tr>
-            <tr>
-                <td>Gender</td>
-                <td>${match.info.gender.name}</td>
+                <td>${match.profile.lastName}</td>
             </tr>
             <tr>
                 <td>Birthday</td>
-                <td>${match.info.birthday}</td>
+                <td>${match.profile.birthday}</td>
+            </tr>
+            <tr>
+                <td>Gender</td>
+                <td>${match.profile.gender.type}</td>
             </tr>
             <tr>
                 <td>Country</td>
-                <td>${match.info.country.name}</td>
+                <td>${match.profile.country.name}</td>
+            </tr>
+            <tr>
+                <td>City</td>
+                <td>${match.profile.city.name}</td>
             </tr>
         </table>
 
