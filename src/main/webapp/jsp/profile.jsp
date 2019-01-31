@@ -29,13 +29,14 @@
                                     </c:choose>
                                 </td>
                                 <td>
-                                    <form method="post" action="${pageContext.request.contextPath}/image"
+                                    <form method="post" action="${pageContext.request.contextPath}/profile"
                                           enctype="multipart/form-data">
+                                        <input type="hidden" name="action" value="change-avatar">
                                         <div class="field">
                                             <input type="file" name="image">
                                         </div>
                                         <div>
-                                            <p class="help is-danger">${errorMessage}</p>
+                                            <p class="help is-danger">${avatarErrorMessage}</p>
                                             <input class="button is-fullwidth is-info" type="submit" value="Change avatar"/>
                                         </div>
                                     </form>
@@ -45,7 +46,8 @@
                                 <th>Email</th>
                                 <td>${user.email}</td>
                                 <td>
-                                    <form method="post" action="">
+                                    <form method="post" action="${pageContext.request.contextPath}/profile">
+                                        <input type="hidden" name="action" value="change-email">
                                         <div class="field">
                                             <div class="control">
                                                 <div id="emailControl" class="control has-icons-left has-icons-right">
@@ -56,6 +58,7 @@
                                             </div>
                                         </div>
                                         <div>
+                                            <p class="help is-danger">${emailErrorMessage}</p>
                                             <input class="button is-fullwidth is-info" type="submit" value="Change email"/>
                                         </div>
                                     </form>
@@ -65,7 +68,8 @@
                                 <th>First name</th>
                                 <td>${user.profile.firstName}</td>
                                 <td rowspan="4">
-                                    <form method="post" action="">
+                                    <form method="post" action="${pageContext.request.contextPath}/profile">
+                                        <input type="hidden" name="action" value="change-password">
                                         <div class="field">
                                             <div id="passwordControl" class="control has-icons-left has-icons-right">
                                                 <input id="password" name="password" type="password"
@@ -81,6 +85,7 @@
                                             </div>
                                         </div>
                                         <div>
+                                            <p class="help is-danger">${passwordErrorMessage}</p>
                                             <input class="button is-fullwidth is-info" type="submit" value="Change password"/>
                                         </div>
                                     </form>
@@ -102,7 +107,8 @@
                                 <th>Country</th>
                                 <td>${user.profile.country.name}</td>
                                 <td rowspan="2">
-                                    <form>
+                                    <form method="post" action="${pageContext.request.contextPath}/profile">
+                                        <input type="hidden" name="action" value="change-location">
                                         <div class="field is-grouped">
                                             <div class="control has-icons-left">
                                                 <div class="select">
@@ -127,6 +133,7 @@
                                             </div>
                                         </div>
                                         <div>
+                                            <p class="help is-danger">${errorMessage}</p>
                                             <input class="button is-fullwidth is-info" type="submit" value="Change location"/>
                                         </div>
                                     </form>
@@ -141,48 +148,6 @@
                 </div>
             </div>
         </section>
-
-        <%--<section class="section">--%>
-            <%--<div class="container">--%>
-                <%--<div class="columns">--%>
-                    <%--<div class="column is-4 is-offset-4 has-text-centered">--%>
-                        <%--<form method="post" action="${pageContext.request.contextPath}/profile">--%>
-                            <%--<div class="field">--%>
-                                <%--<div class="control">--%>
-                                    <%--<div id="emailControl" class="control has-icons-left has-icons-right">--%>
-                                        <%--<input id="email" name="email" type="text" value="${user.email}" class="input">--%>
-                                        <%--<span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>--%>
-                                    <%--</div>--%>
-                                <%--</div>--%>
-                            <%--</div>--%>
-                            <%--<div class="field is-grouped">--%>
-                                <%--<div class="control has-icons-left">--%>
-                                    <%--<div class="select">--%>
-                                        <%--<select name="country_id">--%>
-                                            <%--<option value="${user.profile.country.id}">${user.profile.country.name}</option>--%>
-                                            <%--<option value="2">USA</option>--%>
-                                        <%--</select>--%>
-                                    <%--</div>--%>
-                                    <%--<div class="icon is-small is-left">--%>
-                                        <%--<i class="fas fa-globe"></i>--%>
-                                    <%--</div>--%>
-                                <%--</div>--%>
-                                <%--<div class="select is-rounded">--%>
-                                    <%--<select name="city_id">--%>
-                                        <%--<option value="${user.profile.city.id}">${user.profile.city.name}</option>--%>
-                                        <%--<option value="2">New York</option>--%>
-                                    <%--</select>--%>
-                                <%--</div>--%>
-                            <%--</div>--%>
-                            <%--<div>--%>
-                                <%--<p class="help is-danger">${errorMessage}</p>--%>
-                                <%--<input class="button is-fullwidth is-info" type="submit" value="Save"/>--%>
-                            <%--</div>--%>
-                        <%--</form>--%>
-                    <%--</div>--%>
-                <%--</div>--%>
-            <%--</div>--%>
-        <%--</section>--%>
 
         <jsp:include page="layout/footer.jsp"/>
     </body>

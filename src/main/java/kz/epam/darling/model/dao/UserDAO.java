@@ -84,10 +84,23 @@ public class UserDAO {
         }
     }
 
-    public static void update(User user) {
+    public static void updateEmail(User user) {
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("UPDATE users SET email = ? WHERE id = ?")) {
             ps.setString(1, user.getEmail());
+            ps.setInt(2, user.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error(e);
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
+        }
+    }
+
+    public static void updatePassword(User user) {
+        Connection con = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement ps = con.prepareStatement("UPDATE users SET password = ? WHERE id = ?")) {
+            ps.setString(1, user.getPassword());
             ps.setInt(2, user.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
