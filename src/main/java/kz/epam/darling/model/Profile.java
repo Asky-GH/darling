@@ -3,10 +3,11 @@ package kz.epam.darling.model;
 import java.sql.Date;
 
 public class Profile extends Entity {
+    private Image image;
     private String firstName;
     private String lastName;
-    private Gender gender;
     private Date birthday;
+    private Gender gender;
     private Country country;
     private City city;
     private int userId;
@@ -17,6 +18,14 @@ public class Profile extends Entity {
 
     public Profile(int id) {
         super(id);
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public String getFirstName() {
@@ -35,20 +44,20 @@ public class Profile extends Entity {
         this.lastName = lastName;
     }
 
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
     public Date getBirthday() {
         return birthday;
     }
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     public Country getCountry() {

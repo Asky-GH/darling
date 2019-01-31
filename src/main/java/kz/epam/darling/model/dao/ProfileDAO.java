@@ -29,6 +29,7 @@ public class ProfileDAO {
                     profile.setCountry(CountryDAO.findById(rs.getInt("country_id")));
                     profile.setCity(CityDAO.findById(rs.getInt("city_id")));
                     profile.setUserId(user_id);
+                    profile.setImage(ImageDAO.findByUserId(user_id));
                 }
             }
         } catch (SQLException e) {
@@ -42,8 +43,8 @@ public class ProfileDAO {
     public static void create(Profile profile) {
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("INSERT INTO profile(first_name, last_name, birthday, " +
-                                                            "gender_id, country_id, city_id, user_id) " +
-                                                            "VALUES (?, ?, ?, ?, ?, ?, ?)")) {
+                                                            "gender_id, country_id, city_id, user_id, image_id) " +
+                                                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
             ps.setString(1, profile.getFirstName());
             ps.setString(2, profile.getLastName());
             ps.setDate(3, profile.getBirthday());
@@ -51,6 +52,7 @@ public class ProfileDAO {
             ps.setInt(5, profile.getCountry().getId());
             ps.setInt(6, profile.getCity().getId());
             ps.setInt(7, profile.getUserId());
+            ps.setInt(8, profile.getImage().getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e);

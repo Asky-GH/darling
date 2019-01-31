@@ -57,6 +57,15 @@ create table if not exists users
   constraint fk_users_roles foreign key (role_id) references roles (id)
 );
 
+create table if not exists images
+(
+  id int auto_increment primary key,
+  data longblob,
+  url varchar(100),
+  user_id int not null,
+  constraint fk_images_users foreign key (user_id) references users (id)
+);
+
 create table if not exists profile
 (
   id int auto_increment primary key,
@@ -67,6 +76,7 @@ create table if not exists profile
   country_id int not null,
   city_id int not null,
   user_id int not null,
+  image_id int default 0 not null,
   constraint fk_profile_countries foreign key (country_id) references countries (id),
   constraint fk_profile_cities foreign key (city_id) references cities (id),
   constraint fk_profile_genders foreign key (gender_id) references genders (locale_id),

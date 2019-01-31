@@ -1,6 +1,7 @@
 package kz.epam.darling.controller.command.auth;
 
 import kz.epam.darling.controller.command.Command;
+import kz.epam.darling.model.Image;
 import kz.epam.darling.model.Profile;
 import kz.epam.darling.model.User;
 import kz.epam.darling.model.dao.*;
@@ -53,6 +54,10 @@ public class RegistrationCommand implements Command {
                 user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
                 UserDAO.create(user);
                 user = UserDAO.findByEmail(email);
+                Image image = new Image();
+                image.setUser_id(user.getId());
+                ImageDAO.create(image);
+                image = ImageDAO.findByUserId(user.getId());
                 Profile profile = new Profile();
                 profile.setFirstName(firstName);
                 profile.setLastName(lastName);
@@ -61,6 +66,7 @@ public class RegistrationCommand implements Command {
                 profile.setCountry(CountryDAO.findById(country_id));
                 profile.setCity(CityDAO.findById(city_id));
                 profile.setUserId(user.getId());
+                profile.setImage(image);
                 ProfileDAO.create(profile);
                 user.setProfile(profile);
                 user.setPassword(null);
