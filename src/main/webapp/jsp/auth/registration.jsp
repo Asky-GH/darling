@@ -41,21 +41,21 @@
                             <div class="field">
                                 <div id="fNameControl" class="control has-icons-left has-icons-right">
                                     <input id="fName" name="firstName" type="text"
-                                           placeholder="first type" class="input">
+                                           placeholder="first name" class="input">
                                     <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
                                 </div>
                             </div>
                             <div class="field">
                                 <div id="lNameControl" class="control has-icons-left has-icons-right">
                                     <input id="lName" name="lastName" type="text"
-                                           placeholder="last type" class="input">
+                                           placeholder="last name" class="input">
                                     <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
                                 </div>
                             </div>
                             <div class="field is-grouped">
                                 <div class="control">Birthday</div>
                                 <div class="control">
-                                    <input class="input" name="date" type="birthday">
+                                    <input class="input" type="date" name="birthday">
                                 </div>
                             </div>
                             <div class="field is-grouped">
