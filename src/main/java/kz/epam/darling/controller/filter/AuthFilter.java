@@ -43,6 +43,9 @@ public class AuthFilter implements Filter {
                         filterChain.doFilter(servletRequest, servletResponse);
                     }
                     break;
+
+                default:
+                    filterChain.doFilter(servletRequest, servletResponse);
             }
         } catch (ServletException | IOException e) {
             LOGGER.error(e);
