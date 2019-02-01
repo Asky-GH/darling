@@ -11,9 +11,13 @@ insert into roles(id, type) VALUES (2, 'admin');
 
 insert into cities(id, locale_id, name) VALUES (1, 1, 'Astana');
 insert into cities(id, locale_id, name) VALUES (1, 2, 'Астана');
+insert into cities(id, locale_id, name) VALUES (2, 1, 'New York');
+insert into cities(id, locale_id, name) VALUES (2, 2, 'Нью-Йорк');
 
 insert into countries(id, locale_id, name) VALUES (1, 1, 'Kazakhstan');
 insert into countries(id, locale_id, name) VALUES (1, 2, 'Казахстан');
+insert into countries(id, locale_id, name) VALUES (2, 1, 'USA');
+insert into countries(id, locale_id, name) VALUES (2, 2, 'США');
 
 insert into genders(id, locale_id, type) VALUES (1, 1, 'female');
 insert into genders(id, locale_id, type) VALUES (1, 2, 'женский');
