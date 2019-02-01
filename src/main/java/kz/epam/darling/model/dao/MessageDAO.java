@@ -18,9 +18,12 @@ public class MessageDAO {
     public static List<Message> findByParticipants(int sender_id, int receiver_id) {
         List<Message> messages = new ArrayList<>();
         Connection con = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM messages WHERE sender_id = ? AND receiver_id = ?")) {
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM messages WHERE sender_id IN (?, ?) AND " +
+                                                            "receiver_id IN (?, ?)")) {
             ps.setInt(1, sender_id);
             ps.setInt(2, receiver_id);
+            ps.setInt(3, sender_id);
+            ps.setInt(4, receiver_id);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Message message = new Message();
