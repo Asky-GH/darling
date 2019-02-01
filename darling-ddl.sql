@@ -60,7 +60,7 @@ create table if not exists users
 create table if not exists images
 (
   id int auto_increment primary key,
-  data longblob,
+  data mediumblob,
   url varchar(100),
   user_id int not null,
   constraint fk_images_users foreign key (user_id) references users (id)
