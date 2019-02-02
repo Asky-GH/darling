@@ -76,7 +76,7 @@ create table if not exists profile
   country_id int not null,
   city_id int not null,
   user_id int not null,
-  image_id int default 0 not null,
+  image_id int not null,
   constraint fk_profile_countries foreign key (country_id) references countries (id),
   constraint fk_profile_cities foreign key (city_id) references cities (id),
   constraint fk_profile_genders foreign key (gender_id) references genders (locale_id),
