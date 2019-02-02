@@ -12,34 +12,24 @@
 
         <section class="section">
             <div class="container">
-                <div class="columns is-multiline">
+                <div class="columns is-multiline is-centered">
                     <c:forEach var="user" items="${users}">
-                        <c:if test="${user.role.type == 'user'}">
-                            <div class="column is-one-quarter">
+                        <c:if test="${user.role.type == 'user' && user.id != principal.id}">
+                            <div class="column is-4 has-text-centered" style="margin-bottom: 40px; padding: 40px">
                                 <a href="${pageContext.request.contextPath}/match?id=${user.id}">
-                                    <div class="card">
-                                        <div class="card-image">
-                                            <figure class="image is-4by3">
-                                                <c:choose>
-                                                    <c:when test="${user.profile.image.url != null}">
-                                                        <img src="${user.profile.image.url}">
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <img src="${user.profile.gender.type == 'female' ? 'static/img/female.png'
+                                    <figure class="image">
+                                        <c:choose>
+                                            <c:when test="${user.profile.image.url != null}">
+                                                <img src="${user.profile.image.url}">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img src="${user.profile.gender.type == 'female' ? 'static/img/female.png'
                                                                                              : 'static/img/male.png'}">
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </figure>
-                                        </div>
-                                        <div class="card-content">
-                                            <div class="media">
-                                                <div class="media-content">
-                                                    <p class="title is-4">${user.profile.firstName} ${user.profile.lastName}</p>
-                                                    <p class="subtitle is-6">Country: ${user.profile.country.name}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </figure>
+                                    <p class="title">${user.profile.firstName} ${user.profile.lastName}</p>
+                                    <p class="subtitle">Location: ${user.profile.country.name}, ${user.profile.city.name}</p>
                                 </a>
                             </div>
                         </c:if>

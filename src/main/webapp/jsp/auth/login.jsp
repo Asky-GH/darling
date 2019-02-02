@@ -12,8 +12,8 @@
 
         <section class="section">
             <div class="container">
-                <div class="columns">
-                    <div class="column is-4 is-offset-4 has-text-centered">
+                <div class="columns has-text-centered">
+                    <div class="column is-4 is-offset-4">
                         <form method="post" action="${pageContext.request.contextPath}/login">
                             <input type="hidden" name="from" value="${from}">
                             <div class="field">
@@ -27,9 +27,9 @@
                                     <input tabindex="2" class="input" type="password" name="password" placeholder="password">
                                     <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
                                 </div>
-                                <p class="help is-danger">${errorMessage}</p>
                             </div>
                             <div class="field">
+                                <p class="help is-danger">${errorMessage}</p>
                                 <div class="control">
                                     <input tabindex="3" class="button is-fullwidth is-info" type="submit" value="Login">
                                 </div>
