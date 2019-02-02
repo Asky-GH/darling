@@ -70,7 +70,7 @@ public class RegistrationCommand implements Command {
                 ProfileDAO.create(profile);
                 user.setProfile(profile);
                 user.setPassword(null);
-                request.getSession().setAttribute("user", user);
+                request.getSession().setAttribute("principal", user);
                 response.sendRedirect(request.getContextPath() + "/profile");
             }
         } catch (ServletException | IOException e) {

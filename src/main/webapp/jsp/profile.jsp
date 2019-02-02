@@ -19,11 +19,11 @@
                                 <th>Avatar</th>
                                 <td>
                                     <c:choose>
-                                        <c:when test="${user.profile.image.url != null}">
-                                            <img src="${user.profile.image.url}">
+                                        <c:when test="${principal.profile.image.url != null}">
+                                            <img src="${principal.profile.image.url}">
                                         </c:when>
                                         <c:otherwise>
-                                            <img src="${user.profile.gender.type == 'female' ? 'static/img/female.png'
+                                            <img src="${principal.profile.gender.type == 'female' ? 'static/img/female.png'
                                                                                              : 'static/img/male.png'}">
                                         </c:otherwise>
                                     </c:choose>
@@ -44,7 +44,7 @@
                             </tr>
                             <tr>
                                 <th>Email</th>
-                                <td>${user.email}</td>
+                                <td>${principal.email}</td>
                                 <td>
                                     <form method="post" action="${pageContext.request.contextPath}/profile">
                                         <input type="hidden" name="action" value="change-email">
@@ -66,7 +66,7 @@
                             </tr>
                             <tr>
                                 <th>First name</th>
-                                <td>${user.profile.firstName}</td>
+                                <td>${principal.profile.firstName}</td>
                                 <td rowspan="4">
                                     <form method="post" action="${pageContext.request.contextPath}/profile">
                                         <input type="hidden" name="action" value="change-password">
@@ -93,19 +93,19 @@
                             </tr>
                             <tr>
                                 <th>Last name</th>
-                                <td>${user.profile.lastName}</td>
+                                <td>${principal.profile.lastName}</td>
                             </tr>
                             <tr>
                                 <th>Birthday</th>
-                                <td>${user.profile.birthday}</td>
+                                <td>${principal.profile.birthday}</td>
                             </tr>
                             <tr>
                                 <th>Gender</th>
-                                <td>${user.profile.gender.type}</td>
+                                <td>${principal.profile.gender.type}</td>
                             </tr>
                             <tr>
                                 <th>Country</th>
-                                <td>${user.profile.country.name}</td>
+                                <td>${principal.profile.country.name}</td>
                                 <td rowspan="2">
                                     <form method="post" action="${pageContext.request.contextPath}/profile">
                                         <input type="hidden" name="action" value="change-location">
@@ -113,8 +113,8 @@
                                             <div class="control has-icons-left">
                                                 <div class="select">
                                                     <select name="country_id">
-                                                        <option value="${user.profile.country.id}">
-                                                            ${user.profile.country.name}
+                                                        <option value="${principal.profile.country.id}">
+                                                            ${principal.profile.country.name}
                                                         </option>
                                                         <option value="2">USA</option>
                                                     </select>
@@ -125,8 +125,8 @@
                                             </div>
                                             <div class="select is-rounded">
                                                 <select name="city_id">
-                                                    <option value="${user.profile.city.id}">
-                                                        ${user.profile.city.name}
+                                                    <option value="${principal.profile.city.id}">
+                                                        ${principal.profile.city.name}
                                                     </option>
                                                     <option value="2">New York</option>
                                                 </select>
@@ -141,7 +141,7 @@
                             </tr>
                             <tr>
                                 <th>City</th>
-                                <td>${user.profile.city.name}</td>
+                                <td>${principal.profile.city.name}</td>
                             </tr>
                         </table>
                     </div>

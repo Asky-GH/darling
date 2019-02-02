@@ -16,9 +16,9 @@
         <div class="navbar-end">
             <a class="navbar-item" href="${pageContext.request.contextPath}/main">Main</a>
             <c:choose>
-                <c:when test="${user != null}">
+                <c:when test="${principal != null}">
                     <div class="navbar-item has-dropdown is-hoverable">
-                        <p class="navbar-link">${user.email}</p>
+                        <p class="navbar-link">${principal.email}</p>
                         <div class="navbar-dropdown is-boxed">
                             <a class="navbar-item" href="${pageContext.request.contextPath}/profile">Profile</a>
                             <hr class="navbar-divider">

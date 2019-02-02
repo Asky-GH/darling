@@ -53,7 +53,7 @@ public class ProfileCommand implements Command {
     }
 
     private void changeAvatar(HttpServletRequest request, HttpServletResponse response) {
-        User user = (User) request.getSession(false).getAttribute("user");
+        User user = (User) request.getSession(false).getAttribute("principal");
         try {
             Part part = request.getPart("image");
             if (part.getSize() <= 0) {
@@ -85,7 +85,7 @@ public class ProfileCommand implements Command {
                 if (!EmailValidator.isValid(email)) {
                     request.setAttribute("emailErrorMessage", "Invalid email!");
                 } else {
-                    User user = (User) request.getSession(false).getAttribute("user");
+                    User user = (User) request.getSession(false).getAttribute("principal");
                     user.setEmail(email);
                     UserDAO.updateEmail(user);
                     response.sendRedirect(request.getContextPath() + "/profile");
@@ -113,7 +113,7 @@ public class ProfileCommand implements Command {
                     if (!password.equals(confirmPassword)) {
                         request.setAttribute("passwordErrorMessage", "Passwords do not match!");
                     } else {
-                        User user = (User) request.getSession(false).getAttribute("user");
+                        User user = (User) request.getSession(false).getAttribute("principal");
                         user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
                         UserDAO.updatePassword(user);
                         user.setPassword(null);
@@ -131,7 +131,7 @@ public class ProfileCommand implements Command {
     private void changeLocation(HttpServletRequest request, HttpServletResponse response) {
         int country_id = Integer.parseInt(request.getParameter("country_id"));
         int city_id = Integer.parseInt(request.getParameter("city_id"));
-        User user = (User) request.getSession(false).getAttribute("user");
+        User user = (User) request.getSession(false).getAttribute("principal");
         Profile profile = user.getProfile();
         profile.setCountry(CountryDAO.findById(country_id));
         profile.setCity(CityDAO.findById(city_id));
