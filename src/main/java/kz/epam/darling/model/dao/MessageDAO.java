@@ -27,10 +27,12 @@ public class MessageDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Message message = new Message();
+                    message.setId(rs.getInt("id"));
                     message.setText(rs.getString("text"));
                     message.setCreated_at(rs.getTimestamp("created_at"));
                     message.setSender_id(rs.getInt("sender_id"));
                     message.setReceiver_id(rs.getInt("receiver_id"));
+                    message.setStatus_id(rs.getInt("status_id"));
                     messages.add(message);
                 }
             }
@@ -49,6 +51,19 @@ public class MessageDAO {
             ps.setString(1, message.getText());
             ps.setInt(2, message.getSender_id());
             ps.setInt(3, message.getReceiver_id());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error(e);
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
+        }
+    }
+
+    public static void update(Message message) {
+        Connection con = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement ps = con.prepareStatement("UPDATE messages SET status_id = ? WHERE id = ?")) {
+            ps.setInt(1, message.getStatus_id());
+            ps.setInt(2, message.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e);

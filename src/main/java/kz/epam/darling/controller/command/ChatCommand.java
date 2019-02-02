@@ -19,10 +19,14 @@ public class ChatCommand implements Command {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        User sender = (User) request.getSession(false).getAttribute("user");
+        User sender = (User) request.getSession(false).getAttribute("principal");
         int receiver_id = Integer.parseInt(request.getParameter("id"));
         User receiver = UserDAO.findById(receiver_id);
         List<Message> messages = MessageDAO.findByParticipants(sender.getId(), receiver_id);
+        for (Message message : messages) {
+            message.setStatus_id(2);
+            MessageDAO.update(message);
+        }
         request.setAttribute("messages", messages);
         request.setAttribute("receiver", receiver);
         try {
@@ -34,7 +38,7 @@ public class ChatCommand implements Command {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        User sender = (User) request.getSession(false).getAttribute("user");
+        User sender = (User) request.getSession(false).getAttribute("principal");
         int receiver_id = Integer.parseInt(request.getParameter("id"));
         String text = request.getParameter("text");
         Message message = new Message();

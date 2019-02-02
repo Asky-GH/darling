@@ -90,7 +90,7 @@ create table if not exists messages
   created_at timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
   sender_id int not null,
   receiver_id int not null,
-  status_id int not null,
+  status_id int default 1 not null,
   constraint fk_messages_users_receiver foreign key (receiver_id) references users (id),
   constraint fk_messages_users_sender foreign key (sender_id) references users (id),
   constraint fk_messages_statuses foreign key (status_id) references statuses (id)
