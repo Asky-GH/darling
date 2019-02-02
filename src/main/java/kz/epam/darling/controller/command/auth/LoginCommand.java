@@ -27,6 +27,7 @@ public class LoginCommand implements Command {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        String from = request.getParameter("from");
         try {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
@@ -34,11 +35,12 @@ public class LoginCommand implements Command {
                 User user = UserDAO.findByEmail(email);
                 if (user != null && BCrypt.checkpw(password, user.getPassword())) {
                     user.setPassword(null);
-                    request.getSession().setAttribute("user", user);
-                    response.sendRedirect(request.getContextPath() + "/main");
+                    request.getSession().setAttribute("principal", user);
+                    response.sendRedirect(from);
                     return;
                 }
             }
+            request.setAttribute("from", from);
             request.setAttribute("errorMessage", "Invalid email or password!");
             request.getRequestDispatcher("jsp/auth/login.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
