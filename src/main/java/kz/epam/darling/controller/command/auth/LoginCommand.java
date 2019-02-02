@@ -36,7 +36,11 @@ public class LoginCommand implements Command {
                 if (user != null && BCrypt.checkpw(password, user.getPassword())) {
                     user.setPassword(null);
                     request.getSession().setAttribute("principal", user);
-                    response.sendRedirect(from);
+                    if (!from.isEmpty()) {
+                        response.sendRedirect(from);
+                    } else {
+                        response.sendRedirect(request.getContextPath() + "/main");
+                    }
                     return;
                 }
             }
