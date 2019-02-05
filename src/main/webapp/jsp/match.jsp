@@ -13,7 +13,7 @@
         <section class="section">
             <div class="container">
                 <div class="columns">
-                    <div class="column is-6 is-offset-3 is-8-mobile is-offset-2-mobile">
+                    <div class="column is-8 is-offset-2">
                         <div class="tile is-ancestor">
                             <div class="tile is-vertical">
                                 <div class="tile is-parent">

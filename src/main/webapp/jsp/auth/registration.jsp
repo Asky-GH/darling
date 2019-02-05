@@ -64,25 +64,29 @@
                                     </div>
                                     <div class="field">
                                         <label class="label">Location</label>
-                                        <div class="field is-grouped">
-                                            <div class="control has-icons-left">
-                                                <div class="select">
-                                                    <select name="country_id">
-                                                        <option value="1">Kazakhstan</option>
-                                                        <option>Select dropdown</option>
-                                                        <option>With options</option>
-                                                    </select>
-                                                </div>
-                                                <div class="icon is-small is-left">
-                                                    <i class="fas fa-globe"></i>
+                                        <div class="columns">
+                                            <div class="column">
+                                                <div class="control has-icons-left">
+                                                    <div class="select">
+                                                        <select name="country_id">
+                                                            <option value="1">Kazakhstan</option>
+                                                            <option>Select dropdown</option>
+                                                            <option>With options</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="icon is-small is-left">
+                                                        <i class="fas fa-globe"></i>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="control">
-                                                <div class="select is-rounded">
-                                                    <select name="city_id">
-                                                        <option value="1">Astana</option>
-                                                        <option>With options</option>
-                                                    </select>
+                                            <div class="column">
+                                                <div class="control">
+                                                    <div class="select is-rounded">
+                                                        <select name="city_id">
+                                                            <option value="1">Astana</option>
+                                                            <option>With options</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
