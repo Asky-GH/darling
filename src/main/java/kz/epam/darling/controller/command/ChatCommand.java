@@ -24,8 +24,10 @@ public class ChatCommand implements Command {
         User receiver = UserDAO.findById(receiver_id);
         List<Message> messages = MessageDAO.findByParticipants(sender.getId(), receiver_id);
         for (Message message : messages) {
-            message.setStatus_id(2);
-            MessageDAO.update(message);
+            if (message.getReceiver_id() == sender.getId()) {
+                message.setStatus_id(2);
+                MessageDAO.update(message);
+            }
         }
         request.setAttribute("messages", messages);
         request.setAttribute("receiver", receiver);
@@ -46,6 +48,10 @@ public class ChatCommand implements Command {
         message.setSender_id(sender.getId());
         message.setReceiver_id(receiver_id);
         MessageDAO.create(message);
-        doGet(request, response);
+        try {
+            response.sendRedirect(request.getContextPath() + "/chat?id=" + receiver_id);
+        } catch (IOException e) {
+            LOGGER.error(e);
+        }
     }
 }

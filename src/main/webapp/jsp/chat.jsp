@@ -10,59 +10,88 @@
     <body>
         <jsp:include page="layout/navbar.jsp"/>
 
-        <table>
-            <tr>
-                <td>First name</td>
-                <td>${receiver.profile.firstName}</td>
-            </tr>
-            <tr>
-                <td>Last name</td>
-                <td>${receiver.profile.lastName}</td>
-            </tr>
-            <tr>
-                <td>Birthday</td>
-                <td>${receiver.profile.birthday}</td>
-            </tr>
-            <tr>
-                <td>Gender</td>
-                <td>${receiver.profile.gender.type}</td>
-            </tr>
-            <tr>
-                <td>Country</td>
-                <td>${receiver.profile.country.name}</td>
-            </tr>
-            <tr>
-                <td>City</td>
-                <td>${receiver.profile.city.name}</td>
-            </tr>
-        </table>
+        <section class="section">
+            <div class="container">
+                <div id="msgs">
+                    <c:forEach var="message" items="${messages}">
+                        <div class="columns">
+                            <c:choose>
+                                <c:when test="${message.sender_id == receiver.id}">
+                                    <div class="column is-4 is-offset-2">
+                                        <div class="notification">${message.text} - ${message.created_at}</div>
+                                    </div>
+                                    <div class="column is-4">
 
-        <table>
-            <c:forEach var="message" items="${messages}">
-                <tr>
-                    <c:choose>
-                        <c:when test="${message.sender_id == receiver.id}">
-                            <td>
-                                ${message.text} - ${message.created_at}
-                            </td>
-                            <td></td>
-                        </c:when>
-                        <c:otherwise>
-                            <td></td>
-                            <td>
-                                ${message.text} - ${message.created_at}
-                            </td>
-                        </c:otherwise>
-                    </c:choose>
-                </tr>
-            </c:forEach>
-        </table>
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="column is-4 is-offset-2">
 
-        <form method="post" action="${pageContext.request.contextPath}/chat?id=${receiver.id}">
-            <textarea rows="4" cols="50" placeholder="Type your message here..." name="text"></textarea>
-            <input type="submit" value="Send">
-        </form>
+                                    </div>
+                                    <div class="column is-4">
+                                        <div class="notification is-primary">${message.text} - ${message.created_at}</div>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </c:forEach>
+                </div>
+                <form method="post" action="${pageContext.request.contextPath}/chat?id=${receiver.id}">
+                    <input id="sender" type="hidden" value="${principal.id}">
+                    <input id="receiver" type="hidden" value="${receiver.id}">
+                    <div class="columns">
+                        <div class="column is-8 is-offset-2">
+                            <div class="field">
+                                <div class="control">
+                                    <textarea class="textarea" placeholder="Type your message here..." name="text" autofocus></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="columns">
+                        <div class="column is-8 is-offset-2">
+                            <nav class="level">
+                                <div class="level-left">
+                                    <div class="level-item">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <figure class="image is-48x48">
+                                                    <c:choose>
+                                                        <c:when test="${receiver.profile.image.url != null}">
+                                                            <img src="${receiver.profile.image.url}">
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <img src="${receiver.profile.gender.type == 'female' ? 'static/img/female.png'
+                                                                                             : 'static/img/male.png'}">
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </figure>
+                                            </div>
+                                            <div class="media-content">
+                                                <div class="content">
+                                                    <p class="title is-4">${receiver.profile.firstName} ${receiver.profile.lastName}</p>
+                                                    <p class="subtitle is-6">${receiver.profile.country.name}, ${receiver.profile.city.name}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="level-right">
+                                    <div class="level-item">
+                                        <div class="control">
+                                            <input class="button is-info" type="submit" value="Send">
+                                        </div>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
 
         <jsp:include page="layout/footer.jsp"/>
+
+        <script defer src="static/js/chat.js"></script>
     </body>
 </html>

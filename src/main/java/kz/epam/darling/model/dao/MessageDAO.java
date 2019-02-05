@@ -44,6 +44,35 @@ public class MessageDAO {
         return messages;
     }
 
+    public static List<Message> findNew(int sender_id, int receiver_id) {
+        List<Message> messages = new ArrayList<>();
+        Connection con = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM messages WHERE sender_id IN (?, ?) AND " +
+                "receiver_id IN (?, ?) AND status_id = 1")) {
+            ps.setInt(1, sender_id);
+            ps.setInt(2, receiver_id);
+            ps.setInt(3, sender_id);
+            ps.setInt(4, receiver_id);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Message message = new Message();
+                    message.setId(rs.getInt("id"));
+                    message.setText(rs.getString("text"));
+                    message.setCreated_at(rs.getTimestamp("created_at"));
+                    message.setSender_id(rs.getInt("sender_id"));
+                    message.setReceiver_id(rs.getInt("receiver_id"));
+                    message.setStatus_id(rs.getInt("status_id"));
+                    messages.add(message);
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e);
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
+        }
+        return messages;
+    }
+
     public static void create(Message message) {
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("INSERT INTO messages(text, sender_id, receiver_id) " +

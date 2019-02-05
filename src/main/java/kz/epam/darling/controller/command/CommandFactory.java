@@ -19,6 +19,7 @@ public class CommandFactory {
         commands.put("/match", new MatchCommand());
         commands.put("/chat", new ChatCommand());
         commands.put("/image", new ImageCommand());
+        commands.put("/refresh", new RefreshCommand());
     }
 
     public static CommandFactory getInstance() {
