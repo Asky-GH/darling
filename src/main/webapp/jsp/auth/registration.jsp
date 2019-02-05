@@ -68,10 +68,10 @@
                                             <div class="column">
                                                 <div class="control has-icons-left">
                                                     <div class="select">
-                                                        <select name="country_id">
-                                                            <option value="1">Kazakhstan</option>
-                                                            <option>Select dropdown</option>
-                                                            <option>With options</option>
+                                                        <select id="country" name="country_id">
+                                                            <c:forEach var="country" items="${countries}">
+                                                                <option value="${country.id}">${country.name}</option>
+                                                            </c:forEach>
                                                         </select>
                                                     </div>
                                                     <div class="icon is-small is-left">
@@ -82,9 +82,10 @@
                                             <div class="column">
                                                 <div class="control">
                                                     <div class="select is-rounded">
-                                                        <select name="city_id">
-                                                            <option value="1">Astana</option>
-                                                            <option>With options</option>
+                                                        <select id="city" name="city_id">
+                                                            <c:forEach var="city" items="${cities}">
+                                                                <option value="${city.id}">${city.name}</option>
+                                                            </c:forEach>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -117,5 +118,7 @@
         </section>
 
         <jsp:include page="../layout/footer.jsp"/>
+
+        <script defer src="static/js/location.js"></script>
     </body>
 </html>

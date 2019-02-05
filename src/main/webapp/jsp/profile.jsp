@@ -28,24 +28,20 @@
                         <hr>
                         <form method="post" action="${pageContext.request.contextPath}/profile" enctype="multipart/form-data">
                             <input type="hidden" name="action" value="change-avatar">
-                            <%--<div class="field">--%>
-                            <%--<input type="file" name="image">--%>
-                            <%--</div>--%>
-                            <%--<div>--%>
-                            <%--<p class="help is-danger">${avatarErrorMessage}</p>--%>
-                            <%--<input class="button is-fullwidth is-info" type="submit" value="Change avatar"/>--%>
-                            <%--</div>--%>
                             <div class="field">
-                                <div class="file">
+                                <div class="file is-left">
                                     <label class="file-label">
-                                        <input class="file-input" type="file" name="resume">
+                                        <input class="file-input" type="file" name="image" id="file">
                                         <span class="file-cta">
                                             <span class="file-icon">
-                                                <i class="fas fa-upload"></i>
+                                              <i class="fas fa-upload"></i>
                                             </span>
                                             <span class="file-label">
-                                                Choose a file…
+                                              Choose file…
                                             </span>
+                                        </span>
+                                        <span class="file-name" id="filename">
+                                            No file chosen
                                         </span>
                                     </label>
                                 </div>
@@ -116,9 +112,10 @@
                             <div class="field is-grouped">
                                 <div class="control has-icons-left">
                                     <div class="select">
-                                        <select name="country_id">
-                                            <option value="${principal.profile.country.id}">${principal.profile.country.name}</option>
-                                            <option value="2">USA</option>
+                                        <select id="country" name="country_id">
+                                            <c:forEach var="country" items="${countries}">
+                                                <option value="${country.id}">${country.name}</option>
+                                            </c:forEach>
                                         </select>
                                     </div>
                                     <div class="icon is-small is-left">
@@ -126,9 +123,10 @@
                                     </div>
                                 </div>
                                 <div class="select is-rounded">
-                                    <select name="city_id">
-                                        <option value="${principal.profile.city.id}">${principal.profile.city.name}</option>
-                                        <option value="2">New York</option>
+                                    <select id="city" name="city_id">
+                                        <c:forEach var="city" items="${cities}">
+                                            <option value="${city.id}">${city.name}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
                             </div>
@@ -143,5 +141,8 @@
         </section>
 
         <jsp:include page="layout/footer.jsp"/>
+
+        <script defer src="static/js/location.js"></script>
+        <script defer src="static/js/file.js"></script>
     </body>
 </html>

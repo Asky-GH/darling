@@ -20,21 +20,23 @@ create table if not exists roles
   type char(5) not null
 );
 
-create table if not exists cities
-(
-  id int not null,
-  locale_id int not null,
-  name nvarchar(50) not null,
-  constraint fk_cities_locales foreign key (locale_id) references locales (id),
-  primary key (id, locale_id)
-);
-
 create table if not exists countries
 (
   id int not null,
   locale_id int not null,
   name nvarchar(50) not null,
   constraint fk_countries_locales foreign key (locale_id) references locales (id),
+  primary key (id, locale_id)
+);
+
+create table if not exists cities
+(
+  id int not null,
+  locale_id int not null,
+  name nvarchar(50) not null,
+  country_id int not null,
+  constraint fk_cities_locales foreign key (locale_id) references locales (id),
+  constraint fk_cities_countries foreign key (country_id) references countries (id),
   primary key (id, locale_id)
 );
 

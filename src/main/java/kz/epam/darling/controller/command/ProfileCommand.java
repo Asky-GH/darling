@@ -1,8 +1,6 @@
 package kz.epam.darling.controller.command;
 
-import kz.epam.darling.model.Image;
-import kz.epam.darling.model.Profile;
-import kz.epam.darling.model.User;
+import kz.epam.darling.model.*;
 import kz.epam.darling.model.dao.*;
 import kz.epam.darling.util.EmailValidator;
 import kz.epam.darling.util.PasswordValidator;
@@ -15,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.IOException;
+import java.util.List;
 
 public class ProfileCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(ProfileCommand.class.getName());
@@ -23,6 +22,10 @@ public class ProfileCommand implements Command {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
+        List<Country> countries = CountryDAO.findAll();
+        List<City> cities = CityDAO.findByCountryId(countries.get(0).getId());
+        request.setAttribute("countries", countries);
+        request.setAttribute("cities", cities);
         try {
             request.getRequestDispatcher("jsp/profile.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
@@ -58,7 +61,7 @@ public class ProfileCommand implements Command {
             Part part = request.getPart("image");
             if (part.getSize() <= 0) {
                 request.setAttribute("avatarErrorMessage", "Choose a file!");
-                request.getRequestDispatcher("jsp/profile.jsp").forward(request, response);
+                doGet(request, response);
             } else {
                 if (part.getSize() > MAX_FILE_SIZE) {
                     request.setAttribute("avatarErrorMessage", "Maximum file size is 1Mb!");

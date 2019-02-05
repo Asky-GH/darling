@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CountryDAO {
     private static final Logger LOGGER = LogManager.getLogger(CountryDAO.class.getName());
@@ -18,7 +20,11 @@ public class CountryDAO {
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM countries WHERE id = ?")) {
             ps.setInt(1, id);
-            country = retrieveCountry(ps);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    country = retrieveCountry(rs);
+                }
+            }
         } catch (SQLException e) {
             LOGGER.error(e);
         } finally {
@@ -32,7 +38,11 @@ public class CountryDAO {
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM countries WHERE name = ?")) {
             ps.setString(1, name);
-            country = retrieveCountry(ps);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    country = retrieveCountry(rs);
+                }
+            }
         } catch (SQLException e) {
             LOGGER.error(e);
         } finally {
@@ -41,14 +51,28 @@ public class CountryDAO {
         return country;
     }
 
-    private static Country retrieveCountry(PreparedStatement ps) {
-        Country country = null;
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                country = new Country();
-                country.setId(rs.getInt("id"));
-                country.setName(rs.getString("name"));
+    public static List<Country> findAll() {
+        List<Country> countries = new ArrayList<>();
+        Connection con = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM countries");
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Country country = retrieveCountry(rs);
+                countries.add(country);
             }
+        } catch (SQLException e) {
+            LOGGER.error(e);
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
+        }
+        return countries;
+    }
+
+    private static Country retrieveCountry(ResultSet rs) {
+        Country country = new Country();
+        try {
+            country.setId(rs.getInt("id"));
+            country.setName(rs.getString("name"));
         } catch (SQLException e) {
             LOGGER.error(e);
         }

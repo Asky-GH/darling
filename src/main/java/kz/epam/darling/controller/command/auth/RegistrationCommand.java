@@ -1,9 +1,7 @@
 package kz.epam.darling.controller.command.auth;
 
 import kz.epam.darling.controller.command.Command;
-import kz.epam.darling.model.Image;
-import kz.epam.darling.model.Profile;
-import kz.epam.darling.model.User;
+import kz.epam.darling.model.*;
 import kz.epam.darling.model.dao.*;
 import kz.epam.darling.util.EmailValidator;
 import kz.epam.darling.util.PasswordValidator;
@@ -17,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class RegistrationCommand implements Command {
@@ -25,6 +24,10 @@ public class RegistrationCommand implements Command {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
+        List<Country> countries = CountryDAO.findAll();
+        List<City> cities = CityDAO.findByCountryId(countries.get(0).getId());
+        request.setAttribute("countries", countries);
+        request.setAttribute("cities", cities);
         try {
             request.getRequestDispatcher("jsp/auth/registration.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
@@ -47,7 +50,7 @@ public class RegistrationCommand implements Command {
             Queue<String> errorMessages = validateInput(email, password, confirmPassword, firstName, lastName, birthday);
             if (!errorMessages.isEmpty()) {
                 request.setAttribute("errorMessage", errorMessages.poll());
-                request.getRequestDispatcher("jsp/auth/registration.jsp").forward(request, response);
+                doGet(request, response);
             } else {
                 User user = new User();
                 user.setEmail(email);
@@ -73,7 +76,7 @@ public class RegistrationCommand implements Command {
                 request.getSession().setAttribute("principal", user);
                 response.sendRedirect(request.getContextPath() + "/profile");
             }
-        } catch (ServletException | IOException e) {
+        } catch (IOException e) {
             LOGGER.error(e);
         }
     }
