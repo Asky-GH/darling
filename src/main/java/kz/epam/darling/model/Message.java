@@ -7,7 +7,7 @@ public class Message extends Entity {
     private Timestamp created_at;
     private int sender_id;
     private int receiver_id;
-    private int status_id;
+    private int statusId;
 
 
     public Message() {
@@ -49,11 +49,11 @@ public class Message extends Entity {
         this.receiver_id = receiver_id;
     }
 
-    public int getStatus_id() {
-        return status_id;
+    public int getStatusId() {
+        return statusId;
     }
 
-    public void setStatus_id(int status_id) {
-        this.status_id = status_id;
+    public void setStatusId(int statusId) {
+        this.statusId = statusId;
     }
 }

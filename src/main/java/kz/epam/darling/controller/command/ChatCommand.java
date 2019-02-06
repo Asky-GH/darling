@@ -25,7 +25,7 @@ public class ChatCommand implements Command {
         List<Message> messages = MessageDAO.findByParticipants(sender.getId(), receiver_id);
         for (Message message : messages) {
             if (message.getReceiver_id() == sender.getId()) {
-                message.setStatus_id(2);
+                message.setStatusId(2);
                 MessageDAO.update(message);
             }
         }

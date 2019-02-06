@@ -18,7 +18,7 @@ public class RefreshCommand implements Command {
         List<Message> messages = MessageDAO.findNew(sender_id, receiver_id);
         if (messages.size() > 0) {
             for (Message message : messages) {
-                message.setStatus_id(2);
+                message.setStatusId(2);
                 MessageDAO.update(message);
             }
             try {
