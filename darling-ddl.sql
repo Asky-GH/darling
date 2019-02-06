@@ -89,7 +89,7 @@ create table if not exists messages
 (
   id int auto_increment primary key,
   text nvarchar(500) not null,
-  created_at timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
+  created_at timestamp default CURRENT_TIMESTAMP not null,
   sender_id int not null,
   receiver_id int not null,
   status_id int default 1 not null,
