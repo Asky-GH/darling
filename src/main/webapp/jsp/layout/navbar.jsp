@@ -21,6 +21,7 @@
                         <p class="navbar-link">${principal.email}</p>
                         <div class="navbar-dropdown is-boxed">
                             <a class="navbar-item" href="${pageContext.request.contextPath}/profile">Profile</a>
+                            <a class="navbar-item" href="${pageContext.request.contextPath}/messages">Messages</a>
                             <hr class="navbar-divider">
                             <a class="navbar-item" href="${pageContext.request.contextPath}/logout">Logout</a>
                         </div>

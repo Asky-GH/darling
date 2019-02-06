@@ -21,6 +21,7 @@ public class CommandFactory {
         commands.put("/image", new ImageCommand());
         commands.put("/refresh", new RefreshCommand());
         commands.put("/location", new LocationCommand());
+        commands.put("/messages", new MessagesCommand());
     }
 
     public static CommandFactory getInstance() {
