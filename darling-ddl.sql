@@ -2,10 +2,11 @@ create schema if not exists darling collate utf8_general_ci;
 
 use darling;
 
-create table if not exists locales
+create table if not exists languages
 (
   id int auto_increment primary key,
-  type char(2) not null
+  locale char(2) not null,
+  name nvarchar(50) not null
 );
 
 create table if not exists statuses
@@ -23,30 +24,30 @@ create table if not exists roles
 create table if not exists countries
 (
   id int not null,
-  locale_id int not null,
+  language_id int not null,
   name nvarchar(50) not null,
-  constraint fk_countries_locales foreign key (locale_id) references locales (id),
-  primary key (id, locale_id)
+  constraint fk_countries_languages foreign key (language_id) references languages (id),
+  primary key (id, language_id)
 );
 
 create table if not exists cities
 (
   id int not null,
-  locale_id int not null,
+  language_id int not null,
   name nvarchar(50) not null,
   country_id int not null,
-  constraint fk_cities_locales foreign key (locale_id) references locales (id),
+  constraint fk_cities_languages foreign key (language_id) references languages (id),
   constraint fk_cities_countries foreign key (country_id) references countries (id),
-  primary key (id, locale_id)
+  primary key (id, language_id)
 );
 
 create table if not exists genders
 (
   id int not null,
-  locale_id int not null,
+  language_id int not null,
   type nvarchar(20) not null,
-  constraint fk_genders_locales foreign key (locale_id) references locales (id),
-  primary key (id, locale_id)
+  constraint fk_genders_languages foreign key (language_id) references languages (id),
+  primary key (id, language_id)
 );
 
 create table if not exists users
@@ -81,7 +82,7 @@ create table if not exists profile
   image_id int not null,
   constraint fk_profile_countries foreign key (country_id) references countries (id),
   constraint fk_profile_cities foreign key (city_id) references cities (id),
-  constraint fk_profile_genders foreign key (gender_id) references genders (locale_id),
+  constraint fk_profile_genders foreign key (gender_id) references genders (id),
   constraint fk_profile_users foreign key (user_id) references users (id)
 );
 

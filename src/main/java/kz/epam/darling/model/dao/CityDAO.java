@@ -33,11 +33,12 @@ public class CityDAO {
         return city;
     }
 
-    public static List<City> findByCountryId(int country_id) {
+    public static List<City> findByCountryId(int country_id, int languageId) {
         List<City> cities = new ArrayList<>();
         Connection con = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM cities WHERE country_id = ?")) {
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM cities WHERE country_id = ? AND language_id = ?")) {
             ps.setInt(1, country_id);
+            ps.setInt(2, languageId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     City city = retrieveCity(rs);

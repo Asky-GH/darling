@@ -51,14 +51,16 @@ public class CountryDAO {
         return country;
     }
 
-    public static List<Country> findAll() {
+    public static List<Country> findAll(int languageId) {
         List<Country> countries = new ArrayList<>();
         Connection con = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM countries");
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                Country country = retrieveCountry(rs);
-                countries.add(country);
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM countries WHERE language_id = ?")) {
+            ps.setInt(1, languageId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Country country = retrieveCountry(rs);
+                    countries.add(country);
+                }
             }
         } catch (SQLException e) {
             LOGGER.error(e);

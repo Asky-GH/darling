@@ -2,6 +2,7 @@ package kz.epam.darling.controller.command;
 
 import com.google.gson.Gson;
 import kz.epam.darling.model.City;
+import kz.epam.darling.model.Language;
 import kz.epam.darling.model.dao.CityDAO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,8 @@ public class LocationCommand implements Command {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         int country_id = Integer.parseInt(request.getParameter("country_id"));
-        List<City> cities = CityDAO.findByCountryId(country_id);
+        Language language = (Language) request.getAttribute("language");
+        List<City> cities = CityDAO.findByCountryId(country_id, language.getId());
         try {
             PrintWriter writer = response.getWriter();
             Gson gson = new Gson();

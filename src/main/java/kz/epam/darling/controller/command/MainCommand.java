@@ -1,10 +1,9 @@
 package kz.epam.darling.controller.command;
 
-import kz.epam.darling.model.City;
-import kz.epam.darling.model.Country;
-import kz.epam.darling.model.User;
+import kz.epam.darling.model.*;
 import kz.epam.darling.model.dao.CityDAO;
 import kz.epam.darling.model.dao.CountryDAO;
+import kz.epam.darling.model.dao.GenderDAO;
 import kz.epam.darling.model.dao.UserDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,10 +25,11 @@ public class MainCommand implements Command {
             List<User> users = UserDAO.findAll();
             request.setAttribute("users", users);
         }
-        List<Country> countries = CountryDAO.findAll();
-        List<City> cities = CityDAO.findByCountryId(countries.get(0).getId());
+        Language language = (Language) request.getAttribute("language");
+        List<Gender> genders = GenderDAO.findAll(language.getId());
+        List<Country> countries = CountryDAO.findAll(language.getId());
+        request.setAttribute("genders", genders);
         request.setAttribute("countries", countries);
-        request.setAttribute("cities", cities);
         try {
             request.getRequestDispatcher("jsp/main.jsp").forward(request, response);
         } catch (ServletException | IOException e) {

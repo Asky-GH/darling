@@ -24,10 +24,11 @@ public class RegistrationCommand implements Command {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        List<Country> countries = CountryDAO.findAll();
-        List<City> cities = CityDAO.findByCountryId(countries.get(0).getId());
+        Language language = (Language) request.getAttribute("language");
+        List<Gender> genders = GenderDAO.findAll(language.getId());
+        List<Country> countries = CountryDAO.findAll(language.getId());
+        request.setAttribute("genders", genders);
         request.setAttribute("countries", countries);
-        request.setAttribute("cities", cities);
         try {
             request.getRequestDispatcher("jsp/auth/registration.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
@@ -43,10 +44,10 @@ public class RegistrationCommand implements Command {
             String confirmPassword = request.getParameter("confirmPassword");
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
-            int gender_id = Integer.parseInt(request.getParameter("gender"));
+            int gender_id = Integer.parseInt(request.getParameter("genderId"));
             String birthday = request.getParameter("birthday");
-            int country_id = Integer.parseInt(request.getParameter("country_id"));
-            int city_id = Integer.parseInt(request.getParameter("city_id"));
+            int country_id = Integer.parseInt(request.getParameter("countryId"));
+            int city_id = Integer.parseInt(request.getParameter("cityId"));
             Queue<String> errorMessages = validateInput(email, password, confirmPassword, firstName, lastName, birthday);
             if (!errorMessages.isEmpty()) {
                 request.setAttribute("errorMessage", errorMessages.poll());

@@ -22,6 +22,7 @@ public class CommandFactory {
         commands.put("/refresh", new RefreshCommand());
         commands.put("/location", new LocationCommand());
         commands.put("/messages", new MessagesCommand());
+        commands.put("/language", new LanguageCommand());
     }
 
     public static CommandFactory getInstance() {

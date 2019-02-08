@@ -1,7 +1,7 @@
 use darling;
 
-insert into locales(type) values ('en');
-insert into locales(type) values ('ru');
+insert into languages(locale, name) values ('en', 'English');
+insert into languages(locale, name) values ('ru', 'Русский');
 
 insert into statuses(id, type) values (1, 'unread');
 insert into statuses(id, type) values (2, 'read');
@@ -9,36 +9,36 @@ insert into statuses(id, type) values (2, 'read');
 insert into roles(id, type) values (1, 'user');
 insert into roles(id, type) values (2, 'admin');
 
-insert into genders(id, locale_id, type) values (1, 1, 'female');
-insert into genders(id, locale_id, type) values (1, 2, 'женский');
-insert into genders(id, locale_id, type) values (2, 1, 'male');
-insert into genders(id, locale_id, type) values (2, 2, 'мужской');
+insert into genders(id, language_id, type) values (1, 1, 'Female');
+insert into genders(id, language_id, type) values (1, 2, 'Женский');
+insert into genders(id, language_id, type) values (2, 1, 'Male');
+insert into genders(id, language_id, type) values (2, 2, 'Мужской');
 
-insert into countries(id, locale_id, name) values (1, 1, 'Kazakhstan');
-insert into countries(id, locale_id, name) values (1, 2, 'Казахстан');
-insert into countries(id, locale_id, name) values (2, 1, 'USA');
-insert into countries(id, locale_id, name) values (2, 2, 'США');
-insert into countries(id, locale_id, name) values (3, 1, 'Russia');
-insert into countries(id, locale_id, name) values (3, 2, 'Россия');
-insert into countries(id, locale_id, name) values (4, 2, 'Spain');
-insert into countries(id, locale_id, name) values (4, 2, 'Испания');
+insert into countries(id, language_id, name) values (1, 1, 'Kazakhstan');
+insert into countries(id, language_id, name) values (1, 2, 'Казахстан');
+insert into countries(id, language_id, name) values (2, 1, 'USA');
+insert into countries(id, language_id, name) values (2, 2, 'США');
+insert into countries(id, language_id, name) values (3, 1, 'Russia');
+insert into countries(id, language_id, name) values (3, 2, 'Россия');
+insert into countries(id, language_id, name) values (4, 1, 'Spain');
+insert into countries(id, language_id, name) values (4, 2, 'Испания');
 
-insert into cities(id, locale_id, name, country_id) values (1, 1, 'Astana', 1);
-insert into cities(id, locale_id, name, country_id) values (1, 2, 'Астана', 1);
-insert into cities(id, locale_id, name, country_id) values (2, 1, 'New York', 2);
-insert into cities(id, locale_id, name, country_id) values (2, 2, 'Нью-Йорк', 2);
-insert into cities(id, locale_id, name, country_id) values (3, 1, 'Moscow', 3);
-insert into cities(id, locale_id, name, country_id) values (3, 2, 'Москва', 3);
-insert into cities(id, locale_id, name, country_id) values (4, 1, 'Madrid', 4);
-insert into cities(id, locale_id, name, country_id) values (4, 2, 'Мадрид', 4);
-insert into cities(id, locale_id, name, country_id) values (5, 1, 'Almaty', 1);
-insert into cities(id, locale_id, name, country_id) values (5, 2, 'Алматы', 1);
-insert into cities(id, locale_id, name, country_id) values (6, 1, 'Washington', 2);
-insert into cities(id, locale_id, name, country_id) values (6, 2, 'Вашингтон', 2);
-insert into cities(id, locale_id, name, country_id) values (7, 1, 'Novosibirsk', 3);
-insert into cities(id, locale_id, name, country_id) values (7, 2, 'Новосибирск', 3);
-insert into cities(id, locale_id, name, country_id) values (8, 1, 'Malaga', 4);
-insert into cities(id, locale_id, name, country_id) values (8, 2, 'Малага', 4);
+insert into cities(id, language_id, name, country_id) values (1, 1, 'Astana', 1);
+insert into cities(id, language_id, name, country_id) values (1, 2, 'Астана', 1);
+insert into cities(id, language_id, name, country_id) values (2, 1, 'New York', 2);
+insert into cities(id, language_id, name, country_id) values (2, 2, 'Нью-Йорк', 2);
+insert into cities(id, language_id, name, country_id) values (3, 1, 'Moscow', 3);
+insert into cities(id, language_id, name, country_id) values (3, 2, 'Москва', 3);
+insert into cities(id, language_id, name, country_id) values (4, 1, 'Madrid', 4);
+insert into cities(id, language_id, name, country_id) values (4, 2, 'Мадрид', 4);
+insert into cities(id, language_id, name, country_id) values (5, 1, 'Almaty', 1);
+insert into cities(id, language_id, name, country_id) values (5, 2, 'Алматы', 1);
+insert into cities(id, language_id, name, country_id) values (6, 1, 'Washington', 2);
+insert into cities(id, language_id, name, country_id) values (6, 2, 'Вашингтон', 2);
+insert into cities(id, language_id, name, country_id) values (7, 1, 'Novosibirsk', 3);
+insert into cities(id, language_id, name, country_id) values (7, 2, 'Новосибирск', 3);
+insert into cities(id, language_id, name, country_id) values (8, 1, 'Malaga', 4);
+insert into cities(id, language_id, name, country_id) values (8, 2, 'Малага', 4);
 
 # insert into users(email, password) values ('admin@mail.com', '$2a$10$IWgfQTROmEpgfblZaDLoh.V3jnHhTVuAATr4M43iZnsxHhiwQ/ovm');
 # insert into users(email, password) values ('user1@mail.com', '$2a$10$IWgfQTROmEpgfblZaDLoh.V3jnHhTVuAATr4M43iZnsxHhiwQ/ovm');

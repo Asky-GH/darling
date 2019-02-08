@@ -22,10 +22,9 @@ public class ProfileCommand implements Command {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        List<Country> countries = CountryDAO.findAll();
-        List<City> cities = CityDAO.findByCountryId(countries.get(0).getId());
+        Language language = (Language) request.getAttribute("language");
+        List<Country> countries = CountryDAO.findAll(language.getId());
         request.setAttribute("countries", countries);
-        request.setAttribute("cities", cities);
         try {
             request.getRequestDispatcher("jsp/profile.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
@@ -132,8 +131,8 @@ public class ProfileCommand implements Command {
     }
 
     private void changeLocation(HttpServletRequest request, HttpServletResponse response) {
-        int country_id = Integer.parseInt(request.getParameter("country_id"));
-        int city_id = Integer.parseInt(request.getParameter("city_id"));
+        int country_id = Integer.parseInt(request.getParameter("countryId"));
+        int city_id = Integer.parseInt(request.getParameter("cityId"));
         User user = (User) request.getSession(false).getAttribute("principal");
         Profile profile = user.getProfile();
         profile.setCountry(CountryDAO.findById(country_id));
