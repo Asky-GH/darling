@@ -6,7 +6,7 @@
         <jsp:include page="jsp/layout/header.jsp"/>
         <title>Index page</title>
     </head>
-    
+
     <body>
         <jsp:include page="jsp/layout/navbar.jsp"/>
 
@@ -14,7 +14,7 @@
             <div class="container">
                 <div class="columns">
                     <div class="column is-4 is-offset-4 has-text-centered">
-                        <a href="${pageContext.request.contextPath}/main">Go to main</a>
+                        <a href="main">Go to main</a>
                     </div>
                 </div>
             </div>
