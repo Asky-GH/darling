@@ -21,11 +21,11 @@ public class MainCommand implements Command {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
+        Language language = (Language) request.getAttribute("language");
         if (request.getAttribute("users") == null) {
-            List<User> users = UserDAO.findAll();
+            List<User> users = UserDAO.findAll(language.getId());
             request.setAttribute("users", users);
         }
-        Language language = (Language) request.getAttribute("language");
         List<Gender> genders = GenderDAO.findAll(language.getId());
         List<Country> countries = CountryDAO.findAll(language.getId());
         request.setAttribute("genders", genders);
@@ -39,6 +39,7 @@ public class MainCommand implements Command {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        Language language = (Language) request.getAttribute("language");
         int genderId = Integer.parseInt(request.getParameter("genderId"));
         String fromAgeParam = request.getParameter("fromAge");
         int fromAge = fromAgeParam.isEmpty() ? 18 : Integer.parseInt(fromAgeParam);
@@ -46,8 +47,9 @@ public class MainCommand implements Command {
         int toAge = toAgeParam.isEmpty() ? 100 : Integer.parseInt(toAgeParam);
         int countryId = Integer.parseInt(request.getParameter("countryId"));
         int cityId = Integer.parseInt(request.getParameter("cityId"));
-        List<User> users = UserDAO.findByConstraints(genderId, LocalDate.now().minusYears(fromAge).getYear(),
-                                                    LocalDate.now().minusYears(toAge).getYear(), countryId, cityId);
+        int toYear = LocalDate.now().minusYears(fromAge).getYear();
+        int fromYear = LocalDate.now().minusYears(toAge).getYear();
+        List<User> users = UserDAO.findByConstraints(genderId, toYear, fromYear, countryId, cityId, language.getId());
         request.setAttribute("users", users);
         doGet(request, response);
     }

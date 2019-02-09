@@ -15,11 +15,12 @@ public class CountryDAO {
     private static final Logger LOGGER = LogManager.getLogger(CountryDAO.class.getName());
 
 
-    public static Country findById(Integer id) {
+    public static Country findById(int id, int languageId) {
         Country country = null;
         Connection con = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM countries WHERE id = ?")) {
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM countries WHERE id = ? AND language_id = ?")) {
             ps.setInt(1, id);
+            ps.setInt(2, languageId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     country = retrieveCountry(rs);

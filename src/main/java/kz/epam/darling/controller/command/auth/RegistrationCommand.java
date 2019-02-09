@@ -38,17 +38,19 @@ public class RegistrationCommand implements Command {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        Language language = (Language) request.getAttribute("language");
         try {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
             String confirmPassword = request.getParameter("confirmPassword");
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
-            int gender_id = Integer.parseInt(request.getParameter("genderId"));
+            int genderId = Integer.parseInt(request.getParameter("genderId"));
             String birthday = request.getParameter("birthday");
-            int country_id = Integer.parseInt(request.getParameter("countryId"));
-            int city_id = Integer.parseInt(request.getParameter("cityId"));
-            Queue<String> errorMessages = validateInput(email, password, confirmPassword, firstName, lastName, birthday);
+            int countryId = Integer.parseInt(request.getParameter("countryId"));
+            int cityId = Integer.parseInt(request.getParameter("cityId"));
+            Queue<String> errorMessages = validateInput(email, password, confirmPassword, firstName, lastName, birthday,
+                                                        language.getId());
             if (!errorMessages.isEmpty()) {
                 request.setAttribute("errorMessage", errorMessages.poll());
                 doGet(request, response);
@@ -57,7 +59,7 @@ public class RegistrationCommand implements Command {
                 user.setEmail(email);
                 user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
                 UserDAO.create(user);
-                user = UserDAO.findByEmail(email);
+                user = UserDAO.findByEmail(email, language.getId());
                 Image image = new Image();
                 image.setUser_id(user.getId());
                 ImageDAO.create(image);
@@ -65,10 +67,10 @@ public class RegistrationCommand implements Command {
                 Profile profile = new Profile();
                 profile.setFirstName(firstName);
                 profile.setLastName(lastName);
-                profile.setGender(GenderDAO.findById(gender_id));
+                profile.setGender(GenderDAO.findById(genderId, language.getId()));
                 profile.setBirthday(Date.valueOf(birthday));
-                profile.setCountry(CountryDAO.findById(country_id));
-                profile.setCity(CityDAO.findById(city_id));
+                profile.setCountry(CountryDAO.findById(countryId, language.getId()));
+                profile.setCity(CityDAO.findById(cityId, language.getId()));
                 profile.setUserId(user.getId());
                 profile.setImage(image);
                 ProfileDAO.create(profile);
@@ -83,7 +85,7 @@ public class RegistrationCommand implements Command {
     }
 
     private Queue<String> validateInput(String email, String password, String confirmPassword, String firstName,
-                                        String lastName, String birthday) {
+                                        String lastName, String birthday, int languageId) {
         Queue<String> errorMessages = new LinkedList<>();
         if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || firstName.isEmpty() ||
                 lastName.isEmpty() || birthday.isEmpty()) {
@@ -99,7 +101,7 @@ public class RegistrationCommand implements Command {
         if (!password.equals(confirmPassword)) {
             errorMessages.offer("Passwords do not match!");
         }
-        User user = UserDAO.findByEmail(email);
+        User user = UserDAO.findByEmail(email, languageId);
         if (user != null) {
             errorMessages.offer("Email already exists!");
         }

@@ -15,14 +15,14 @@ public class UserDAO {
     private static final Logger LOGGER = LogManager.getLogger(UserDAO.class.getName());
 
 
-    public static User findById(Integer id) {
+    public static User findById(int id, int languageId) {
         User user = null;
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE id = ?")) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    user = retrieveUser(rs);
+                    user = retrieveUser(rs, languageId);
                     user.setPassword(null);
                 }
             }
@@ -35,14 +35,14 @@ public class UserDAO {
         return user;
     }
 
-    public static User findByEmail(String email) {
+    public static User findByEmail(String email, int languageId) {
         User user = null;
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE email = ?")) {
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    user = retrieveUser(rs);
+                    user = retrieveUser(rs, languageId);
                 }
             }
         } catch (SQLException e) {
@@ -53,13 +53,13 @@ public class UserDAO {
         return user;
     }
 
-    public static List<User> findAll() {
+    public static List<User> findAll(int languageId) {
         List<User> users = new ArrayList<>();
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM users");
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                User user = retrieveUser(rs);
+                User user = retrieveUser(rs, languageId);
                 user.setPassword(null);
                 users.add(user);
             }
@@ -71,7 +71,8 @@ public class UserDAO {
         return users;
     }
 
-    public static List<User> findByConstraints(int genderId, int toYear, int fromYear, int countryId, int cityId) {
+    public static List<User> findByConstraints(int genderId, int toYear, int fromYear, int countryId, int cityId,
+                                               int languageId) {
         List<User> users = new ArrayList<>();
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM (SELECT * FROM profile WHERE gender_id = ? " +
@@ -84,7 +85,7 @@ public class UserDAO {
             ps.setInt(5, toYear);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    User user = retrieveUser(rs);
+                    User user = retrieveUser(rs, languageId);
                     user.setPassword(null);
                     users.add(user);
                 }
@@ -136,13 +137,13 @@ public class UserDAO {
         }
     }
 
-    private static User retrieveUser(ResultSet rs) {
+    private static User retrieveUser(ResultSet rs, int languageId) {
         User user = new User();
         try {
             user.setId(rs.getInt("id"));user.setEmail(rs.getString("email"));
             user.setPassword(rs.getString("password"));
             user.setRole(RoleDAO.findById(rs.getInt("role_id")));
-            user.setProfile(ProfileDAO.findByUserId(user.getId()));
+            user.setProfile(ProfileDAO.findByUserId(user.getId(), languageId));
         } catch (SQLException e) {
             LOGGER.error(e);
         }

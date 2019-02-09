@@ -131,12 +131,13 @@ public class ProfileCommand implements Command {
     }
 
     private void changeLocation(HttpServletRequest request, HttpServletResponse response) {
-        int country_id = Integer.parseInt(request.getParameter("countryId"));
-        int city_id = Integer.parseInt(request.getParameter("cityId"));
+        Language language = (Language) request.getAttribute("language");
+        int countryId = Integer.parseInt(request.getParameter("countryId"));
+        int cityId = Integer.parseInt(request.getParameter("cityId"));
         User user = (User) request.getSession(false).getAttribute("principal");
         Profile profile = user.getProfile();
-        profile.setCountry(CountryDAO.findById(country_id));
-        profile.setCity(CityDAO.findById(city_id));
+        profile.setCountry(CountryDAO.findById(countryId, language.getId()));
+        profile.setCity(CityDAO.findById(cityId, language.getId()));
         ProfileDAO.update(profile);
         try {
             response.sendRedirect(request.getContextPath() + "/profile");

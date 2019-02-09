@@ -20,7 +20,13 @@ public class LanguageCommand implements Command {
         request.getSession(false).setAttribute("language", language);
         try {
             String[] requestURI = request.getParameter("from").split("/");
-            response.sendRedirect(request.getContextPath() + "/" + requestURI[requestURI.length - 1].split("\\.")[0]);
+            String requestQuery = request.getParameter("query");
+            String action = requestURI[requestURI.length - 1].split("\\.")[0];
+            if (requestQuery.isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/" + action);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/" + action + "?" + requestQuery);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

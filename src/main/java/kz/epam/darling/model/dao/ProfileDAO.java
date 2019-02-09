@@ -13,11 +13,11 @@ public class ProfileDAO {
     private static final Logger LOGGER = LogManager.getLogger(ProfileDAO.class.getName());
 
 
-    static Profile findByUserId(int user_id) {
+    public static Profile findByUserId(int userId, int languageId) {
         Profile profile = null;
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM profile WHERE user_id = ?")) {
-            ps.setInt(1, user_id);
+            ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     profile = new Profile();
@@ -25,11 +25,11 @@ public class ProfileDAO {
                     profile.setFirstName(rs.getString("first_name"));
                     profile.setLastName(rs.getString("last_name"));
                     profile.setBirthday(rs.getDate("birthday"));
-                    profile.setGender(GenderDAO.findById(rs.getInt("gender_id")));
-                    profile.setCountry(CountryDAO.findById(rs.getInt("country_id")));
-                    profile.setCity(CityDAO.findById(rs.getInt("city_id")));
-                    profile.setUserId(user_id);
-                    profile.setImage(ImageDAO.findByUserId(user_id));
+                    profile.setGender(GenderDAO.findById(rs.getInt("gender_id"), languageId));
+                    profile.setCountry(CountryDAO.findById(rs.getInt("country_id"), languageId));
+                    profile.setCity(CityDAO.findById(rs.getInt("city_id"), languageId));
+                    profile.setUserId(userId);
+                    profile.setImage(ImageDAO.findByUserId(userId));
                 }
             }
         } catch (SQLException e) {

@@ -15,11 +15,12 @@ public class GenderDAO {
     private static final Logger LOGGER = LogManager.getLogger(GenderDAO.class.getName());
 
 
-    public static Gender findById(Integer id) {
+    public static Gender findById(int id, int languageId) {
         Gender gender = null;
         Connection con = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM genders WHERE id = ?")) {
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM genders WHERE id = ? AND language_id = ?")) {
             ps.setInt(1, id);
+            ps.setInt(2, languageId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     gender = retrieveGender(rs);

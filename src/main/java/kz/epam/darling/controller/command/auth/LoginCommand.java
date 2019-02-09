@@ -1,6 +1,7 @@
 package kz.epam.darling.controller.command.auth;
 
 import kz.epam.darling.controller.command.Command;
+import kz.epam.darling.model.Language;
 import kz.epam.darling.model.User;
 import kz.epam.darling.model.dao.UserDAO;
 import org.apache.logging.log4j.LogManager;
@@ -27,12 +28,13 @@ public class LoginCommand implements Command {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        Language language = (Language) request.getAttribute("language");
         String from = request.getParameter("from");
         try {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
             if (!email.isEmpty() && !password.isEmpty()) {
-                User user = UserDAO.findByEmail(email);
+                User user = UserDAO.findByEmail(email, language.getId());
                 if (user != null && BCrypt.checkpw(password, user.getPassword())) {
                     user.setPassword(null);
                     request.getSession().setAttribute("principal", user);
