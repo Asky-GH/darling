@@ -1,5 +1,6 @@
 package kz.epam.darling.controller.command;
 
+import kz.epam.darling.model.Language;
 import kz.epam.darling.model.User;
 import kz.epam.darling.model.dao.UserDAO;
 import org.apache.logging.log4j.LogManager;
@@ -16,8 +17,9 @@ public class MatchCommand implements Command {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        int match_id = Integer.parseInt(request.getParameter("id"));
-        User match = UserDAO.findById(match_id);
+        Language language = (Language) request.getAttribute("language");
+        int matchId = Integer.parseInt(request.getParameter("id"));
+        User match = UserDAO.findById(matchId, language.getId());
         request.setAttribute("match", match);
         try {
             request.getRequestDispatcher("jsp/match.jsp").forward(request, response);

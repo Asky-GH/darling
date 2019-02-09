@@ -1,10 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
+<fmt:setLocale value="${language.locale}"/>
+<fmt:setBundle basename="locale"/>
 
 <html>
     <head>
         <jsp:include page="layout/header.jsp"/>
-        <title>Match page</title>
+        <title>${match.profile.firstName} ${match.profile.lastName}</title>
     </head>
 
     <body>
@@ -24,10 +29,11 @@
                                 <div class="tile">
                                     <div class="tile is-parent is-vertical">
                                         <article class="tile is-child notification">
-                                            <p class="title">${match.profile.birthday}</p>
+                                            <p class="title"><fmt:formatDate value="${match.profile.birthday}"/></p>
                                         </article>
                                         <c:choose>
-                                            <c:when test="${match.profile.gender.type == 'female'}">
+                                            <c:when test="${match.profile.gender.type == 'Female' ||
+                                                            match.profile.gender.type == 'Женский'}">
                                                 <article class="tile is-child notification is-danger">
                                                     <p class="title">${match.profile.gender.type}</p>
                                                 </article>
@@ -47,8 +53,15 @@
                                                         <img src="${match.profile.image.url}">
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <img src="${match.profile.gender.type == 'female' ? 'static/img/female.png'
-                                                                                             : 'static/img/male.png'}">
+                                                        <c:choose>
+                                                            <c:when test="${match.profile.gender.type == 'Female' ||
+                                                                            match.profile.gender.type == 'Женский'}">
+                                                                <img src="static/img/female.png">
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <img src="static/img/male.png">
+                                                            </c:otherwise>
+                                                        </c:choose>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </figure>
@@ -60,10 +73,10 @@
                                         <p class="title">${match.profile.country.name}, ${match.profile.city.name}</p>
                                     </article>
                                 </div>
-                                <a href="${pageContext.request.contextPath}/chat?id=${match.id}">
+                                <a href="chat?id=${match.id}">
                                     <div class="tile is-parent">
                                         <article class="tile is-child notification is-primary">
-                                            <p class="title has-text-centered">Chat</p>
+                                            <p class="title has-text-centered"><fmt:message key="key.matchPageLinkToChat"/></p>
                                         </article>
                                     </div>
                                 </a>
