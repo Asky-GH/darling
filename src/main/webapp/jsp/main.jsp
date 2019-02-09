@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -64,7 +65,7 @@
                                 <div class="control">
                                     <div class="select is-rounded">
                                         <select id="city" name="cityId">
-                                            <option><fmt:message key="key.mainPageCityLabel"/></option>
+                                            <option id="cityLabel"><fmt:message key="key.mainPageCityLabel"/></option>
                                             <c:forEach var="city" items="${cities}">
                                                 <option value="${city.id}">${city.name}</option>
                                             </c:forEach>
@@ -87,25 +88,35 @@
                     <c:forEach var="user" items="${users}">
                         <c:if test="${user.role.type == 'user' && user.id != principal.id}">
                             <div class="column is-narrow" style="padding: 50px">
-                                <a href="match?id=${user.id}">
+                                <a href="match?id=${user.id}" style="color: black">
                                     <div class="media">
                                         <div class="media-left">
-                                            <figure class="image is-48x48">
+                                            <figure class="image is-64x64">
                                                 <c:choose>
                                                     <c:when test="${user.profile.image.url != null}">
                                                         <img src="${user.profile.image.url}">
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <img src="${user.profile.gender.type == 'female' ? 'static/img/female.png'
-                                                                                             : 'static/img/male.png'}">
+                                                        <c:choose>
+                                                            <c:when test="${user.profile.gender.type == 'Female' ||
+                                                                            user.profile.gender.type == 'Женский'}">
+                                                                <img src="static/img/female.png">
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <img src="static/img/male.png">
+                                                            </c:otherwise>
+                                                        </c:choose>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </figure>
                                         </div>
                                         <div class="media-content">
                                             <div class="content">
-                                                <p class="title is-4">${user.profile.firstName} ${user.profile.lastName}</p>
-                                                <p class="subtitle is-6">${user.profile.country.name}, ${user.profile.city.name}</p>
+                                                <p>
+                                                    <strong>${user.profile.firstName} ${user.profile.lastName}</strong>
+                                                    <br>${user.profile.country.name}, ${user.profile.city.name}
+                                                    <br><small><fmt:formatDate value="${user.profile.birthday}" type="date"/></small>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>

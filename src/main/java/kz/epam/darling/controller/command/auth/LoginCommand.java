@@ -37,7 +37,7 @@ public class LoginCommand implements Command {
                 User user = UserDAO.findByEmail(email, language.getId());
                 if (user != null && BCrypt.checkpw(password, user.getPassword())) {
                     user.setPassword(null);
-                    request.getSession().setAttribute("principal", user);
+                    request.getSession(false).setAttribute("principal", user);
                     if (!from.isEmpty()) {
                         response.sendRedirect(from);
                     } else {
@@ -48,8 +48,8 @@ public class LoginCommand implements Command {
             }
             request.setAttribute("from", from);
             request.setAttribute("errorMessage", "Invalid email or password!");
-            request.getRequestDispatcher("jsp/auth/login.jsp").forward(request, response);
-        } catch (ServletException | IOException e) {
+            doGet(request, response);
+        } catch (IOException e) {
             LOGGER.error(e);
         }
     }

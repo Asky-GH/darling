@@ -22,6 +22,7 @@ public class ProfileCommand implements Command {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
+        User user = (User) request.getSession(false).getAttribute("principal");
         Language language = (Language) request.getAttribute("language");
         List<Country> countries = CountryDAO.findAll(language.getId());
         request.setAttribute("countries", countries);
@@ -64,7 +65,7 @@ public class ProfileCommand implements Command {
             } else {
                 if (part.getSize() > MAX_FILE_SIZE) {
                     request.setAttribute("avatarErrorMessage", "Maximum file size is 1Mb!");
-                    request.getRequestDispatcher("jsp/profile.jsp").forward(request, response);
+                    doGet(request, response);
                 } else {
                     Image image = user.getProfile().getImage();
                     image.setUrl(request.getContextPath() + "/image?id=" + image.getId());
@@ -94,8 +95,8 @@ public class ProfileCommand implements Command {
                     return;
                 }
             }
-            request.getRequestDispatcher("jsp/profile.jsp").forward(request, response);
-        } catch(ServletException | IOException e){
+            doGet(request, response);
+        } catch(IOException e){
             LOGGER.error(e);
         }
     }
@@ -124,25 +125,28 @@ public class ProfileCommand implements Command {
                     }
                 }
             }
-            request.getRequestDispatcher("jsp/profile.jsp").forward(request, response);
-        } catch (ServletException | IOException e) {
+            doGet(request, response);
+        } catch (IOException e) {
             LOGGER.error(e);
         }
     }
 
     private void changeLocation(HttpServletRequest request, HttpServletResponse response) {
         Language language = (Language) request.getAttribute("language");
-        int countryId = Integer.parseInt(request.getParameter("countryId"));
-        int cityId = Integer.parseInt(request.getParameter("cityId"));
-        User user = (User) request.getSession(false).getAttribute("principal");
-        Profile profile = user.getProfile();
-        profile.setCountry(CountryDAO.findById(countryId, language.getId()));
-        profile.setCity(CityDAO.findById(cityId, language.getId()));
-        ProfileDAO.update(profile);
         try {
+            int countryId = Integer.parseInt(request.getParameter("countryId"));
+            int cityId = Integer.parseInt(request.getParameter("cityId"));
+            User user = (User) request.getSession(false).getAttribute("principal");
+            Profile profile = user.getProfile();
+            profile.setCountry(CountryDAO.findById(countryId, language.getId()));
+            profile.setCity(CityDAO.findById(cityId, language.getId()));
+            ProfileDAO.update(profile);
             response.sendRedirect(request.getContextPath() + "/profile");
         } catch (IOException e) {
             LOGGER.error(e);
+        } catch (NumberFormatException e) {
+            request.setAttribute("locationErrorMessage", "Choose location!");
+            doGet(request, response);
         }
     }
 }

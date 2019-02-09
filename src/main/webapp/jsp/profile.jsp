@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -23,8 +24,15 @@
                                     <img src="${principal.profile.image.url}">
                                 </c:when>
                                 <c:otherwise>
-                                    <img src="${principal.profile.gender.type == 'Female' ? 'static/img/female.png'
-                                                                                             : 'static/img/male.png'}">
+                                    <c:choose>
+                                        <c:when test="${principal.profile.gender.type == 'Female' ||
+                                                        principal.profile.gender.type == 'Женский'}">
+                                            <img src="static/img/female.png">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img src="static/img/male.png">
+                                        </c:otherwise>
+                                    </c:choose>
                                 </c:otherwise>
                             </c:choose>
                         </figure>
@@ -59,14 +67,14 @@
                         <p class="title">${principal.profile.firstName} ${principal.profile.lastName}</p>
                         <div class="columns">
                             <div class="column">
-                                <p class="title">${principal.profile.birthday}</p>
+                                <p class="title"><fmt:formatDate value="${principal.profile.birthday}" type="date"/></p>
                             </div>
                             <div class="column">
                                 <p class="title">${principal.profile.gender.type}</p>
                             </div>
                         </div>
                         <hr>
-                        <div class="columns">
+                        <div class="columns" style="margin-bottom: 30px">
                             <div class="column" style="padding-top: 28px">
                                 <form method="post" action="profile">
                                     <input type="hidden" name="action" value="change-email">
@@ -129,18 +137,20 @@
                                         <i class="fas fa-globe"></i>
                                     </div>
                                 </div>
-                                <div class="select is-rounded">
-                                    <select id="city" name="cityId">
-                                        <option><fmt:message key="key.profilePageCityLabel"/></option>
-                                        <c:forEach var="city" items="${cities}">
-                                            <option value="${city.id}">${city.name}</option>
-                                        </c:forEach>
-                                    </select>
+                                <div class="control">
+                                    <div class="select is-rounded">
+                                        <select id="city" name="cityId">
+                                            <option id="cityLabel"><fmt:message key="key.profilePageCityLabel"/></option>
+                                            <c:forEach var="city" items="${cities}">
+                                                <option value="${city.id}">${city.name}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div>
-                                <p class="help is-danger">${errorMessage}</p>
-                                <option><fmt:message key="key.profilePageChangeLocationButton" var="changeLocation"/></option>
+                                <p class="help is-danger">${locationErrorMessage}</p>
+                                <fmt:message key="key.profilePageChangeLocationButton" var="changeLocation"/>
                                 <input class="button is-fullwidth is-info" type="submit" value="${changeLocation}"/>
                             </div>
                         </form>
