@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainCommand implements Command {
@@ -40,16 +41,70 @@ public class MainCommand implements Command {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         Language language = (Language) request.getAttribute("language");
-        int genderId = Integer.parseInt(request.getParameter("genderId"));
-        String fromAgeParam = request.getParameter("fromAge");
-        int fromAge = fromAgeParam.isEmpty() ? 18 : Integer.parseInt(fromAgeParam);
-        String toAgeParam = request.getParameter("toAge");
-        int toAge = toAgeParam.isEmpty() ? 100 : Integer.parseInt(toAgeParam);
-        int countryId = Integer.parseInt(request.getParameter("countryId"));
-        int cityId = Integer.parseInt(request.getParameter("cityId"));
+        boolean genderConstraint = true;
+        boolean countryConstraint = true;
+        boolean cityConstraint = true;
+
+        int genderId = 0;
+        try {
+            genderId = Integer.parseInt(request.getParameter("genderId"));
+        } catch (NumberFormatException | NullPointerException e) {
+            genderConstraint = false;
+        }
+
+        int fromAge = 0;
+        try {
+            fromAge = Integer.parseInt(request.getParameter("fromAge"));
+        } catch (NumberFormatException e) {
+            fromAge = 18;
+        }
+
+        int toAge = 0;
+        try {
+            toAge = Integer.parseInt(request.getParameter("toAge"));
+        } catch (NumberFormatException e) {
+            toAge = 100;
+        }
+
+        int countryId = 0;
+        try {
+            countryId = Integer.parseInt(request.getParameter("countryId"));
+        } catch (NumberFormatException e) {
+            countryConstraint = false;
+        }
+
+        int cityId = 0;
+        try {
+            cityId = Integer.parseInt(request.getParameter("cityId"));
+        } catch (NumberFormatException e) {
+            cityConstraint = false;
+        }
+
         int toYear = LocalDate.now().minusYears(fromAge).getYear();
         int fromYear = LocalDate.now().minusYears(toAge).getYear();
-        List<User> users = UserDAO.findByConstraints(genderId, toYear, fromYear, countryId, cityId, language.getId());
+        List<User> users;
+        if (genderConstraint) {
+            if (countryConstraint) {
+                if (cityConstraint) {
+                    users = UserDAO.findByConstraints(genderId, toYear, fromYear, countryId, cityId, language.getId());
+                } else {
+                    users = UserDAO.findByGenderAndCountry(genderId, toYear, fromYear, countryId, language.getId());
+                }
+            } else {
+                users = UserDAO.findByGender(genderId, toYear, fromYear, language.getId());
+            }
+        } else {
+            if (countryConstraint) {
+                if (cityConstraint) {
+                    users = UserDAO.findByCountryAndCity(toYear, fromYear, countryId, cityId, language.getId());
+                } else {
+                    users = UserDAO.findByCountry(toYear, fromYear, countryId, language.getId());
+                }
+            } else {
+                users = UserDAO.findByAge(toYear, fromYear, language.getId());
+            }
+        }
+
         request.setAttribute("users", users);
         doGet(request, response);
     }
