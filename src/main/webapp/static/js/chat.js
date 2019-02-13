@@ -1,7 +1,7 @@
 $(document).ready(function () {
-    const sender_id = document.querySelector('#sender').value;
-    const receiver_id = document.querySelector('#receiver').value;
-    const url = "/darling/refresh?sender_id=" + sender_id + "&receiver_id=" + receiver_id;
+    const senderId = document.querySelector('#sender').value;
+    const receiverId = document.querySelector('#receiver').value;
+    const url = "/darling/refresh?senderId=" + senderId + "&receiverId=" + receiverId;
     setInterval(function () {
         $.ajax({
             type: 'GET',
@@ -11,21 +11,32 @@ $(document).ready(function () {
                 "Content-Type": "application/json; charset=utf-8"
             },
             success: function (result) {
-                var messages = $.parseJSON(result);
+                const messages = $.parseJSON(result);
                 if (messages != null) {
                     for (i = 0; i < messages.length; i++) {
-                        var columns = document.createElement('DIV');
+                        const columns = document.createElement('DIV');
                         columns.className = "columns";
-                        var contentColumn = document.createElement('DIV');
-                        contentColumn.className = "column is-4 is-offset-2";
-                        var content = document.createElement('DIV');
-                        content.className = "notification";
-                        content.innerHTML = messages[i].text + " " + messages[i].created_at;
+                        const contentColumn = document.createElement('DIV');
+                        contentColumn.className = "column is-5 is-offset-2 is-11-mobile";
+                        const content = document.createElement('DIV');
+                        content.className = "notification content";
+                        const text = document.createElement('P');
+                        text.innerHTML = messages[i].text;
+                        const time = document.createElement('P');
+                        time.style = "text-align: right";
+                        const small = document.createElement('SMALL');
+                        const locale = document.querySelector('#locale').value;
+                        if (locale === 'ru-RU') {
+                            small.innerHTML = new Date(messages[i].createdAt).toLocaleDateString(locale) + " " + new Date(messages[i].createdAt).toLocaleTimeString(locale);
+                        } else {
+                            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                            small.innerHTML = new Date(messages[i].createdAt).toLocaleDateString(locale, options) + " " + new Date(messages[i].createdAt).toLocaleTimeString(locale);
+                        }
+                        time.appendChild(small);
+                        content.appendChild(text);
+                        content.appendChild(time);
                         contentColumn.appendChild(content);
-                        var emptyColumn = document.createElement('DIV');
-                        emptyColumn.className = "column is-4";
                         columns.appendChild(contentColumn);
-                        columns.appendChild(emptyColumn);
                         document.querySelector('#msgs').appendChild(columns);
                     }
                 }

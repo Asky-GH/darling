@@ -4,9 +4,9 @@ import java.sql.Timestamp;
 
 public class Message extends Entity {
     private String text;
-    private Timestamp created_at;
-    private int sender_id;
-    private int receiver_id;
+    private Timestamp createdAt;
+    private int senderId;
+    private int receiverId;
     private int statusId;
 
 
@@ -25,28 +25,28 @@ public class Message extends Entity {
         this.text = text;
     }
 
-    public Timestamp getCreated_at() {
-        return created_at;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Timestamp created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public int getSender_id() {
-        return sender_id;
+    public int getSenderId() {
+        return senderId;
     }
 
-    public void setSender_id(int sender_id) {
-        this.sender_id = sender_id;
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
     }
 
-    public int getReceiver_id() {
-        return receiver_id;
+    public int getReceiverId() {
+        return receiverId;
     }
 
-    public void setReceiver_id(int receiver_id) {
-        this.receiver_id = receiver_id;
+    public void setReceiverId(int receiverId) {
+        this.receiverId = receiverId;
     }
 
     public int getStatusId() {

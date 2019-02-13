@@ -1,7 +1,7 @@
 use darling;
 
-insert into languages(locale, name) values ('en', 'English');
-insert into languages(locale, name) values ('ru', 'Русский');
+insert into languages(locale, name) values ('en-US', 'English');
+insert into languages(locale, name) values ('ru-RU', 'Русский');
 
 insert into statuses(id, type) values (1, 'unread');
 insert into statuses(id, type) values (2, 'read');

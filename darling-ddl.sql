@@ -5,7 +5,7 @@ use darling;
 create table if not exists languages
 (
   id int auto_increment primary key,
-  locale char(2) not null,
+  locale char(5) not null,
   name nvarchar(50) not null
 );
 

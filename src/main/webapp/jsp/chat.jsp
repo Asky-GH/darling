@@ -1,93 +1,118 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<fmt:setLocale value="${language.locale}"/>
+<input id="locale" type="hidden" value="${language.locale}">
+<fmt:setBundle basename="locale"/>
 
 <html>
     <head>
         <jsp:include page="layout/header.jsp"/>
-        <title>Chat page</title>
+        <title><fmt:message key="key.chatPageTitle"/> ${receiver.profile.firstName} ${receiver.profile.lastName}</title>
     </head>
 
     <body>
         <jsp:include page="layout/navbar.jsp"/>
 
-        <section class="section">
+        <section id="top" class="section">
             <div class="container">
+                <div class="columns">
+                    <div class="column is-8 is-offset-2">
+                        <div class="notification is-warning">
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="image is-64x64">
+                                        <c:choose>
+                                            <c:when test="${receiver.profile.image.url != null}">
+                                                <img src="${receiver.profile.image.url}">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:choose>
+                                                    <c:when test="${receiver.profile.gender.type == 'Female' ||
+                                                                    receiver.profile.gender.type == 'Женский'}">
+                                                        <img src="static/img/female.png">
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <img src="static/img/male.png">
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </figure>
+                                </div>
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p>
+                                            <strong>${receiver.profile.firstName} ${receiver.profile.lastName}</strong>
+                                            <br>${receiver.profile.country.name}, ${receiver.profile.city.name}
+                                            <br><small><fmt:formatDate value="${receiver.profile.birthday}" type="date"/></small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div id="msgs">
                     <c:forEach var="message" items="${messages}">
                         <div class="columns">
                             <c:choose>
-                                <c:when test="${message.sender_id == receiver.id}">
-                                    <div class="column is-4 is-offset-2">
-                                        <div class="notification">${message.text} - ${message.created_at}</div>
-                                    </div>
-                                    <div class="column is-4">
-
+                                <c:when test="${message.senderId == receiver.id}">
+                                    <div class="column is-5 is-offset-2 is-11-mobile">
+                                        <div class="notification content">
+                                            <p>${message.text}</p>
+                                            <p style="text-align: right">
+                                                <small><fmt:formatDate value="${message.createdAt}" type="both"/></small>
+                                            </p>
+                                        </div>
                                     </div>
                                 </c:when>
                                 <c:otherwise>
-                                    <div class="column is-4 is-offset-2">
-
-                                    </div>
-                                    <div class="column is-4">
-                                        <div class="notification is-primary">${message.text} - ${message.created_at}</div>
+                                    <div class="column is-5 is-offset-5 is-11-mobile is-offset-1-mobile">
+                                        <div class="notification is-primary content">
+                                            <p>${message.text}</p>
+                                            <p style="text-align: right">
+                                                <small><fmt:formatDate value="${message.createdAt}" type="both"/></small>
+                                            </p>
+                                        </div>
                                     </div>
                                 </c:otherwise>
                             </c:choose>
                         </div>
                     </c:forEach>
                 </div>
-                <form method="post" action="${pageContext.request.contextPath}/chat?id=${receiver.id}">
+                <form method="post" action="chat?id=${receiver.id}">
                     <input id="sender" type="hidden" value="${principal.id}">
                     <input id="receiver" type="hidden" value="${receiver.id}">
                     <div class="columns">
                         <div class="column is-8 is-offset-2">
                             <div class="field">
                                 <div class="control">
-                                    <textarea class="textarea" placeholder="Type your message here..." name="text" autofocus></textarea>
+                                    <fmt:message key="key.chatPageMessagePlaceholder" var="text"/>
+                                    <textarea class="textarea" placeholder="${text}" name="text" autofocus></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="columns">
                         <div class="column is-8 is-offset-2">
-                            <nav class="level">
-                                <div class="level-left">
-                                    <div class="level-item">
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <figure class="image is-48x48">
-                                                    <c:choose>
-                                                        <c:when test="${receiver.profile.image.url != null}">
-                                                            <img src="${receiver.profile.image.url}">
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <img src="${receiver.profile.gender.type == 'female' ? 'static/img/female.png'
-                                                                                             : 'static/img/male.png'}">
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </figure>
-                                            </div>
-                                            <div class="media-content">
-                                                <div class="content">
-                                                    <p class="title is-4">${receiver.profile.firstName} ${receiver.profile.lastName}</p>
-                                                    <p class="subtitle is-6">${receiver.profile.country.name}, ${receiver.profile.city.name}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <fmt:message key="key.chatPageSendButton" var="send"/>
+                                    <input class="button is-info is-fullwidth" type="submit" value="${send}">
                                 </div>
-                                <div class="level-right">
-                                    <div class="level-item">
-                                        <div class="control">
-                                            <input class="button is-info" type="submit" value="Send">
-                                        </div>
-                                    </div>
+                                <div class="control">
+                                    <a class="button" href="chat?${pageContext.request.queryString}#top">
+                                        <fmt:message key="key.chatPageBackToTopButton"/>
+                                    </a>
                                 </div>
-                            </nav>
+                            </div>
                         </div>
                     </div>
                 </form>
             </div>
+
         </section>
 
         <jsp:include page="layout/footer.jsp"/>

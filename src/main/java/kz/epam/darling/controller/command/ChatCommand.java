@@ -1,5 +1,6 @@
 package kz.epam.darling.controller.command;
 
+import kz.epam.darling.model.Language;
 import kz.epam.darling.model.Message;
 import kz.epam.darling.model.User;
 import kz.epam.darling.model.dao.MessageDAO;
@@ -19,12 +20,13 @@ public class ChatCommand implements Command {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
+        Language language = (Language) request.getAttribute("language");
         User sender = (User) request.getSession(false).getAttribute("principal");
-        int receiver_id = Integer.parseInt(request.getParameter("id"));
-        User receiver = UserDAO.findById(receiver_id);
-        List<Message> messages = MessageDAO.findByParticipants(sender.getId(), receiver_id);
+        int receiverId = Integer.parseInt(request.getParameter("id"));
+        User receiver = UserDAO.findById(receiverId, language.getId());
+        List<Message> messages = MessageDAO.findByParticipants(sender.getId(), receiverId);
         for (Message message : messages) {
-            if (message.getReceiver_id() == sender.getId()) {
+            if (message.getReceiverId() == sender.getId()) {
                 message.setStatusId(2);
                 MessageDAO.update(message);
             }
@@ -41,15 +43,15 @@ public class ChatCommand implements Command {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         User sender = (User) request.getSession(false).getAttribute("principal");
-        int receiver_id = Integer.parseInt(request.getParameter("id"));
+        int receiverId = Integer.parseInt(request.getParameter("id"));
         String text = request.getParameter("text");
         Message message = new Message();
         message.setText(text);
-        message.setSender_id(sender.getId());
-        message.setReceiver_id(receiver_id);
+        message.setSenderId(sender.getId());
+        message.setReceiverId(receiverId);
         MessageDAO.create(message);
         try {
-            response.sendRedirect(request.getContextPath() + "/chat?id=" + receiver_id);
+            response.sendRedirect(request.getContextPath() + "/chat?id=" + receiverId);
         } catch (IOException e) {
             LOGGER.error(e);
         }

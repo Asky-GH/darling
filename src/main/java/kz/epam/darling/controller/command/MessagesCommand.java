@@ -1,5 +1,6 @@
 package kz.epam.darling.controller.command;
 
+import kz.epam.darling.model.Language;
 import kz.epam.darling.model.Message;
 import kz.epam.darling.model.Profile;
 import kz.epam.darling.model.User;
@@ -18,13 +19,13 @@ import java.util.Map;
 public class MessagesCommand implements Command {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
+        Language language = (Language) request.getAttribute("language");
         Map<User, Message> dialogs = new LinkedHashMap<>();
         User receiver = (User) request.getSession(false).getAttribute("principal");
         List<Message> messages = MessageDAO.findByChat(receiver.getId());
         for (Message message : messages) {
-            User user = UserDAO.findById(message.getSender_id());
-            Profile profile = ProfileDAO.findByUserId(user.getId());
-            user.setPassword(null);
+            User user = UserDAO.findById(message.getSenderId(), language.getId());
+            Profile profile = ProfileDAO.findByUserId(user.getId(), language.getId());
             user.setProfile(profile);
             dialogs.put(user, message);
         }

@@ -1,6 +1,7 @@
 package kz.epam.darling.controller.command;
 
 import com.google.gson.Gson;
+import kz.epam.darling.model.Language;
 import kz.epam.darling.model.Message;
 import kz.epam.darling.model.dao.MessageDAO;
 
@@ -13,9 +14,9 @@ import java.util.List;
 public class RefreshCommand implements Command {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        int sender_id = Integer.parseInt(request.getParameter("sender_id"));
-        int receiver_id = Integer.parseInt(request.getParameter("receiver_id"));
-        List<Message> messages = MessageDAO.findNew(sender_id, receiver_id);
+        int senderId = Integer.parseInt(request.getParameter("senderId"));
+        int receiverId = Integer.parseInt(request.getParameter("receiverId"));
+        List<Message> messages = MessageDAO.findNew(senderId, receiverId);
         if (messages.size() > 0) {
             for (Message message : messages) {
                 message.setStatusId(2);
