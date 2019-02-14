@@ -3,7 +3,6 @@ package kz.epam.darling.controller.command;
 import kz.epam.darling.model.*;
 import kz.epam.darling.model.dao.*;
 import kz.epam.darling.util.EmailValidator;
-import kz.epam.darling.util.PasswordValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
@@ -108,21 +107,15 @@ public class ProfileCommand implements Command {
             if (password.isEmpty() || confirmPassword.isEmpty()) {
                 request.setAttribute("passwordErrorMessage", "All fields are required!");
             } else {
-                if (!PasswordValidator.isValid(password)) {
-                    request.setAttribute("passwordErrorMessage", "Password must be at list 6 characters long! It must " +
-                                                                "contain at least 1 lowercase, 1 uppercase latin letter, " +
-                                                                "1 special character, 1 digit! It must not contain whitespace!");
+                if (!password.equals(confirmPassword)) {
+                    request.setAttribute("passwordErrorMessage", "Passwords do not match!");
                 } else {
-                    if (!password.equals(confirmPassword)) {
-                        request.setAttribute("passwordErrorMessage", "Passwords do not match!");
-                    } else {
-                        User user = (User) request.getSession(false).getAttribute("principal");
-                        user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-                        UserDAO.updatePassword(user);
-                        user.setPassword(null);
-                        response.sendRedirect(request.getContextPath() + "/profile");
-                        return;
-                    }
+                    User user = (User) request.getSession(false).getAttribute("principal");
+                    user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
+                    UserDAO.updatePassword(user);
+                    user.setPassword(null);
+                    response.sendRedirect(request.getContextPath() + "/profile");
+                    return;
                 }
             }
             doGet(request, response);

@@ -257,6 +257,26 @@ public class UserDAO {
         }
     }
 
+    public static boolean emailExists(String email) {
+        boolean emailExists = false;
+
+        Connection con = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE email = ?")) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    emailExists = true;
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e);
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
+        }
+
+        return emailExists;
+    }
+
     private static User retrieveUser(ResultSet rs, int languageId) {
         User user = new User();
         try {
