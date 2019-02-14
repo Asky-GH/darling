@@ -1,32 +1,35 @@
 package kz.epam.darling.controller.command;
 
-import com.google.gson.Gson;
 import kz.epam.darling.model.City;
 import kz.epam.darling.model.Language;
 import kz.epam.darling.model.dao.CityDAO;
+import kz.epam.darling.util.JsonSender;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 public class LocationCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(LocationCommand.class.getName());
+
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        int country_id = Integer.parseInt(request.getParameter("country_id"));
-        Language language = (Language) request.getAttribute("language");
-        List<City> cities = CityDAO.findByCountryId(country_id, language.getId());
         try {
-            PrintWriter writer = response.getWriter();
-            Gson gson = new Gson();
-            writer.print(gson.toJson(cities));
-            writer.flush();
-            writer.close();
+            try {
+                int countryId = Integer.parseInt(request.getParameter("countryId"));
+                Language language = (Language) request.getAttribute("language");
+                List<City> cities = CityDAO.findByCountryId(countryId, language.getId());
+                JsonSender.send(response, cities);
+            } catch (NumberFormatException e) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
-
     }
 
     @Override

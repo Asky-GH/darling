@@ -1,19 +1,27 @@
 package kz.epam.darling.controller.command;
 
-import com.google.gson.Gson;
-import kz.epam.darling.model.Language;
 import kz.epam.darling.model.Message;
 import kz.epam.darling.model.dao.MessageDAO;
+import kz.epam.darling.util.JsonSender;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 public class RefreshCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(RefreshCommand.class.getName());
+
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
+
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
         int senderId = Integer.parseInt(request.getParameter("senderId"));
         int receiverId = Integer.parseInt(request.getParameter("receiverId"));
         List<Message> messages = MessageDAO.findNew(senderId, receiverId);
@@ -23,19 +31,10 @@ public class RefreshCommand implements Command {
                 MessageDAO.update(message);
             }
             try {
-                PrintWriter writer = response.getWriter();
-                Gson gson = new Gson();
-                writer.print(gson.toJson(messages));
-                writer.flush();
-                writer.close();
+                JsonSender.send(response, messages);
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error(e);
             }
         }
-    }
-
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
-
     }
 }

@@ -59,7 +59,7 @@ public class CityDAO {
         try {
             city.setId(rs.getInt("id"));
             city.setName(rs.getString("name"));
-            city.setCountry_id(rs.getInt("country_id"));
+            city.setCountryId(rs.getInt("country_id"));
         } catch (SQLException e) {
             LOGGER.error(e);
         }

@@ -2,7 +2,7 @@ package kz.epam.darling.model;
 
 public class City extends Entity {
     private String name;
-    private int country_id;
+    private int countryId;
 
 
     public City() {
@@ -20,11 +20,11 @@ public class City extends Entity {
         this.name = name;
     }
 
-    public int getCountry_id() {
-        return country_id;
+    public int getCountryId() {
+        return countryId;
     }
 
-    public void setCountry_id(int country_id) {
-        this.country_id = country_id;
+    public void setCountryId(int countryId) {
+        this.countryId = countryId;
     }
 }
