@@ -12,6 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class LoginCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(LoginCommand.class.getName());
@@ -29,7 +31,7 @@ public class LoginCommand implements Command {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         Language language = (Language) request.getAttribute("language");
-        String from = request.getParameter("from");
+        String referer = request.getParameter("referer");
         try {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
@@ -38,16 +40,16 @@ public class LoginCommand implements Command {
                 if (user != null && BCrypt.checkpw(password, user.getPassword())) {
                     user.setPassword(null);
                     request.getSession(false).setAttribute("principal", user);
-                    if (!from.isEmpty()) {
-                        response.sendRedirect(from);
+                    if (!referer.isEmpty()) {
+                        response.sendRedirect(referer);
                     } else {
                         response.sendRedirect(request.getContextPath() + "/main");
                     }
                     return;
                 }
             }
-            request.setAttribute("from", from);
-            request.setAttribute("errorMessage", "Invalid email or password!");
+            request.setAttribute("referer", referer);
+            request.setAttribute("error", "key.loginPageLoginError");
             doGet(request, response);
         } catch (IOException e) {
             LOGGER.error(e);
