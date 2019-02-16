@@ -144,16 +144,16 @@
                                                 <c:when test="${birthday != null}">
                                                     <c:choose>
                                                         <c:when test="${fn:contains(birthday, 'key')}">
-                                                            <input class="input is-danger" type="date" name="birthday" autofocus>
+                                                            <input id="date" class="input is-danger" type="date" name="birthday" autofocus>
                                                             <p class="help is-danger"><fmt:message key="${birthday}"/></p>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <input class="input" type="date" name="birthday" value="${birthday}">
+                                                            <input id="date" class="input" type="date" name="birthday" value="${birthday}">
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <input class="input" type="date" name="birthday">
+                                                    <input id="date" class="input" type="date" name="birthday">
                                                 </c:otherwise>
                                             </c:choose>
                                         </div>
@@ -263,5 +263,6 @@
         <jsp:include page="../layout/footer.jsp"/>
 
         <script defer src="static/js/location.js"></script>
+        <script defer src="static/js/calendar.js"></script>
     </body>
 </html>
