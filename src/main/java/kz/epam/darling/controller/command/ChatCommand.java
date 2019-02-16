@@ -45,15 +45,24 @@ public class ChatCommand implements Command {
         User sender = (User) request.getSession(false).getAttribute("principal");
         int receiverId = Integer.parseInt(request.getParameter("id"));
         String text = request.getParameter("text");
-        Message message = new Message();
-        message.setText(text);
-        message.setSenderId(sender.getId());
-        message.setReceiverId(receiverId);
-        MessageDAO.create(message);
-        try {
-            response.sendRedirect(request.getContextPath() + "/chat?id=" + receiverId);
-        } catch (IOException e) {
-            LOGGER.error(e);
+        if (text.trim().isEmpty()) {
+            request.setAttribute("textError", "key.chatPageEmptyTextError");
+        } else if (text.length() > 500) {
+            request.setAttribute("textError", "key.chatPageTooLongTextError");
+            request.setAttribute("text", text);
+        } else {
+            Message message = new Message();
+            message.setText(text);
+            message.setSenderId(sender.getId());
+            message.setReceiverId(receiverId);
+            MessageDAO.create(message);
+            try {
+                response.sendRedirect(request.getContextPath() + "/chat?id=" + receiverId);
+                return;
+            } catch (IOException e) {
+                LOGGER.error(e);
+            }
         }
+        doGet(request, response);
     }
 }

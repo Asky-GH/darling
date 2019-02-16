@@ -87,12 +87,34 @@
                     <input id="receiver" type="hidden" value="${receiver.id}">
                     <div class="columns">
                         <div class="column is-8 is-offset-2">
-                            <div class="field">
-                                <div class="control">
-                                    <fmt:message key="key.chatPageMessagePlaceholder" var="text"/>
-                                    <textarea class="textarea" placeholder="${text}" name="text" autofocus></textarea>
-                                </div>
-                            </div>
+                            <c:choose>
+                                <c:when test="${textError != null}">
+                                    <div class="field">
+                                        <div class="control">
+                                            <fmt:message key="key.chatPageMessagePlaceholder" var="textPlaceholder"/>
+                                            <c:choose>
+                                                <c:when test="${text != null}">
+                                                    <textarea class="textarea is-danger" name="text" autofocus>${text}</textarea>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <textarea class="textarea is-danger" placeholder="${textPlaceholder}" name="text" autofocus></textarea>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <p class="help is-danger"><fmt:message key="${textError}"/></p>
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="field">
+                                        <div class="control">
+                                            <fmt:message key="key.chatPageMessagePlaceholder" var="textPlaceholder"/>
+                                            <textarea class="textarea" placeholder="${textPlaceholder}" name="text" autofocus></textarea>
+                                        </div>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                     </div>
                     <div class="columns">
