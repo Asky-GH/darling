@@ -52,14 +52,14 @@ public class MainCommand implements Command {
             genderConstraint = false;
         }
 
-        int fromAge = 0;
+        int fromAge;
         try {
             fromAge = Integer.parseInt(request.getParameter("fromAge"));
         } catch (NumberFormatException e) {
             fromAge = 18;
         }
 
-        int toAge = 0;
+        int toAge;
         try {
             toAge = Integer.parseInt(request.getParameter("toAge"));
         } catch (NumberFormatException e) {

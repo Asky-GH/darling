@@ -6,12 +6,20 @@ import java.io.IOException;
 
 public class NoCommand implements Command {
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.getWriter().println("From 'doGet()' method of 'NoCommand' class...");
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            response.getWriter().println("From 'doGet()' method of 'NoCommand' class...");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.getWriter().println("From 'doPost()' method of 'NoCommand' class...");
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            response.getWriter().println("From 'doPost()' method of 'NoCommand' class...");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -91,7 +91,7 @@
                                                 <div class="control">
                                                     <div class="control has-icons-left has-icons-right">
                                                         <fmt:message key="key.profilePageEmailPlaceholder" var="newEmail"/>
-                                                        <input name="email" type="text" placeholder="${newEmail}" class="input is-danger">
+                                                        <input name="email" type="text" placeholder="${newEmail}" class="input is-danger" autofocus>
                                                         <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
                                                         <span class="icon is-small is-right"><i class="fas fa-exclamation-triangle"></i></span>
                                                     </div>
@@ -128,7 +128,7 @@
                                             <div class="field">
                                                 <div class="control has-icons-left has-icons-right">
                                                     <fmt:message key="key.profilePagePasswordPlaceholder" var="newPassword"/>
-                                                    <input name="password" type="password" placeholder="${newPassword}" class="input is-danger">
+                                                    <input name="password" type="password" placeholder="${newPassword}" class="input is-danger" autofocus>
                                                     <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
                                                     <span class="icon is-small is-right"><i class="fas fa-exclamation-triangle"></i></span>
                                                 </div>

@@ -63,7 +63,6 @@
                                         </div>
                                     </div>
                                     <div class="field">
-                                        <p class="help is-danger">${errorMessage}</p>
                                         <div class="control">
                                             <fmt:message key="key.loginPageLoginButton" var="login"/>
                                             <input class="button is-fullwidth is-info" type="submit" value="${login}">

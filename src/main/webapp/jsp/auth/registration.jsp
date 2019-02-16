@@ -251,7 +251,6 @@
                                 </div>
                             </div>
                             <div class="field has-text-centered">
-                                <p class="help is-danger">${errorMessage}</p>
                                 <fmt:message key="key.registrationPageRegisterButton" var="register"/>
                                 <input class="button is-fullwidth is-info" type="submit" value="${register}"/>
                             </div>

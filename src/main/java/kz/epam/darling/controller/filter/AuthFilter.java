@@ -37,7 +37,7 @@ public class AuthFilter implements Filter {
 
                 case "/profile":
                     if (session == null || session.getAttribute("principal") == null) {
-                        request.setAttribute("from", request.getRequestURL());
+                        request.setAttribute("referer", request.getRequestURL());
                         request.getRequestDispatcher("jsp/auth/login.jsp").forward(request, response);
                     } else {
                         filterChain.doFilter(servletRequest, servletResponse);
@@ -45,7 +45,7 @@ public class AuthFilter implements Filter {
                     break;
                 case "/chat":
                     if (session == null || session.getAttribute("principal") == null) {
-                        request.setAttribute("from", request.getRequestURL() + "?" + request.getQueryString());
+                        request.setAttribute("referer", request.getRequestURL() + "?" + request.getQueryString());
                         request.getRequestDispatcher("jsp/auth/login.jsp").forward(request, response);
                     } else {
                         filterChain.doFilter(servletRequest, servletResponse);
