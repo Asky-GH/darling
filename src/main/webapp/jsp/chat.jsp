@@ -19,39 +19,41 @@
             <div class="container">
                 <div class="columns">
                     <div class="column is-8 is-offset-2">
-                        <div class="notification is-warning">
-                            <div class="media">
-                                <div class="media-left">
-                                    <figure class="image is-64x64">
-                                        <c:choose>
-                                            <c:when test="${receiver.profile.image.url != null}">
-                                                <img src="${receiver.profile.image.url}">
-                                            </c:when>
-                                            <c:otherwise>
-                                                <c:choose>
-                                                    <c:when test="${receiver.profile.gender.type == 'Female' ||
-                                                                    receiver.profile.gender.type == 'Женский'}">
-                                                        <img src="static/img/female.png">
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <img src="static/img/male.png">
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </figure>
-                                </div>
-                                <div class="media-content">
-                                    <div class="content">
-                                        <p>
-                                            <strong>${receiver.profile.firstName} ${receiver.profile.lastName}</strong>
-                                            <br>${receiver.profile.country.name}, ${receiver.profile.city.name}
-                                            <br><small><fmt:formatDate value="${receiver.profile.birthday}" type="date"/></small>
-                                        </p>
+                        <a href="match?id=${receiver.id}" style="color: black">
+                            <div class="notification is-warning">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <figure class="image is-64x64">
+                                            <c:choose>
+                                                <c:when test="${receiver.profile.image.url != null}">
+                                                    <img src="${receiver.profile.image.url}">
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:choose>
+                                                        <c:when test="${receiver.profile.gender.type == 'Female' ||
+                                                                        receiver.profile.gender.type == 'Женский'}">
+                                                            <img src="static/img/female.png">
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <img src="static/img/male.png">
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </figure>
+                                    </div>
+                                    <div class="media-content">
+                                        <div class="content">
+                                            <p>
+                                                <strong>${receiver.profile.firstName} ${receiver.profile.lastName}</strong>
+                                                <br>${receiver.profile.country.name}, ${receiver.profile.city.name}
+                                                <br><small class="user-age">${receiver.profile.birthday}</small>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
                 <div id="msgs">
@@ -140,5 +142,6 @@
         <jsp:include page="layout/footer.jsp"/>
 
         <script defer src="static/js/chat.js"></script>
+        <script defer src="static/js/age.js"></script>
     </body>
 </html>

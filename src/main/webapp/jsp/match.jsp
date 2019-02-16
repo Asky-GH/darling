@@ -29,7 +29,7 @@
                                 <div class="tile">
                                     <div class="tile is-parent is-vertical">
                                         <article class="tile is-child notification">
-                                            <p class="title"><fmt:formatDate value="${match.profile.birthday}"/></p>
+                                            <p class="title user-age">${match.profile.birthday}</p>
                                         </article>
                                         <c:choose>
                                             <c:when test="${match.profile.gender.type == 'Female' ||
@@ -88,5 +88,7 @@
         </section>
 
         <jsp:include page="layout/footer.jsp"/>
+
+        <script defer src="static/js/age.js"></script>
     </body>
 </html>

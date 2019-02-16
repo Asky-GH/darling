@@ -115,7 +115,7 @@
                                                 <p>
                                                     <strong>${user.profile.firstName} ${user.profile.lastName}</strong>
                                                     <br>${user.profile.country.name}, ${user.profile.city.name}
-                                                    <br><small><fmt:formatDate value="${user.profile.birthday}" type="date"/></small>
+                                                    <br><small class="user-age">${user.profile.birthday}</small>
                                                 </p>
                                             </div>
                                         </div>
@@ -131,5 +131,6 @@
         <jsp:include page="layout/footer.jsp"/>
 
         <script defer src="static/js/location.js"></script>
+        <script defer src="static/js/age.js"></script>
     </body>
 </html>
