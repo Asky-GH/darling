@@ -21,7 +21,6 @@ public class ProfileCommand implements Command {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        User user = (User) request.getSession(false).getAttribute("principal");
         Language language = (Language) request.getAttribute("language");
         List<Country> countries = CountryDAO.findAll(language.getId());
         request.setAttribute("countries", countries);
@@ -59,20 +58,22 @@ public class ProfileCommand implements Command {
         try {
             Part part = request.getPart("image");
             if (part.getSize() <= 0) {
-                request.setAttribute("avatarErrorMessage", "Choose a file!");
-                doGet(request, response);
+                request.setAttribute("avatarError", "key.profilePageEmptyAvatarError");
             } else {
                 if (part.getSize() > MAX_FILE_SIZE) {
-                    request.setAttribute("avatarErrorMessage", "Maximum file size is 1Mb!");
-                    doGet(request, response);
+                    request.setAttribute("avatarError", "key.profilePageAvatarSizeError");
+                } else if (!part.getContentType().contains("image/")) {
+                    request.setAttribute("avatarError", "key.profilePageAvatarExtensionError");
                 } else {
                     Image image = user.getProfile().getImage();
                     image.setUrl(request.getContextPath() + "/image?id=" + image.getId());
                     ImageDAO.update(image, part);
                     user.getProfile().setImage(image);
                     response.sendRedirect(request.getContextPath() + "/profile");
+                    return;
                 }
             }
+            doGet(request, response);
         } catch (IOException | ServletException e) {
             LOGGER.error(e);
         }
@@ -82,10 +83,14 @@ public class ProfileCommand implements Command {
         String email = request.getParameter("email");
         try {
             if (email.isEmpty()) {
-                request.setAttribute("emailErrorMessage", "Enter new email!");
+                request.setAttribute("emailError", "key.profilePageEmptyEmailError");
             } else {
-                if (!EmailValidator.isValid(email)) {
-                    request.setAttribute("emailErrorMessage", "Invalid email!");
+                if (email.length() > 100) {
+                    request.setAttribute("emailError", "key.profilePageTooLongEmailError");
+                } else if (!EmailValidator.isValid(email)) {
+                    request.setAttribute("emailError", "key.profilePageInvalidEmailError");
+                } else if (UserDAO.emailExists(email)) {
+                    request.setAttribute("emailError", "key.profilePageEmailExistsError");
                 } else {
                     User user = (User) request.getSession(false).getAttribute("principal");
                     user.setEmail(email);
@@ -105,10 +110,12 @@ public class ProfileCommand implements Command {
         String confirmPassword = request.getParameter("confirmPassword");
         try {
             if (password.isEmpty() || confirmPassword.isEmpty()) {
-                request.setAttribute("passwordErrorMessage", "All fields are required!");
+                request.setAttribute("passwordError", "key.profilePageEmptyPasswordError");
             } else {
-                if (!password.equals(confirmPassword)) {
-                    request.setAttribute("passwordErrorMessage", "Passwords do not match!");
+                if (password.length() > 100) {
+                    request.setAttribute("passwordError", "key.profilePageTooLongPasswordError");
+                } else if (!password.equals(confirmPassword)) {
+                    request.setAttribute("passwordError", "key.profilePagePasswordError");
                 } else {
                     User user = (User) request.getSession(false).getAttribute("principal");
                     user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
@@ -138,7 +145,7 @@ public class ProfileCommand implements Command {
         } catch (IOException e) {
             LOGGER.error(e);
         } catch (NumberFormatException e) {
-            request.setAttribute("locationErrorMessage", "Choose location!");
+            request.setAttribute("locationError", "key.profilePageLocationError");
             doGet(request, response);
         }
     }

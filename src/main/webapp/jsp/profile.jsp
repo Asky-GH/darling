@@ -56,8 +56,14 @@
                                     </label>
                                 </div>
                             </div>
+                            <c:choose>
+                                <c:when test="${avatarError != null}">
+                                    <div class="field">
+                                        <p class="help is-danger"><fmt:message key="${avatarError}"/></p>
+                                    </div>
+                                </c:when>
+                            </c:choose>
                             <div class="field">
-                                <p class="help is-danger">${avatarErrorMessage}</p>
                                 <fmt:message key="key.profilePageChangeAvatarButton" var="changeAvatar"/>
                                 <input class="button is-fullwidth is-info" type="submit" value="${changeAvatar}"/>
                             </div>
@@ -78,18 +84,37 @@
                             <div class="column" style="padding-top: 28px">
                                 <form method="post" action="profile">
                                     <input type="hidden" name="action" value="change-email">
-                                    <div class="field">
-                                        <div class="label">${principal.email}</div>
-                                        <div class="control">
-                                            <div class="control has-icons-left has-icons-right">
-                                                <fmt:message key="key.profilePageEmailPlaceholder" var="newEmail"/>
-                                                <input name="email" type="text" placeholder="${newEmail}" class="input">
-                                                <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
+                                    <c:choose>
+                                        <c:when test="${emailError != null}">
+                                            <div class="field">
+                                                <div class="label">${principal.email}</div>
+                                                <div class="control">
+                                                    <div class="control has-icons-left has-icons-right">
+                                                        <fmt:message key="key.profilePageEmailPlaceholder" var="newEmail"/>
+                                                        <input name="email" type="text" placeholder="${newEmail}" class="input is-danger">
+                                                        <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
+                                                        <span class="icon is-small is-right"><i class="fas fa-exclamation-triangle"></i></span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                            <div class="field">
+                                                <p class="help is-danger"><fmt:message key="${emailError}"/></p>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="field">
+                                                <div class="label">${principal.email}</div>
+                                                <div class="control">
+                                                    <div class="control has-icons-left has-icons-right">
+                                                        <fmt:message key="key.profilePageEmailPlaceholder" var="newEmail"/>
+                                                        <input name="email" type="text" placeholder="${newEmail}" class="input">
+                                                        <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
                                     <div>
-                                        <p class="help is-danger">${emailErrorMessage}</p>
                                         <fmt:message key="key.profilePageChangeEmailButton" var="changeEmail"/>
                                         <input class="button is-fullwidth is-info" type="submit" value="${changeEmail}"/>
                                     </div>
@@ -98,22 +123,46 @@
                             <div class="column">
                                 <form method="post" action="profile">
                                     <input type="hidden" name="action" value="change-password">
-                                    <div class="field">
-                                        <div class="control has-icons-left has-icons-right">
-                                            <fmt:message key="key.profilePagePasswordPlaceholder" var="newPassword"/>
-                                            <input name="password" type="password" placeholder="${newPassword}" class="input">
-                                            <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="field">
-                                        <div class="control has-icons-left has-icons-right">
-                                            <fmt:message key="key.profilePageConfirmPasswordPlaceholder" var="confirmPassword"/>
-                                            <input name="confirmPassword" type="password" placeholder="${confirmPassword}" class="input">
-                                            <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
-                                        </div>
-                                    </div>
+                                    <c:choose>
+                                        <c:when test="${passwordError != null}">
+                                            <div class="field">
+                                                <div class="control has-icons-left has-icons-right">
+                                                    <fmt:message key="key.profilePagePasswordPlaceholder" var="newPassword"/>
+                                                    <input name="password" type="password" placeholder="${newPassword}" class="input is-danger">
+                                                    <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+                                                    <span class="icon is-small is-right"><i class="fas fa-exclamation-triangle"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <div class="control has-icons-left has-icons-right">
+                                                    <fmt:message key="key.profilePageConfirmPasswordPlaceholder" var="confirmPassword"/>
+                                                    <input name="confirmPassword" type="password" placeholder="${confirmPassword}" class="input is-danger">
+                                                    <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+                                                    <span class="icon is-small is-right"><i class="fas fa-exclamation-triangle"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <p class="help is-danger"><fmt:message key="${passwordError}"/></p>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="field">
+                                                <div class="control has-icons-left has-icons-right">
+                                                    <fmt:message key="key.profilePagePasswordPlaceholder" var="newPassword"/>
+                                                    <input name="password" type="password" placeholder="${newPassword}" class="input">
+                                                    <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <div class="control has-icons-left has-icons-right">
+                                                    <fmt:message key="key.profilePageConfirmPasswordPlaceholder" var="confirmPassword"/>
+                                                    <input name="confirmPassword" type="password" placeholder="${confirmPassword}" class="input">
+                                                    <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+                                                </div>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
                                     <div>
-                                        <p class="help is-danger">${passwordErrorMessage}</p>
                                         <fmt:message key="key.profilePageChangePasswordButton" var="changePassword"/>
                                         <input class="button is-fullwidth is-info" type="submit" value="${changePassword}"/>
                                     </div>
@@ -148,8 +197,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <c:choose>
+                                <c:when test="${locationError != null}">
+                                    <div class="field">
+                                        <p class="help is-danger"><fmt:message key="${locationError}"/></p>
+                                    </div>
+                                </c:when>
+                            </c:choose>
                             <div>
-                                <p class="help is-danger">${locationErrorMessage}</p>
                                 <fmt:message key="key.profilePageChangeLocationButton" var="changeLocation"/>
                                 <input class="button is-fullwidth is-info" type="submit" value="${changeLocation}"/>
                             </div>
