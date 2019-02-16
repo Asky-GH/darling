@@ -4,10 +4,8 @@ import kz.epam.darling.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,138 +69,13 @@ public class UserDAO {
         return users;
     }
 
-    public static List<User> findByConstraints(int genderId, int toYear, int fromYear, int countryId, int cityId,
-                                               int languageId) {
+    public static List<User> search(int languageId, LocalDate fromDate, LocalDate toDate) {
         List<User> users = new ArrayList<>();
         Connection con = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM (SELECT * FROM profile WHERE gender_id = ? " +
-                                                            "AND country_id = ? AND city_id = ? AND YEAR(birthday) " +
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM (SELECT * FROM profile WHERE birthday " +
                                                             "BETWEEN ? AND ?) AS p INNER JOIN users ON p.user_id = users.id")) {
-            ps.setInt(1, genderId);
-            ps.setInt(2, countryId);
-            ps.setInt(3, cityId);
-            ps.setInt(4, fromYear);
-            ps.setInt(5, toYear);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    User user = retrieveUser(rs, languageId);
-                    user.setPassword(null);
-                    users.add(user);
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.error(e);
-        } finally {
-            ConnectionPool.getInstance().releaseConnection(con);
-        }
-        return users;
-    }
-
-    public static List<User> findByGenderAndCountry(int genderId, int toYear, int fromYear, int countryId, int languageId) {
-        List<User> users = new ArrayList<>();
-        Connection con = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM (SELECT * FROM profile WHERE gender_id = ? " +
-                                                            "AND country_id = ? AND YEAR(birthday) BETWEEN ? AND ?) " +
-                                                            "AS p INNER JOIN users ON p.user_id = users.id")) {
-            ps.setInt(1, genderId);
-            ps.setInt(2, countryId);
-            ps.setInt(3, fromYear);
-            ps.setInt(4, toYear);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    User user = retrieveUser(rs, languageId);
-                    user.setPassword(null);
-                    users.add(user);
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.error(e);
-        } finally {
-            ConnectionPool.getInstance().releaseConnection(con);
-        }
-        return users;
-    }
-
-    public static List<User> findByGender(int genderId, int toYear, int fromYear, int languageId) {
-        List<User> users = new ArrayList<>();
-        Connection con = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM (SELECT * FROM profile WHERE gender_id = ? " +
-                                                            "AND YEAR(birthday) BETWEEN ? AND ?) AS p INNER JOIN users " +
-                                                            "ON p.user_id = users.id")) {
-            ps.setInt(1, genderId);
-            ps.setInt(2, fromYear);
-            ps.setInt(3, toYear);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    User user = retrieveUser(rs, languageId);
-                    user.setPassword(null);
-                    users.add(user);
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.error(e);
-        } finally {
-            ConnectionPool.getInstance().releaseConnection(con);
-        }
-        return users;
-    }
-
-    public static List<User> findByCountryAndCity(int toYear, int fromYear, int countryId, int cityId, int languageId) {
-        List<User> users = new ArrayList<>();
-        Connection con = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM (SELECT * FROM profile WHERE country_id = ? " +
-                                                            "AND city_id = ? AND YEAR(birthday) BETWEEN ? AND ?) AS p " +
-                                                            "INNER JOIN users ON p.user_id = users.id")) {
-            ps.setInt(1, countryId);
-            ps.setInt(2, cityId);
-            ps.setInt(3, fromYear);
-            ps.setInt(4, toYear);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    User user = retrieveUser(rs, languageId);
-                    user.setPassword(null);
-                    users.add(user);
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.error(e);
-        } finally {
-            ConnectionPool.getInstance().releaseConnection(con);
-        }
-        return users;
-    }
-
-    public static List<User> findByCountry(int toYear, int fromYear, int countryId, int languageId) {
-        List<User> users = new ArrayList<>();
-        Connection con = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM (SELECT * FROM profile WHERE country_id = ? " +
-                                                            "AND YEAR(birthday) BETWEEN ? AND ?) AS p INNER JOIN users " +
-                                                            "ON p.user_id = users.id")) {
-            ps.setInt(1, countryId);
-            ps.setInt(2, fromYear);
-            ps.setInt(3, toYear);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    User user = retrieveUser(rs, languageId);
-                    user.setPassword(null);
-                    users.add(user);
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.error(e);
-        } finally {
-            ConnectionPool.getInstance().releaseConnection(con);
-        }
-        return users;
-    }
-
-    public static List<User> findByAge(int toYear, int fromYear, int languageId) {
-        List<User> users = new ArrayList<>();
-        Connection con = ConnectionPool.getInstance().takeConnection();
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM (SELECT * FROM profile WHERE YEAR(birthday) " +
-                                                            "BETWEEN ? AND ?) AS p INNER JOIN users ON p.user_id = users.id")) {
-            ps.setInt(1, fromYear);
-            ps.setInt(2, toYear);
+            ps.setDate(1, Date.valueOf(fromDate));
+            ps.setDate(2, Date.valueOf(toDate));
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     User user = retrieveUser(rs, languageId);
