@@ -1,5 +1,6 @@
 package kz.epam.darling.controller.filter;
 
+import kz.epam.darling.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class AuthFilter implements Filter {
-    private static final Logger LOGGER = LogManager.getLogger(AuthFilter.class.getName());
+public class RouteFilter implements Filter {
+    private static final Logger LOGGER = LogManager.getLogger(RouteFilter.class.getName());
 
 
     @Override
@@ -36,6 +37,7 @@ public class AuthFilter implements Filter {
                     break;
 
                 case "/profile":
+                case "/messages":
                     if (session == null || session.getAttribute("principal") == null) {
                         request.setAttribute("referer", request.getRequestURL());
                         request.getRequestDispatcher("jsp/auth/login.jsp").forward(request, response);
@@ -47,6 +49,20 @@ public class AuthFilter implements Filter {
                     if (session == null || session.getAttribute("principal") == null) {
                         request.setAttribute("referer", request.getRequestURL() + "?" + request.getQueryString());
                         request.getRequestDispatcher("jsp/auth/login.jsp").forward(request, response);
+                    } else {
+                        filterChain.doFilter(servletRequest, servletResponse);
+                    }
+                    break;
+
+                case "/admin":
+                case "/admin/users":
+                case "/admin/languages":
+                case "/admin/genders":
+                case "/admin/countries":
+                case "/admin/cities":
+                    if (session == null || session.getAttribute("principal") == null ||
+                            !((User) session.getAttribute("principal")).getRole().getType().equals("admin")) {
+                        response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     } else {
                         filterChain.doFilter(servletRequest, servletResponse);
                     }
