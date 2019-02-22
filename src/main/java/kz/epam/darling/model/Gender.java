@@ -1,6 +1,7 @@
 package kz.epam.darling.model;
 
 public class Gender extends Entity {
+    private Language language;
     private String type;
 
 
@@ -9,6 +10,14 @@ public class Gender extends Entity {
 
     public Gender(int id) {
         super(id);
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 
     public String getType() {

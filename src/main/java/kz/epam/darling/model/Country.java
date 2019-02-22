@@ -1,6 +1,7 @@
 package kz.epam.darling.model;
 
 public class Country extends Entity {
+    private Language language;
     private String name;
 
 
@@ -9,6 +10,14 @@ public class Country extends Entity {
 
     public Country(int id) {
         super(id);
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 
     public String getName() {

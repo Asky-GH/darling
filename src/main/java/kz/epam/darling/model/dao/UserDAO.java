@@ -104,6 +104,31 @@ public class UserDAO {
         }
     }
 
+    public static void delete(int id) {
+        Connection con = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement ps = con.prepareStatement("DELETE FROM users WHERE id = ?")) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error(e);
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
+        }
+    }
+
+    public static void update(User user) {
+        Connection con = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement ps = con.prepareStatement("UPDATE users SET role_id = ? WHERE id = ?")) {
+            ps.setInt(1, user.getRole().getId());
+            ps.setInt(2, user.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error(e);
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
+        }
+    }
+
     public static void updateEmail(User user) {
         Connection con = ConnectionPool.getInstance().takeConnection();
         try (PreparedStatement ps = con.prepareStatement("UPDATE users SET email = ? WHERE id = ?")) {

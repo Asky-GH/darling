@@ -66,7 +66,7 @@ create table if not exists images
   data mediumblob,
   url varchar(100),
   user_id int not null,
-  constraint fk_images_users foreign key (user_id) references users (id)
+  constraint fk_images_users foreign key (user_id) references users (id) on delete cascade
 );
 
 create table if not exists profile
@@ -83,7 +83,7 @@ create table if not exists profile
   constraint fk_profile_countries foreign key (country_id) references countries (id),
   constraint fk_profile_cities foreign key (city_id) references cities (id),
   constraint fk_profile_genders foreign key (gender_id) references genders (id),
-  constraint fk_profile_users foreign key (user_id) references users (id)
+  constraint fk_profile_users foreign key (user_id) references users (id) on delete cascade
 );
 
 create table if not exists messages
@@ -94,7 +94,7 @@ create table if not exists messages
   sender_id int not null,
   receiver_id int not null,
   status_id int default 1 not null,
-  constraint fk_messages_users_receiver foreign key (receiver_id) references users (id),
-  constraint fk_messages_users_sender foreign key (sender_id) references users (id),
+  constraint fk_messages_users_receiver foreign key (receiver_id) references users (id) on delete cascade ,
+  constraint fk_messages_users_sender foreign key (sender_id) references users (id) on delete cascade ,
   constraint fk_messages_statuses foreign key (status_id) references statuses (id)
 );

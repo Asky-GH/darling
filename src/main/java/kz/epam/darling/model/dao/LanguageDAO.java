@@ -40,8 +40,37 @@ public class LanguageDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
         }
         return language;
+    }
+
+    public static void create(Language language) {
+        Connection con = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement ps = con.prepareStatement("INSERT INTO languages(locale, name) VALUES (?, ?)")) {
+            ps.setString(1, language.getLocale());
+            ps.setString(2, language.getName());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
+        }
+    }
+
+    public static void update(Language language) {
+        Connection con = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement ps = con.prepareStatement("UPDATE languages SET locale = ?, name = ? WHERE id = ?")) {
+            ps.setString(1, language.getLocale());
+            ps.setString(2, language.getName());
+            ps.setInt(3, language.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionPool.getInstance().releaseConnection(con);
+        }
     }
 
     private static Language retrieveLanguage(ResultSet rs) {

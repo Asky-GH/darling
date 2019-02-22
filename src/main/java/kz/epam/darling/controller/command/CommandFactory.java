@@ -1,5 +1,6 @@
 package kz.epam.darling.controller.command;
 
+import kz.epam.darling.controller.command.admin.*;
 import kz.epam.darling.controller.command.auth.*;
 
 import java.util.HashMap;
@@ -23,6 +24,13 @@ public class CommandFactory {
         commands.put("/location", new LocationCommand());
         commands.put("/messages", new MessagesCommand());
         commands.put("/language", new LanguageCommand());
+        commands.put("/admin", new AdminCommand());
+        commands.put("/admin/users", new UsersCommand());
+        commands.put("/admin/languages", new LanguagesCommand());
+        commands.put("/admin/genders", new GendersCommand());
+        commands.put("/admin/countries", new CountriesCommand());
+        commands.put("/admin/cities", new CitiesCommand());
+        commands.put("/country", new CountryCommand());
     }
 
     public static CommandFactory getInstance() {

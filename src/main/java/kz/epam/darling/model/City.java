@@ -1,8 +1,9 @@
 package kz.epam.darling.model;
 
 public class City extends Entity {
+    private Language language;
     private String name;
-    private int countryId;
+    private Country country;
 
 
     public City() {
@@ -10,6 +11,14 @@ public class City extends Entity {
 
     public City(int id) {
         super(id);
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 
     public String getName() {
@@ -20,11 +29,11 @@ public class City extends Entity {
         this.name = name;
     }
 
-    public int getCountryId() {
-        return countryId;
+    public Country getCountry() {
+        return country;
     }
 
-    public void setCountryId(int countryId) {
-        this.countryId = countryId;
+    public void setCountry(Country country) {
+        this.country = country;
     }
 }

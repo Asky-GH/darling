@@ -25,6 +25,9 @@
                         <div class="navbar-dropdown is-boxed">
                             <a class="navbar-item" href="profile"><fmt:message key="key.navbarLinkToProfile"/></a>
                             <a class="navbar-item" href="messages"><fmt:message key="key.navbarLinkToMessages"/></a>
+                            <c:if test="${principal.role.type == 'admin'}">
+                                <a class="navbar-item" href="admin">Admin panel</a>
+                            </c:if>
                             <hr class="navbar-divider">
                             <a class="navbar-item" href="logout"><fmt:message key="key.navbarLinkToLogout"/></a>
                         </div>
