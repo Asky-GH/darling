@@ -7,6 +7,10 @@
     <error-page>
         <location>/jsp/error.jsp</location>
     </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/jsp/forbidden.jsp</location>
+    </error-page>
 
     <servlet>
         <servlet-name>DarlingServlet</servlet-name>
