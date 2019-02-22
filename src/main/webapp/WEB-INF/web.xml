@@ -4,6 +4,10 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
+    <error-page>
+        <location>/jsp/error.jsp</location>
+    </error-page>
+
     <servlet>
         <servlet-name>DarlingServlet</servlet-name>
         <servlet-class>kz.epam.darling.controller.DarlingServlet</servlet-class>
@@ -30,6 +34,10 @@
         <servlet-name>default</servlet-name>
         <url-pattern>/static/js/*</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/static/css/*</url-pattern>
+    </servlet-mapping>
 
     <filter>
         <filter-name>SessionFilter</filter-name>
@@ -49,7 +57,7 @@
     </filter-mapping>
     <filter>
         <filter-name>AuthFilter</filter-name>
-        <filter-class>kz.epam.darling.controller.filter.AuthFilter</filter-class>
+        <filter-class>kz.epam.darling.controller.filter.RouteFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>AuthFilter</filter-name>
