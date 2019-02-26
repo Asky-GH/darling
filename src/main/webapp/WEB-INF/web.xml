@@ -5,7 +5,7 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
     <error-page>
-        <location>/jsp/error.jsp</location>
+        <location>/jsp/not-found.jsp</location>
     </error-page>
     <error-page>
         <error-code>403</error-code>
