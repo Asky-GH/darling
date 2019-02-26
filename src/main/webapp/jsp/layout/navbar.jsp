@@ -29,7 +29,9 @@
                                 <a class="navbar-item" href="admin">Admin panel</a>
                             </c:if>
                             <hr class="navbar-divider">
-                            <a class="navbar-item" href="logout"><fmt:message key="key.navbarLinkToLogout"/></a>
+                            <a class="navbar-item" href="#" onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();"><fmt:message key="key.navbarLinkToLogout"/></a>
+                            <form id="logout-form" method="post" style="display: none;" action="logout"></form>
                         </div>
                     </div>
                 </c:when>
