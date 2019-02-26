@@ -1,119 +1,232 @@
-* {
-    box-sizing: border-box;
+@keyframes floating {
+    to {
+        top: 1.5rem;
+    }
 }
 body {
-    background: #111;
-    min-height: 100vh;
-    overflow-x: auto;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    font-family: "Open Sans";
+    font-size: 1.3rem;
 }
-.staff {
-    -webkit-animation: strike 0.5s 0.5s cubic-bezier(1, 0.25, 1, 1) both;
-    animation: strike 0.5s 0.5s cubic-bezier(1, 0.25, 1, 1) both;
-    bottom: 15vh;
-    height: 100vh;
-    left: 50%;
+body h1 {
+    font-size: 2.5rem;
+}
+
+.message {
+    max-width: 700px;
+    margin: 5rem auto 0 auto;
+}
+
+.gandalf {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+    top: 1rem;
+    animation: floating 1s infinite alternate ease-in-out;
+}
+.gandalf div {
     position: absolute;
-    -webkit-transform: translate(15%, 0);
-    transform: translate(15%, 0);
-    width: 200px;
 }
-.shine {
-    -webkit-animation: flash 2s 1s ease;
-    animation: flash 2s 1s ease;
-    background: #fff;
-    bottom: 0;
-    left: 0;
-    opacity: 0;
-    position: fixed;
-    right: 0;
+.gandalf::before {
+    content: "";
+    position: absolute;
     top: 0;
+    left: 0;
+    width: 400px;
+    height: 400px;
+    background-color: #1a2130;
+    border-radius: 50%;
 }
-.text {
-    -webkit-animation-name: shake;
-    animation-name: shake;
-    -webkit-animation-iteration-count: 20;
-    animation-iteration-count: 20;
-    -webkit-animation-timing-function: ease;
-    animation-timing-function: ease;
-    -webkit-animation-delay: 1s;
-    animation-delay: 1s;
-    -webkit-animation-duration: 0.1s;
-    animation-duration: 0.1s;
-    left: 50%;
+.gandalf .fireball {
+    bottom: -10px;
+    left: 50px;
+    width: 300px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(#EFAC41, #DE8531, #6C1305, black);
+    border: 5px solid #000;
+}
+.gandalf .skirt {
+    bottom: 50px;
+    left: 100px;
+    border-bottom: 230px solid #ededed;
+    border-left: 100px solid transparent;
+    border-right: 100px solid transparent;
+    filter: drop-shadow(0 0 6px #d4d4d4);
+}
+.gandalf .skirt::before {
+    content: "";
     position: absolute;
-    top: 50%;
-    -webkit-transform: translate(-100%, -50%);
-    transform: translate(-100%, -50%);
-    width: 150px;
+    background-color: #ededed;
+    width: 100px;
+    height: 21px;
+    top: 230px;
+    left: 0px;
+    border-bottom-right-radius: 180%;
+    border-bottom-left-radius: 100%;
 }
-@media (min-width: 768px) {
-    .text {
-        width: 300px;
-    }
+.gandalf .skirt::after {
+    content: "";
+    position: absolute;
+    background-color: #ededed;
+    width: 100px;
+    height: 28px;
+    top: 230px;
+    left: -100px;
+    border-bottom-right-radius: 80%;
+    border-bottom-left-radius: 180%;
 }
-.text * {
-    fill: #fff;
-    stroke: #fff;
+.gandalf .sleeves::before, .gandalf .sleeves::after {
+    content: "";
+    position: absolute;
+    border-bottom: 70px solid #ededed;
+    filter: drop-shadow(0 0 6px #d4d4d4);
 }
-@-webkit-keyframes flash {
-    0% {
-        opacity: 0.85;
-    }
-    50% {
-        opacity: 0.5;
-    }
-    75%, 100% {
-        opacity: 0;
-    }
+.gandalf .sleeves::before {
+    top: 130px;
+    left: 191px;
+    border-left: 100px solid transparent;
+    border-right: 40px solid transparent;
+    transform: rotate(-34deg);
 }
-@keyframes flash {
-    0% {
-        opacity: 0.85;
-    }
-    50% {
-        opacity: 0.5;
-    }
-    75%, 100% {
-        opacity: 0;
-    }
+.gandalf .sleeves::after {
+    top: 127px;
+    left: 70px;
+    border-left: 40px solid transparent;
+    border-right: 100px solid transparent;
+    transform: rotate(41deg);
 }
-@-webkit-keyframes strike {
-    from {
-        -webkit-transform: translate(15%, -100%);
-        transform: translate(15%, -100%);
-    }
+.gandalf .shoulders {
+    background-color: #ededed;
+    border-radius: 50%;
+    width: 100px;
+    height: 130px;
+    left: 150px;
+    top: 120px;
 }
-@keyframes strike {
-    from {
-        -webkit-transform: translate(15%, -100%);
-        transform: translate(15%, -100%);
-    }
+.gandalf .shoulders .hand {
+    width: 33px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: #ffd8ad;
+    top: -6px;
 }
-@-webkit-keyframes shake {
-    0%, 50%, 100% {
-        -webkit-transform: translate(-100%, -50%);
-        transform: translate(-100%, -50%);
-    }
-    25% {
-        -webkit-transform: translate(-102%, -52%);
-        transform: translate(-102%, -52%);
-    }
-    75% {
-        -webkit-transform: translate(-98%, -48%);
-        transform: translate(-98%, -48%);
-    }
+.gandalf .shoulders .left {
+    left: -70px;
+    transform: rotate(-20deg);
 }
-@keyframes shake {
-    0%, 50%, 100% {
-        -webkit-transform: translate(-100%, -50%);
-        transform: translate(-100%, -50%);
-    }
-    25% {
-        -webkit-transform: translate(-102%, -52%);
-        transform: translate(-102%, -52%);
-    }
-    75% {
-        -webkit-transform: translate(-98%, -48%);
-        transform: translate(-98%, -48%);
-    }
+.gandalf .shoulders .left::after {
+    content: "";
+    position: absolute;
+    background-color: #e6e6e6;
+    width: 126px;
+    height: 8px;
+    border-radius: 4px;
+    transform: rotate(-105deg);
+    transform-origin: bottom;
+    top: -48px;
+    left: -56px;
+}
+.gandalf .shoulders .right {
+    right: -70px;
+    transform: rotate(20deg);
+}
+.gandalf .shoulders .right::after {
+    content: "";
+    position: absolute;
+    background-color: #bf5507;
+    width: 250px;
+    height: 5px;
+    border-radius: 2.5px;
+    transform: rotate(-78deg);
+    transform-origin: left;
+    bottom: -100px;
+    left: 0;
+}
+.gandalf .head {
+    width: 80px;
+    height: 90px;
+    top: 80px;
+    left: 160px;
+    background-color: #ffd8ad;
+    border-radius: 50%;
+}
+.gandalf .head::before, .gandalf .head::after {
+    content: "";
+    position: absolute;
+    background-color: #000;
+}
+.gandalf .head::before {
+    width: 13px;
+    height: 5px;
+    border-radius: 3px;
+    top: 42px;
+    left: 22px;
+    transform: rotate(19deg);
+}
+.gandalf .head::after {
+    width: 13px;
+    height: 5px;
+    border-radius: 3px;
+    top: 42px;
+    right: 22px;
+    transform: rotate(-19deg);
+}
+.gandalf .head .hair {
+    width: 70px;
+    height: 30px;
+    background-color: #c2beb5;
+    border-radius: 50%;
+    top: 0px;
+    left: 5px;
+}
+.gandalf .head .hair::before, .gandalf .head .hair::after {
+    content: "";
+    position: absolute;
+    background-color: #c2beb5;
+    filter: drop-shadow(2px 5px 0 #aba599);
+}
+.gandalf .head .hair::before {
+    top: 13px;
+    left: -16px;
+    width: 25px;
+    height: 100px;
+    border-top-left-radius: 34px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 20px;
+    transform: rotate(8deg);
+}
+.gandalf .head .hair::after {
+    top: 13px;
+    right: -16px;
+    width: 25px;
+    height: 100px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 34px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 100px;
+    transform: rotate(-10deg);
+}
+.gandalf .head .beard {
+    top: 64px;
+    left: 5px;
+    border-top: 80px solid #c2beb5;
+    border-left: 35px solid transparent;
+    border-right: 35px solid transparent;
+    border-radius: 30px;
+    filter: drop-shadow(2px 5px 0 #aba599);
+}
+.gandalf .head .beard::before {
+    content: "";
+    position: absolute;
+    background-color: pink;
+    width: 20px;
+    height: 5px;
+    border-radius: 40%;
+    top: -70px;
+    left: -9px;
 }
