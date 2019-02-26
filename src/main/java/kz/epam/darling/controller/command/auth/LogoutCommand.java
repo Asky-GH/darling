@@ -15,6 +15,11 @@ public class LogoutCommand implements Command {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
+
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
@@ -24,10 +29,5 @@ public class LogoutCommand implements Command {
         } catch (IOException e) {
             LOGGER.error(e);
         }
-    }
-
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
-
     }
 }
