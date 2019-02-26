@@ -27,7 +27,7 @@
         <div class="message">
             <h1><fmt:message key="key.forbiddenPageErrorMessage"/></h1>
             <p>
-                <a href="${pageContext.request.contextPath}/main"><fmt:message key="key.forbiddenPageLinkToHome"/></a>
+                <a href="${pageContext.request.contextPath}/main"><fmt:message key="key.forbiddenPageLinkToMain"/></a>
             </p>
         </div>
     </body>
