@@ -12,24 +12,30 @@ public class CommandFactory {
 
 
     private CommandFactory() {
-        commands.put("/login", new LoginCommand());
-        commands.put("/logout", new LogoutCommand());
-        commands.put("/registration", new RegistrationCommand());
-        commands.put("/profile", new ProfileCommand());
         commands.put("/main", new MainCommand());
         commands.put("/match", new MatchCommand());
-        commands.put("/chat", new ChatCommand());
         commands.put("/image", new ImageCommand());
-        commands.put("/refresh", new RefreshCommand());
-        commands.put("/location", new LocationCommand());
+
+        commands.put("/login", new LoginCommand());
+        commands.put("/registration", new RegistrationCommand());
+
+        commands.put("/logout", new LogoutCommand());
+
+        commands.put("/profile", new ProfileCommand());
         commands.put("/messages", new MessagesCommand());
-        commands.put("/language", new LanguageCommand());
+
+        commands.put("/chat", new ChatCommand());
+
         commands.put("/admin", new AdminCommand());
         commands.put("/admin/users", new UsersCommand());
         commands.put("/admin/languages", new LanguagesCommand());
         commands.put("/admin/genders", new GendersCommand());
         commands.put("/admin/countries", new CountriesCommand());
         commands.put("/admin/cities", new CitiesCommand());
+
+        commands.put("/refresh", new RefreshCommand());
+        commands.put("/location", new LocationCommand());
+        commands.put("/language", new LanguageCommand());
         commands.put("/country", new CountryCommand());
     }
 
