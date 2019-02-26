@@ -17,9 +17,15 @@ public class ImageCommand implements Command {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        int image_id = Integer.parseInt(request.getParameter("id"));
-        Blob image = ImageDAO.findById(image_id);
         try {
+            int imageId;
+            try {
+                imageId = Integer.parseInt(request.getParameter("id"));
+            } catch (NumberFormatException e) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+            Blob image = ImageDAO.findById(imageId);
             byte[] bytes = image.getBytes(1, (int) image.length());
             response.setContentType("image/gif");
             OutputStream os = response.getOutputStream();

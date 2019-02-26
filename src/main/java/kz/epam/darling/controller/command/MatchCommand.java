@@ -17,11 +17,17 @@ public class MatchCommand implements Command {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        Language language = (Language) request.getAttribute("language");
-        int matchId = Integer.parseInt(request.getParameter("id"));
-        User match = UserDAO.findById(matchId, language.getId());
-        request.setAttribute("match", match);
         try {
+            int matchId;
+            try {
+                matchId = Integer.parseInt(request.getParameter("id"));
+            } catch (NumberFormatException e) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+            Language language = (Language) request.getAttribute("language");
+            User match = UserDAO.findById(matchId, language.getId());
+            request.setAttribute("match", match);
             request.getRequestDispatcher("jsp/match.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             LOGGER.error(e);

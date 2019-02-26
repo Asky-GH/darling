@@ -12,8 +12,14 @@ import java.util.List;
 public class CountryCommand implements Command {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        List<Country> countries = CountryDAO.findAll(Integer.parseInt(request.getParameter("languageId")));
         try {
+            List<Country> countries;
+            try {
+                countries = CountryDAO.findAll(Integer.parseInt(request.getParameter("languageId")));
+            } catch (NumberFormatException e) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
             JsonSender.send(response, countries);
         } catch (IOException e) {
             e.printStackTrace();

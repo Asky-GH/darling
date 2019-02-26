@@ -20,20 +20,26 @@ public class ChatCommand implements Command {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        Language language = (Language) request.getAttribute("language");
-        User sender = (User) request.getSession(false).getAttribute("principal");
-        int receiverId = Integer.parseInt(request.getParameter("id"));
-        User receiver = UserDAO.findById(receiverId, language.getId());
-        List<Message> messages = MessageDAO.findByParticipants(sender.getId(), receiverId);
-        for (Message message : messages) {
-            if (message.getReceiverId() == sender.getId()) {
-                message.setStatusId(2);
-                MessageDAO.update(message);
-            }
-        }
-        request.setAttribute("messages", messages);
-        request.setAttribute("receiver", receiver);
         try {
+            int receiverId;
+            try {
+                receiverId = Integer.parseInt(request.getParameter("id"));
+            } catch (NumberFormatException e) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+            Language language = (Language) request.getAttribute("language");
+            User receiver = UserDAO.findById(receiverId, language.getId());
+            User sender = (User) request.getSession(false).getAttribute("principal");
+            List<Message> messages = MessageDAO.findByParticipants(sender.getId(), receiverId);
+            for (Message message : messages) {
+                if (message.getReceiverId() == sender.getId()) {
+                    message.setStatusId(2);
+                    MessageDAO.update(message);
+                }
+            }
+            request.setAttribute("messages", messages);
+            request.setAttribute("receiver", receiver);
             request.getRequestDispatcher("jsp/chat.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             LOGGER.error(e);
