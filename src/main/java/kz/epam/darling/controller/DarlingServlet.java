@@ -1,8 +1,8 @@
 package kz.epam.darling.controller;
 
-import kz.epam.darling.controller.command.CommandFactory;
+import kz.epam.darling.command.CommandFactory;
 import kz.epam.darling.model.Language;
-import kz.epam.darling.model.dao.LanguageDAO;
+import kz.epam.darling.dao.LanguageDAO;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

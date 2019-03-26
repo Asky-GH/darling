@@ -45,6 +45,11 @@
                                            style="width: 100px;" min="18" max="100">
                                 </div>
                             </div>
+                            <c:if test="${error != null}">
+                                <div class="field">
+                                    <p class="help is-danger"><fmt:message key="${error}"/></p>
+                                </div>
+                            </c:if>
                         </div>
                         <div class="column is-narrow">
                             <label class="label"><fmt:message key="key.mainPageLocationLabel"/></label>

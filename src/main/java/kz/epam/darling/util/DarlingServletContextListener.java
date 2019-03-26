@@ -1,6 +1,6 @@
 package kz.epam.darling.util;
 
-import kz.epam.darling.model.dao.ConnectionPool;
+import kz.epam.darling.dao.ConnectionPool;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

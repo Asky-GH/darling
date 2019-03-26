@@ -47,7 +47,14 @@
                                                 <p>
                                                     <strong>${dialog.key.profile.firstName} ${dialog.key.profile.lastName}</strong>
                                                     &emsp;<small><fmt:formatDate value="${dialog.value.createdAt}" type="both"/></small>
-                                                    <br>${dialog.value.text}
+                                                    <c:choose>
+                                                        <c:when test="${dialog.value.receiverId != principal.id}">
+                                                            <br><span class="is-pulled-right">${dialog.value.text}</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <br>${dialog.value.text}
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </p>
                                             </div>
                                         </div>
