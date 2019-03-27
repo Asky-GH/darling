@@ -9,7 +9,6 @@ import java.io.IOException;
 public class CharsetFilter implements Filter {
     private static final Logger LOGGER = LogManager.getLogger(CharsetFilter.class.getName());
 
-
     @Override
     public void init(FilterConfig filterConfig) {
 

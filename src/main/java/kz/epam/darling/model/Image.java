@@ -4,12 +4,7 @@ public class Image extends Entity {
     private String url;
     private int user_id;
 
-
     public Image() {
-    }
-
-    public Image(int id) {
-        super(id);
     }
 
     public String getUrl() {

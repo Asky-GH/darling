@@ -15,7 +15,7 @@ import java.util.List;
 public class CountriesCommand implements Command {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        List<Country> countries = CountryDAO.findAll();
+        List<Country> countries = CountryDAO.find();
         List<Language> languages = LanguageDAO.findAll();
         List<Integer> ids = CountryDAO.findIds();
         request.setAttribute("countries", countries);

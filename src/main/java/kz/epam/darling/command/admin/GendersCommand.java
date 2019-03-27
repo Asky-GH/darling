@@ -15,7 +15,7 @@ import java.util.List;
 public class GendersCommand implements Command {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        List<Gender> genders = GenderDAO.findAll();
+        List<Gender> genders = GenderDAO.find();
         List<Language> languages = LanguageDAO.findAll();
         List<Integer> ids = GenderDAO.findIds();
         request.setAttribute("genders", genders);

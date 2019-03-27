@@ -4,7 +4,6 @@ public class Language extends Entity {
     private String locale;
     private String name;
 
-
     public Language() {
     }
 

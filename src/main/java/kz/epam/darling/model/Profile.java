@@ -12,7 +12,6 @@ public class Profile extends Entity {
     private City city;
     private int userId;
 
-
     public Profile() {
     }
 

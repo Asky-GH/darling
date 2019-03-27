@@ -15,7 +15,6 @@ public class ConnectionPool {
     private static ConnectionPool instance;
     private BlockingQueue<Connection> connections;
 
-
     private ConnectionPool() {
         ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
         String databaseURL = resourceBundle.getString("db.url");

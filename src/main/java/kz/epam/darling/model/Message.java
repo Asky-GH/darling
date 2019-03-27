@@ -9,7 +9,6 @@ public class Message extends Entity {
     private int receiverId;
     private int statusId;
 
-
     public Message() {
     }
 

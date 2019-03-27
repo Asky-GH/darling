@@ -1,8 +1,9 @@
 package kz.epam.darling.command.auth;
 
 import kz.epam.darling.command.Command;
-import kz.epam.darling.model.*;
+import kz.epam.darling.constant.*;
 import kz.epam.darling.dao.*;
+import kz.epam.darling.model.*;
 import kz.epam.darling.util.EmailValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,16 +19,15 @@ import java.util.List;
 public class RegistrationCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(RegistrationCommand.class.getName());
 
-
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        Language language = (Language) request.getAttribute("language");
+        Language language = (Language) request.getAttribute(Attribute.LANGUAGE);
         List<Gender> genders = GenderDAO.findAll(language.getId());
         List<Country> countries = CountryDAO.findAll(language.getId());
-        request.setAttribute("genders", genders);
-        request.setAttribute("countries", countries);
+        request.setAttribute(Attribute.GENDERS, genders);
+        request.setAttribute(Attribute.COUNTRIES, countries);
         try {
-            request.getRequestDispatcher("jsp/auth/registration.jsp").forward(request, response);
+            request.getRequestDispatcher(View.REGISTRATION).forward(request, response);
         } catch (ServletException | IOException e) {
             LOGGER.error(e);
         }
@@ -43,32 +43,31 @@ public class RegistrationCommand implements Command {
         processCountry(request);
         processCity(request);
         processGender(request);
-        if (request.getAttribute("error") == null) {
-            Language language = (Language) request.getAttribute("language");
+        if (request.getAttribute(Attribute.ERROR) == null) {
+            Language language = (Language) request.getAttribute(Attribute.LANGUAGE);
             User user = new User();
-            user.setEmail(request.getParameter("email"));
-            user.setPassword(BCrypt.hashpw(request.getParameter("password"), BCrypt.gensalt()));
+            user.setEmail(request.getParameter(Parameter.EMAIL));
+            user.setPassword(BCrypt.hashpw(request.getParameter(Parameter.PASSWORD), BCrypt.gensalt()));
             UserDAO.create(user);
-            user = UserDAO.findByEmail(request.getParameter("email"), language.getId());
+            user = UserDAO.findByEmail(request.getParameter(Parameter.EMAIL), language.getId());
             Image image = new Image();
             image.setUser_id(user.getId());
             ImageDAO.create(image);
             image = ImageDAO.findByUserId(user.getId());
             Profile profile = new Profile();
-            profile.setFirstName(request.getParameter("firstName"));
-            profile.setLastName(request.getParameter("lastName"));
-            profile.setGender(GenderDAO.findById(Integer.parseInt(request.getParameter("genderId")), language.getId()));
-            profile.setBirthday(Date.valueOf(request.getParameter("birthday")));
-            profile.setCountry(CountryDAO.findById(Integer.parseInt(request.getParameter("countryId")), language.getId()));
-            profile.setCity(CityDAO.findById(Integer.parseInt(request.getParameter("cityId")), language.getId()));
+            profile.setFirstName(request.getParameter(Parameter.FIRST_NAME));
+            profile.setLastName(request.getParameter(Parameter.LAST_NAME));
+            profile.setGender(GenderDAO.findById(Integer.parseInt(request.getParameter(Parameter.GENDER_ID)), language.getId()));
+            profile.setBirthday(Date.valueOf(request.getParameter(Parameter.BIRTHDAY)));
+            profile.setCountry(CountryDAO.findById(Integer.parseInt(request.getParameter(Parameter.COUNTRY_ID)), language.getId()));
+            profile.setCity(CityDAO.findById(Integer.parseInt(request.getParameter(Parameter.CITY_ID)), language.getId()));
             profile.setUserId(user.getId());
             profile.setImage(image);
             ProfileDAO.create(profile);
             user.setProfile(profile);
-            user.setPassword(null);
-            request.getSession().setAttribute("principal", user);
+            request.getSession().setAttribute(Attribute.PRINCIPAL, user);
             try {
-                response.sendRedirect(request.getContextPath() + "/profile");
+                response.sendRedirect(request.getContextPath() + Route.PROFILE);
             } catch (IOException e) {
                 LOGGER.error(e);
             }
@@ -80,157 +79,157 @@ public class RegistrationCommand implements Command {
     private void processEmail(HttpServletRequest request) {
         boolean emailIsValid = true;
 
-        String email = request.getParameter("email");
+        String email = request.getParameter(Parameter.EMAIL);
         if (email.isEmpty()) {
             emailIsValid = false;
-            request.setAttribute("email", "key.registrationPageEmptyEmailError");
-        } else if (email.length() > 100) {
+            request.setAttribute(Attribute.EMAIL, "key.registrationPageEmptyEmailError");
+        } else if (email.length() > Constant.EMAIL_MAX_LENGTH) {
             emailIsValid = false;
-            request.setAttribute("email", "key.registrationPageTooLongEmailError");
+            request.setAttribute(Attribute.EMAIL, "key.registrationPageTooLongEmailError");
         } else if (!EmailValidator.isValid(email)) {
             emailIsValid = false;
-            request.setAttribute("email", "key.registrationPageInvalidEmailError");
+            request.setAttribute(Attribute.EMAIL, "key.registrationPageInvalidEmailError");
         } else if (UserDAO.emailExists(email)) {
             emailIsValid = false;
-            request.setAttribute("email", "key.registrationPageExistingEmailError");
+            request.setAttribute(Attribute.EMAIL, "key.registrationPageExistingEmailError");
         }
 
         if (!emailIsValid) {
-            request.setAttribute("error", true);
+            request.setAttribute(Attribute.ERROR, true);
         } else {
-            request.setAttribute("email", email);
+            request.setAttribute(Attribute.EMAIL, email);
         }
     }
 
     private void processPassword(HttpServletRequest request) {
         boolean passwordIsValid = true;
 
-        String password = request.getParameter("password");
-        String confirmPassword = request.getParameter("confirmPassword");
+        String password = request.getParameter(Parameter.PASSWORD);
+        String confirmPassword = request.getParameter(Parameter.CONFIRM_PASSWORD);
         if (!password.isEmpty() && !confirmPassword.isEmpty()) {
             if (!password.equals(confirmPassword)) {
                 passwordIsValid = false;
-                request.setAttribute("password", "key.registrationPagePasswordError");
+                request.setAttribute(Attribute.PASSWORD, "key.registrationPagePasswordError");
             }
-            if (password.length() > 100) {
+            if (password.length() > Constant.PASSWORD_MAX_LENGTH) {
                 passwordIsValid = false;
-                request.setAttribute("password", "key.registrationPageTooLongPasswordError");
+                request.setAttribute(Attribute.PASSWORD, "key.registrationPageTooLongPasswordError");
             }
         } else {
             if (password.isEmpty()) {
                 passwordIsValid = false;
-                request.setAttribute("password", "key.registrationPageEmptyPasswordError");
+                request.setAttribute(Attribute.PASSWORD, "key.registrationPageEmptyPasswordError");
             }
             if (confirmPassword.isEmpty()) {
                 passwordIsValid = false;
-                request.setAttribute("confirmPassword", "key.registrationPageEmptyConfirmPasswordError");
+                request.setAttribute(Attribute.CONFIRM_PASSWORD, "key.registrationPageEmptyConfirmPasswordError");
             }
         }
 
         if (!passwordIsValid) {
-            request.setAttribute("error", true);
+            request.setAttribute(Attribute.ERROR, true);
         }
     }
 
     private void processFirstName(HttpServletRequest request) {
         boolean firstNameIsValid = true;
 
-        String firstName = request.getParameter("firstName");
+        String firstName = request.getParameter(Parameter.FIRST_NAME);
         if (firstName.isEmpty()) {
             firstNameIsValid = false;
-            request.setAttribute("firstName", "key.registrationPageEmptyFirstNameError");
-        } else if (firstName.length() > 50) {
+            request.setAttribute(Attribute.FIRST_NAME, "key.registrationPageEmptyFirstNameError");
+        } else if (firstName.length() > Constant.FIRST_NAME_MAX_LENGTH) {
             firstNameIsValid = false;
-            request.setAttribute("firstName", "key.registrationPageTooLongFirstNameError");
+            request.setAttribute(Attribute.FIRST_NAME, "key.registrationPageTooLongFirstNameError");
         }
 
         if (!firstNameIsValid) {
-            request.setAttribute("error", true);
+            request.setAttribute(Attribute.ERROR, true);
         } else {
-            request.setAttribute("firstName", firstName);
+            request.setAttribute(Attribute.FIRST_NAME, firstName);
         }
     }
 
     private void processLastName(HttpServletRequest request) {
         boolean lastNameIsValid = true;
 
-        String lastName = request.getParameter("lastName");
+        String lastName = request.getParameter(Parameter.LAST_NAME);
         if (lastName.isEmpty()) {
             lastNameIsValid = false;
-            request.setAttribute("lastName", "key.registrationPageEmptyLastNameError");
-        } else if (lastName.length() > 50) {
+            request.setAttribute(Attribute.LAST_NAME, "key.registrationPageEmptyLastNameError");
+        } else if (lastName.length() > Constant.LAST_NAME_MAX_LENGTH) {
             lastNameIsValid = false;
-            request.setAttribute("lastName", "key.registrationPageTooLongLastNameError");
+            request.setAttribute(Attribute.LAST_NAME, "key.registrationPageTooLongLastNameError");
         }
 
         if (!lastNameIsValid) {
-            request.setAttribute("error", true);
+            request.setAttribute(Attribute.ERROR, true);
         } else {
-            request.setAttribute("lastName", lastName);
+            request.setAttribute(Attribute.LAST_NAME, lastName);
         }
     }
 
     private void processBirthday(HttpServletRequest request) {
         boolean birthdayIsValid = true;
 
-        String birthday = request.getParameter("birthday");
+        String birthday = request.getParameter(Parameter.BIRTHDAY);
         if (birthday.isEmpty()) {
             birthdayIsValid = false;
-            request.setAttribute("birthday", "key.registrationPageEmptyBirthdayError");
+            request.setAttribute(Attribute.BIRTHDAY, "key.registrationPageEmptyBirthdayError");
         }
 
         if (!birthdayIsValid) {
-            request.setAttribute("error", true);
+            request.setAttribute(Attribute.ERROR, true);
         } else {
-            request.setAttribute("birthday", birthday);
+            request.setAttribute(Attribute.BIRTHDAY, birthday);
         }
     }
 
     private void processCountry(HttpServletRequest request) {
         boolean countryIsValid = true;
 
-        String countryId = request.getParameter("countryId");
+        String countryId = request.getParameter(Parameter.COUNTRY_ID);
         try {
             Integer.parseInt(countryId);
         } catch (NumberFormatException e) {
             countryIsValid = false;
-            request.setAttribute("countryError", "key.registrationPageEmptyCountryError");
+            request.setAttribute(Attribute.COUNTRY_ERROR, "key.registrationPageEmptyCountryError");
         }
 
         if (!countryIsValid) {
-            request.setAttribute("error", true);
+            request.setAttribute(Attribute.ERROR, true);
         }
     }
 
     private void processCity(HttpServletRequest request) {
         boolean cityIdIsValid = true;
 
-        String cityId = request.getParameter("cityId");
+        String cityId = request.getParameter(Parameter.CITY_ID);
         try {
             Integer.parseInt(cityId);
         } catch (NumberFormatException e) {
             cityIdIsValid = false;
-            request.setAttribute("cityError", "key.registrationPageEmptyCityError");
+            request.setAttribute(Attribute.CITY_ERROR, "key.registrationPageEmptyCityError");
         }
 
         if (!cityIdIsValid) {
-            request.setAttribute("error", true);
+            request.setAttribute(Attribute.ERROR, true);
         }
     }
 
     private void processGender(HttpServletRequest request) {
         boolean genderIsValid = true;
 
-        String genderId = request.getParameter("genderId");
+        String genderId = request.getParameter(Parameter.GENDER_ID);
         if (genderId == null) {
             genderIsValid = false;
-            request.setAttribute("genderId", "key.registrationEmptyGenderError");
+            request.setAttribute(Attribute.GENDER_ID, "key.registrationEmptyGenderError");
         }
 
         if (!genderIsValid) {
-            request.setAttribute("error", true);
+            request.setAttribute(Attribute.ERROR, true);
         } else {
-            request.setAttribute("genderId", genderId);
+            request.setAttribute(Attribute.GENDER_ID, genderId);
         }
     }
 }

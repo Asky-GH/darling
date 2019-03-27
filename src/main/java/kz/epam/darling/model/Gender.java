@@ -4,12 +4,7 @@ public class Gender extends Entity {
     private Language language;
     private String type;
 
-
     public Gender() {
-    }
-
-    public Gender(int id) {
-        super(id);
     }
 
     public Language getLanguage() {

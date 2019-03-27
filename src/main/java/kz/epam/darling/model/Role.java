@@ -3,7 +3,6 @@ package kz.epam.darling.model;
 public class Role extends Entity {
     private String type;
 
-
     public Role() {
     }
 

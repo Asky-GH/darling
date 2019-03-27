@@ -5,12 +5,7 @@ public class City extends Entity {
     private String name;
     private Country country;
 
-
     public City() {
-    }
-
-    public City(int id) {
-        super(id);
     }
 
     public Language getLanguage() {

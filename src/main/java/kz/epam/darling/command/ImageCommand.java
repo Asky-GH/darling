@@ -1,5 +1,6 @@
 package kz.epam.darling.command;
 
+import kz.epam.darling.constant.Parameter;
 import kz.epam.darling.dao.ImageDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,13 +15,12 @@ import java.sql.SQLException;
 public class ImageCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(ImageCommand.class.getName());
 
-
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
             int imageId;
             try {
-                imageId = Integer.parseInt(request.getParameter("id"));
+                imageId = Integer.parseInt(request.getParameter(Parameter.ID));
             } catch (NumberFormatException e) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
@@ -39,6 +39,10 @@ public class ImageCommand implements Command {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
-
+        try {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } catch (IOException e) {
+            LOGGER.error(e);
+        }
     }
 }

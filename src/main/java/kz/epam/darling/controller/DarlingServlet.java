@@ -1,5 +1,6 @@
 package kz.epam.darling.controller;
 
+import kz.epam.darling.constant.Attribute;
 import kz.epam.darling.command.CommandFactory;
 import kz.epam.darling.model.Language;
 import kz.epam.darling.dao.LanguageDAO;
@@ -13,7 +14,7 @@ public class DarlingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         List<Language> languages = LanguageDAO.findAll();
-        request.setAttribute("languages", languages);
+        request.setAttribute(Attribute.LANGUAGES, languages);
         CommandFactory.getInstance().getCommand(request.getServletPath()).execute(request, response);
     }
 

@@ -1,5 +1,6 @@
 package kz.epam.darling.command;
 
+import kz.epam.darling.constant.Route;
 import kz.epam.darling.command.admin.*;
 import kz.epam.darling.command.auth.*;
 
@@ -10,33 +11,26 @@ public class CommandFactory {
     private static CommandFactory instance = new CommandFactory();
     private Map<String, Command> commands = new HashMap<>();
 
-
     private CommandFactory() {
-        commands.put("/main", new MainCommand());
-        commands.put("/match", new MatchCommand());
-        commands.put("/image", new ImageCommand());
-
-        commands.put("/login", new LoginCommand());
-        commands.put("/registration", new RegistrationCommand());
-
-        commands.put("/logout", new LogoutCommand());
-
-        commands.put("/profile", new ProfileCommand());
-        commands.put("/messages", new MessagesCommand());
-
-        commands.put("/chat", new ChatCommand());
-
-        commands.put("/admin", new AdminCommand());
-        commands.put("/admin/users", new UsersCommand());
-        commands.put("/admin/languages", new LanguagesCommand());
-        commands.put("/admin/genders", new GendersCommand());
-        commands.put("/admin/countries", new CountriesCommand());
-        commands.put("/admin/cities", new CitiesCommand());
-
-        commands.put("/refresh", new RefreshCommand());
-        commands.put("/location", new LocationCommand());
-        commands.put("/language", new LanguageCommand());
-        commands.put("/country", new CountryCommand());
+        commands.put(Route.MAIN, new MainCommand());
+        commands.put(Route.MATCH, new MatchCommand());
+        commands.put(Route.IMAGE, new ImageCommand());
+        commands.put(Route.LOGIN, new LoginCommand());
+        commands.put(Route.REGISTRATION, new RegistrationCommand());
+        commands.put(Route.LOGOUT, new LogoutCommand());
+        commands.put(Route.PROFILE, new ProfileCommand());
+        commands.put(Route.MESSAGES, new MessagesCommand());
+        commands.put(Route.CHAT, new ChatCommand());
+        commands.put(Route.ADMIN, new AdminCommand());
+        commands.put(Route.USERS, new UsersCommand());
+        commands.put(Route.LANGUAGES, new LanguagesCommand());
+        commands.put(Route.GENDERS, new GendersCommand());
+        commands.put(Route.COUNTRIES, new CountriesCommand());
+        commands.put(Route.CITIES, new CitiesCommand());
+        commands.put(Route.REFRESH, new RefreshCommand());
+        commands.put(Route.LOCATION, new LocationCommand());
+        commands.put(Route.LANGUAGE, new LanguageCommand());
+        commands.put(Route.COUNTRY, new CountryCommand());
     }
 
     public static CommandFactory getInstance() {

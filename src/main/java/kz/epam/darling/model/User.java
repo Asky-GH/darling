@@ -6,7 +6,6 @@ public class User extends Entity {
     private Role role;
     private Profile profile;
 
-
     public User() {
     }
 

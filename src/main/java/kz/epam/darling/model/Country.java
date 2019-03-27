@@ -4,7 +4,6 @@ public class Country extends Entity {
     private Language language;
     private String name;
 
-
     public Country() {
     }
 

@@ -43,7 +43,7 @@
             <div class="navbar-item">
                 <div class="select">
                     <form action="language" method="post">
-                        <input type="hidden" name="from" value="${pageContext.request.requestURI}">
+                        <input type="hidden" name="referer" value="${pageContext.request.requestURI}">
                         <input type="hidden" name="query" value="${pageContext.request.queryString}">
                         <select name="languageId" onchange="this.form.submit()">
                             <option><fmt:message key="key.navbarLanguageSelect"/></option>
