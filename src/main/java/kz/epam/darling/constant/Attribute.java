@@ -1,12 +1,14 @@
 package kz.epam.darling.constant;
 
 public class Attribute {
+    public static final String IDS = "ids";
     public static final String PRINCIPAL = "principal";
     public static final String REFERER = "referer";
     public static final String LANGUAGE = "language";
     public static final String LANGUAGES = "languages";
     public static final String ERROR = "error";
     public static final String GENDERS = "genders";
+    public static final String CITIES = "cities";
     public static final String COUNTRIES = "countries";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
@@ -28,4 +30,5 @@ public class Attribute {
     public static final String PASSWORD_ERROR = "passwordError";
     public static final String EMAIL_ERROR = "emailError";
     public static final String AVATAR_ERROR = "avatarError";
+    public static final String ROLES = "roles";
 }

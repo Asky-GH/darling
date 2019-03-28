@@ -21,4 +21,8 @@ public class Parameter {
     public static final String FROM_AGE = "fromAge";
     public static final String ACTION = "action";
     public static final String IMAGE = "image";
+    public static final String NAME = "name";
+    public static final String TYPE = "type";
+    public static final String LOCALE = "locale";
+    public static final String ROLE_ID = "roleId";
 }
