@@ -35,11 +35,6 @@ public class ConnectionPool {
 
     public static void init() {
         if (instance == null) {
-            try {
-                Thread.sleep(20 * 1000);
-            } catch (InterruptedException e) {
-                LOGGER.error(e);
-            }
             instance = new ConnectionPool();
         }
     }
