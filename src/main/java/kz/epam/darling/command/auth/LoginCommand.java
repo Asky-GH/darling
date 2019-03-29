@@ -4,6 +4,7 @@ import kz.epam.darling.command.Command;
 import kz.epam.darling.constant.Attribute;
 import kz.epam.darling.constant.Parameter;
 import kz.epam.darling.constant.Route;
+import kz.epam.darling.constant.View;
 import kz.epam.darling.dao.UserDAO;
 import kz.epam.darling.model.Language;
 import kz.epam.darling.model.User;
@@ -22,7 +23,7 @@ public class LoginCommand implements Command {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
-            request.getRequestDispatcher(Route.LOGIN).forward(request, response);
+            request.getRequestDispatcher(View.LOGIN).forward(request, response);
         } catch (ServletException | IOException e) {
             LOGGER.error(e);
         }
@@ -38,7 +39,6 @@ public class LoginCommand implements Command {
             if (!email.isEmpty() && !password.isEmpty()) {
                 User user = UserDAO.findByEmail(email, language.getId());
                 if (user != null && BCrypt.checkpw(password, user.getPassword())) {
-                    user.setPassword(null);
                     request.getSession().setAttribute(Attribute.PRINCIPAL, user);
                     if (!referer.isEmpty()) {
                         response.sendRedirect(referer);

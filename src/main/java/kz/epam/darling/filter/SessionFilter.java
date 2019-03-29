@@ -19,8 +19,11 @@ public class SessionFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        HttpSession session = request.getSession();
-        session.setAttribute(Attribute.LANGUAGE, LanguageDAO.findById(Constant.DEFAULT_LANGUAGE_ID));
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            session = request.getSession();
+            session.setAttribute(Attribute.LANGUAGE, LanguageDAO.findById(Constant.DEFAULT_LANGUAGE_ID));
+        }
         request.setAttribute(Attribute.LANGUAGE, session.getAttribute(Attribute.LANGUAGE));
         filterChain.doFilter(servletRequest, servletResponse);
     }

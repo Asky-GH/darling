@@ -1,0 +1,16 @@
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./:/docker-entrypoint-initdb.d
+
+  app:
+    image: tomcat:7-jre8
+    ports:
+      - "8080:8080"
+    links:
+      - db:mysqldb
+    volumes:
+      - ./target:/usr/local/tomcat/webapps
+
