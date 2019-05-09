@@ -1,7 +1,7 @@
 $(document).ready(function () {
     const senderId = document.querySelector('#sender').value;
     const receiverId = document.querySelector('#receiver').value;
-    const url = '/darling/refresh?senderId=' + senderId + '&receiverId=' + receiverId;
+    const url = ctx + '/refresh?senderId=' + senderId + '&receiverId=' + receiverId;
     setInterval(function () {
         $.ajax({
             type: 'POST',
