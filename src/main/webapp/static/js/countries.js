@@ -2,7 +2,7 @@ $(document).ready(function () {
     $('#language').change(function () {
         const languageSelect = document.querySelector('#language');
         const languageId = languageSelect.value;
-        const url = '/darling/country?languageId=' + languageId;
+        const url = ctx + '/country?languageId=' + languageId;
         $.ajax({
             type: 'GET',
             url: url,

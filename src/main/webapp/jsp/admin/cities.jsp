@@ -80,6 +80,7 @@
         <a href="${pageContext.request.contextPath}/admin">Go back</a>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+	<script>var ctx="${pageContext.request.contextPath}"</script>
         <script defer src="${pageContext.request.contextPath}/static/js/countries.js"></script>
     </body>
 </html>
