@@ -7,7 +7,7 @@ $(document).ready(function () {
         const countrySelect = document.querySelector('#country');
         if (countrySelect.value !== 'Country') {
             const countryId = countrySelect.value;
-            const url = '/darling/location?countryId=' + countryId;
+            const url = ctx + '/location?countryId=' + countryId;
             $.ajax({
                 type: 'GET',
                 url: url,

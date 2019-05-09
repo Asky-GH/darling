@@ -216,7 +216,8 @@
 
         <jsp:include page="layout/footer.jsp"/>
 
-        <script defer src="static/js/location.js"></script>
+        <script>var ctx="${pageContext.request.contextPath}"</script>
+	<script defer src="static/js/location.js"></script>
         <script defer src="static/js/file.js"></script>
     </body>
 </html>
